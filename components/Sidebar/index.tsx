@@ -128,7 +128,7 @@ function Slidebar() {
     <>
       <aside
         id="default-sidebar"
-        className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 border-r-2 "
+        className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 border-r-2 select-none "
         aria-label="Sidebar"
       > <h1></h1>
         <div className="h-full bg-[#ffffff]"
@@ -271,7 +271,7 @@ function Slidebar() {
                 </li>
                 <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isProfile ? "bg-gray-100" : ""}`} onClick={handleProfile}>
                   <Link
-                    href="/members/profile/0"
+                    href="/members/profile/"
                     className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group`}
                   >
                      <span
@@ -290,7 +290,7 @@ function Slidebar() {
                 </li>
                 <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isSetting ? "bg-gray-100" : ""}`} onClick={handleSetting}>
                   <Link
-                    href="/members/setting/0"
+                    href="/members/setting/"
                     className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
                      <span
@@ -364,7 +364,7 @@ function Slidebar() {
                 </li>
                 <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isYourBlog ? "bg-gray-100" : ""}`} onClick={handleYourBlog}>
                   <Link
-                    href="/blogs/detail/0"
+                    href="/blogs/detail/"
                     className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
                      <span

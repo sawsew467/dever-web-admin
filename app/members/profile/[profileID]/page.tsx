@@ -6,7 +6,7 @@ interface pageProps {
     params: {profileID: string};
 }
 
-function Profile({params}: pageProps) {
+function ProfileDetail({params}: pageProps) {
     const {isOpenSlidebar, isMouseVisit} = useAppContext();
 
     return (
@@ -20,4 +20,4 @@ function Profile({params}: pageProps) {
     )
 }
 
-export default Profile
+export default ProfileDetail
