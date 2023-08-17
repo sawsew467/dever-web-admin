@@ -1,66 +1,173 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import bell from "../../assets/images/sidebar/bell.svg";
 import chevrondown from "../../assets/images/sidebar/chevron-down.svg";
 import usersgroup from "../../assets/images/sidebar/users-group.svg";
 import gridplus from "../../assets/images/sidebar/grid-plus.svg";
-import { useState } from "react";
-import { isBlock } from "typescript";
-import { Flamenco } from "next/font/google";
-function index() {
-  const [isDropdownNotifications, setIsDropdownNotifications] = useState(false);
-  const [isDropdownMembers, setIsDropdownMembers] = useState(false);
-  const [isDropdownBlogs, setIsDropdownBlogs] = useState(false);
+import { useAppContext } from "@/app/context/AppContext";
+import Link from "next/link";
+
+
+function Slidebar() {
+
+  const [isDropdownNotifications, setIsDropdownNotifications] = useState<boolean>(false);
+  const [isDropdownMembers, setIsDropdownMembers] = useState<boolean>(false);
+  const [isDropdownBlogs, setIsDropdownBlogs] = useState<boolean>(false);
+  
+  const [isViewNotification, setIsViewNotifiCation] = useState<boolean>(false);
+  const [isCreateNotification, setIsCreateNotification] = useState<boolean>(false);
+  
+  const [isMemberList, setIsMemberList] = useState<boolean>(false);
+  const [isProfile, setIsProfile] = useState<boolean>(false);
+  const [isSetting, setIsSetting ] = useState<boolean>(false);
+
+  const [isBlogList, setIsBlogList] = useState<boolean>(false);
+  const [isYourBlog, setIsYourBlog] = useState<boolean>(false);
+  const [isCreateBlog, setIsCreateBlog] = useState<boolean>(false);
+
   const handleDropdownNotifications = () => {
     setIsDropdownNotifications(!isDropdownNotifications);
-    setIsDropdownBlogs(false);
-    setIsDropdownMembers(false);
   };
   const handleDropdownMembers = () => {
     setIsDropdownMembers(!isDropdownMembers);
-    setIsDropdownNotifications(false);
-    setIsDropdownBlogs(false);
   };
   const handleDropdownBlogs = () => {
     setIsDropdownBlogs(!isDropdownBlogs);
-    setIsDropdownMembers(false);
-    setIsDropdownNotifications(false);
   };
 
+  const handleViewNotification = () => {
+    setIsViewNotifiCation(true);
+    setIsCreateNotification(false);
+    setIsMemberList(false);
+    setIsProfile(false);
+    setIsSetting(false);
+    setIsBlogList(false);
+    setIsYourBlog(false);
+    setIsCreateBlog(false);
+
+    console.log(isViewNotification);
+    
+  }
+  const handleCreateNotification = () => {
+    setIsViewNotifiCation(false);
+    setIsCreateNotification(true);
+    setIsMemberList(false);
+    setIsProfile(false);
+    setIsSetting(false);
+    setIsBlogList(false);
+    setIsYourBlog(false);
+    setIsCreateBlog(false);
+  }
+  const handleMemberList = () => {
+    setIsViewNotifiCation(false)
+    setIsCreateNotification(false);
+    setIsMemberList(true);
+    setIsProfile(false);
+    setIsSetting(false);
+    setIsBlogList(false);
+    setIsYourBlog(false);
+    setIsCreateBlog(false);
+  }
+  const handleProfile = () => {
+    setIsViewNotifiCation(false)
+    setIsCreateNotification(false);
+    setIsMemberList(false);
+    setIsProfile(true);
+    setIsSetting(false);
+    setIsBlogList(false);
+    setIsYourBlog(false);
+    setIsCreateBlog(false);
+  }
+  const handleSetting = () => {
+    setIsViewNotifiCation(false);
+    setIsCreateNotification(false);
+    setIsMemberList(false);
+    setIsProfile(false);
+    setIsSetting(true);
+    setIsBlogList(false);
+    setIsYourBlog(false);
+    setIsCreateBlog(false);
+  }
+  const handleBlogList = () => {
+    setIsViewNotifiCation(false);
+    setIsCreateNotification(false);
+    setIsMemberList(false);
+    setIsProfile(false);
+    setIsSetting(false);
+    setIsBlogList(true);
+    setIsYourBlog(false);
+    setIsCreateBlog(false);
+  }
+  const handleYourBlog = () => {
+    setIsViewNotifiCation(false)
+    setIsCreateNotification(false);
+    setIsMemberList(false);
+    setIsProfile(false);
+    setIsSetting(false);
+    setIsBlogList(false);
+    setIsYourBlog(true);
+    setIsCreateBlog(false);
+  }
+  const handleCreateBlog = () => {
+    setIsViewNotifiCation(false)
+    setIsCreateNotification(false);
+    setIsMemberList(false);
+    setIsProfile(false);
+    setIsSetting(false);
+    setIsBlogList(false);
+    setIsYourBlog(false);
+    setIsCreateBlog(true);
+  }
+
+  const {isOpenSlidebar,  isMouseVisit, setIsMouseVisit} = useAppContext();
+  
   return (
+    
     <>
       <aside
         id="default-sidebar"
-        className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 "
+        className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 border-r-2 "
         aria-label="Sidebar"
-      >
-        <div className="h-full bg-[#ffffff] ">
-          <ul className="w-[255px] ml-[12px] mr-[12px] ">
+      > 
+        <div className="h-full bg-[#ffffff]"
+        onMouseEnter={() => setIsMouseVisit(true)}
+        onMouseLeave={() => setIsMouseVisit(false)}
+        >
+          <ul className="ml-[12px] mr-[12px] "
+          style={{
+            // width: isOpenSlidebar ? "40px" : "225px",
+            width: isOpenSlidebar ? isMouseVisit ? "225px" : "40px" : "225px",
+            transitionDuration: "0.3s"
+          }}
+          >
             <li className="pt-[16px]">
               <button
                 type="button"
                 onClick={handleDropdownNotifications}
-                //  className='flex pt-[16px] px-[8px] w-[255px] text-gray-900 items-center justify-between'
-                className={
-                  isDropdownNotifications
-                    ? "flex px-[8px] w-[255px] text-gray-900 items-center justify-between py-[6px] bg-gray-100 rounded-[8px]"
-                    : "flex  px-[8px] w-[255px] text-gray-900 items-center justify-between"
-                }
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 rounded-[8px]`}
+                              
               >
                 <div className="flex items-center">
                   <Image
                     src={bell}
                     alt="Picture of the author"
-                    className="w-[24px] h-[24px] "
+                    className="w-[24px] h-[24px]"
                   />
-                  <span className="pl-[12px] text-[16px] ">Notifications</span>
+                  <span className="pl-[12px] text-[16px]"
+                  style={{
+                    display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                  }}
+                  >Notifications</span>
                 </div>
                 <div className={isDropdownNotifications ? "rotate-180" : ""}>
                   <Image
                     src={chevrondown}
                     alt="Picture of the author"
                     className="r-0"
+                    style={{
+                      display: isOpenSlidebar ? isMouseVisit ? "" : "none" : ""
+                    }}
                   />
                 </div>
               </button>
@@ -68,21 +175,44 @@ function index() {
                 id="dropdown-Notifications"
                 className={isDropdownNotifications ? "pt-[6px]" : "hidden"}
               >
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full  text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li  className={`py-[6px] hover:bg-gray-100 rounded-md ${isViewNotification ? "bg-gray-100" : ""}`} onClick={handleViewNotification}>
+                  <Link
+                    href="/notifications/views"
+                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
-                    View notifications
-                  </a>
+                    <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >View notifications</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >V</span>
+                  </Link>
+                  
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full pt-[16px] text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isCreateNotification ? "bg-gray-100" : ""}`} onClick={handleCreateNotification}>
+                  <Link
+                    href="/notifications/create"
+                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group`}
                   >
-                    Create notification
-                  </a>
+                    <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Create notifications</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >C</span>
+                  </Link>
                 </li>
               </ul>
             </li>
@@ -90,12 +220,7 @@ function index() {
               <button
                 type="button"
                 onClick={handleDropdownMembers}
-                //  className='flex pt-[16px] px-[8px] w-[255px] text-gray-900 items-center justify-between'
-                className={
-                  isDropdownMembers
-                    ? "flex px-[8px] w-[255px] text-gray-900 items-center justify-between py-[6px] bg-gray-100 rounded-[8px]"
-                    : "flex  px-[8px] w-[255px] text-gray-900 items-center justify-between"
-                }
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 rounded-[8px]`}
               >
                 <div className="flex items-center">
                   <Image
@@ -103,13 +228,20 @@ function index() {
                     alt="Picture of the author"
                     className="w-[24px] h-[24px] "
                   />
-                  <span className="pl-[12px] text-[16px] ">Members</span>
+                  <span className="pl-[12px] text-[16px] "
+                  style={{
+                    display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                  }}
+                  >Members</span>
                 </div>
                 <div className={isDropdownMembers ? "rotate-180" : ""}>
                   <Image
                     src={chevrondown}
                     alt="Picture of the author"
                     className="r-0"
+                    style={{
+                      display: isOpenSlidebar ? "none" : ""
+                    }}
                   />
                 </div>
               </button>
@@ -117,29 +249,62 @@ function index() {
                 id="dropdown-Notifications"
                 className={isDropdownMembers ? "pt-[6px]" : "hidden"}
               >
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full  text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] hover:bg-gray-100 rounded-md ${isMemberList ? "bg-gray-100" : ""}`} onClick={handleMemberList}>
+                  <Link
+                    href="/members/list"
+                    className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
-                    Member List
-                  </a>
+                     <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Member List</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >M</span>
+                  </Link>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full pt-[16px] text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isProfile ? "bg-gray-100" : ""}`} onClick={handleProfile}>
+                  <Link
+                    href="/members/profile/0"
+                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group`}
                   >
-                    Profile
-                  </a>
+                     <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Profile</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >P</span>
+                  </Link>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full pt-[16px] text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isSetting ? "bg-gray-100" : ""}`} onClick={handleSetting}>
+                  <Link
+                    href="/members/setting/0"
+                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
-                    Settings
-                  </a>
+                     <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Setting</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >S</span>
+                  </Link>
                 </li>
               </ul>
             </li>
@@ -148,11 +313,7 @@ function index() {
                 type="button"
                 onClick={handleDropdownBlogs}
                 //  className='flex pt-[16px] px-[8px] w-[255px] text-gray-900 items-center justify-between'
-                className={
-                  isDropdownBlogs
-                    ? "flex px-[8px] w-[255px] text-gray-900 items-center justify-between py-[6px] bg-gray-100 rounded-[8px]"
-                    : "flex  px-[8px] w-[255px] text-gray-900 items-center justify-between"
-                }
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center justify-between hover:bg-gray-100 rounded-[8px] transition`}
               >
                 <div className="flex items-center">
                   <Image
@@ -160,13 +321,20 @@ function index() {
                     alt="Picture of the author"
                     className="w-[24px] h-[24px] "
                   />
-                  <span className="pl-[12px] text-[16px] ">Blogs</span>
+                  <span className="pl-[12px] text-[16px] "
+                  style={{
+                    display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                  }}
+                  >Blogs</span>
                 </div>
                 <div className={isDropdownBlogs ? "rotate-180" : ""}>
                   <Image
                     src={chevrondown}
                     alt="Picture of the author"
                     className="r-0"
+                    style={{
+                      display: isOpenSlidebar ? "none" : ""
+                    }}
                   />
                 </div>
               </button>
@@ -174,29 +342,62 @@ function index() {
                 id="dropdown-Notifications"
                 className={isDropdownBlogs ? "pt-[6px]" : "hidden"}
               >
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full  text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] hover:bg-gray-100 rounded-md ${isBlogList ? "bg-gray-100" : ""}`} onClick={handleBlogList}> 
+                  <Link
+                    href="/blogs/list"
+                    className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
-                    Blog list
-                  </a>
+                     <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Blog List</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >B</span>
+                  </Link>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full pt-[16px] text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isYourBlog ? "bg-gray-100" : ""}`} onClick={handleYourBlog}>
+                  <Link
+                    href="/blogs/detail/0"
+                    className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
-                    Your blog
-                  </a>
+                     <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Your blog</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >Y</span>
+                  </Link>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full pt-[16px] text-gray-900 transition duration-75 rounded-lg pl-11 group "
+                <li className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${isCreateBlog ? "bg-gray-100" : ""}`} onClick={handleCreateBlog}>
+                  <Link
+                    href="/blogs/create"
+                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group`}
                   >
-                    Create blog
-                  </a>
+                     <span
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >Create blog</span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar ? isMouseVisit ? "none" : "" : "none"
+                      }}
+                    >C</span>
+                  </Link>
                 </li>
               </ul>
             </li>
@@ -207,4 +408,4 @@ function index() {
   );
 }
 
-export default index;
+export default Slidebar;
