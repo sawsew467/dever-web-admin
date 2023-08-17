@@ -6,7 +6,7 @@ interface pageProps {
     params: {blogID: string};
 }
 
-function DetailNotification({params}: pageProps) {
+function BlogDetail({params}: pageProps) {
     const {isOpenSlidebar, isMouseVisit} = useAppContext();
 
     return (
@@ -20,4 +20,4 @@ function DetailNotification({params}: pageProps) {
     )
 }
 
-export default DetailNotification
+export default BlogDetail
