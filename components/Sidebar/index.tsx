@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import bell from "../../assets/images/sidebar/bell.svg";
-import chevrondown from "../../assets/images/sidebar/chevron-down.svg";
-import usersgroup from "../../assets/images/sidebar/users-group.svg";
-import gridplus from "../../assets/images/sidebar/grid-plus.svg";
+import bell from "@assets/images/sidebar/bell.svg";
+import chevrondown from "@assets/images/sidebar/chevron-down.svg";
+import usersgroup from "@assets/images/sidebar/users-group.svg";
+import gridplus from "@assets/images/sidebar/grid-plus.svg";
 import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
 

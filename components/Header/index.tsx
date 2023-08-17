@@ -1,10 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
-import menu from "../../assets/images/header/menu.svg"
-import logo from "../../assets/images/header/logo.svg"
-import moon from "../../assets/images/header/moon.svg"
-import avatar from "../../assets/images/header/avatar.svg"
+import menu from "@assets/images/header/menu.svg"
+import logo from "@assets/images/header/logo.svg"
+import moon from "@assets/images/header/moon.svg"
+import avatar from "@assets/images/header/avatar.svg"
 import { useAppContext } from '@/app/context/AppContext';
 import Link from 'next/link';
 function Header() {
