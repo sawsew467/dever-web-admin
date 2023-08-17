@@ -7,6 +7,8 @@ import usersgroup from "@assets/images/sidebar/users-group.svg";
 import gridplus from "@assets/images/sidebar/grid-plus.svg";
 import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { GetServerSidePropsContext } from "next";
 
 
 function Slidebar() {
@@ -45,8 +47,6 @@ function Slidebar() {
     setIsBlogList(false);
     setIsYourBlog(false);
     setIsCreateBlog(false);
-
-    console.log(isViewNotification);
     
   }
   const handleCreateNotification = () => {
@@ -121,7 +121,8 @@ function Slidebar() {
   }
 
   const {isOpenSlidebar,  isMouseVisit, setIsMouseVisit} = useAppContext();
-  
+
+
   return (
     
     <>
@@ -129,7 +130,7 @@ function Slidebar() {
         id="default-sidebar"
         className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 border-r-2 "
         aria-label="Sidebar"
-      > 
+      > <h1></h1>
         <div className="h-full bg-[#ffffff]"
         onMouseEnter={() => setIsMouseVisit(true)}
         onMouseLeave={() => setIsMouseVisit(false)}
@@ -240,7 +241,7 @@ function Slidebar() {
                     alt="Picture of the author"
                     className="r-0"
                     style={{
-                      display: isOpenSlidebar ? "none" : ""
+                      display: isOpenSlidebar ? isMouseVisit ? "" : "none" : ""
                     }}
                   />
                 </div>
@@ -333,7 +334,7 @@ function Slidebar() {
                     alt="Picture of the author"
                     className="r-0"
                     style={{
-                      display: isOpenSlidebar ? "none" : ""
+                      display: isOpenSlidebar ? isMouseVisit ? "" : "none" : ""
                     }}
                   />
                 </div>
@@ -407,5 +408,4 @@ function Slidebar() {
     </>
   );
 }
-
 export default Slidebar;
