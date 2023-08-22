@@ -22,16 +22,9 @@ function DetailNotification({ params }: pageProps) {
       "<p style='font-size:14px; font-weight: bold;'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt ultrices tempus. Sed quis arcu nec nibh faucibus feugiat non et nunc. Proin bibendum turpis consequat tellus dapibus, eget commodo ligula mattis. Nullam finibus, odio at tincidunt tincidunt, ante nisl maximus justo, in lobortis metus felis faucibus est. Mauris ultrices tincidunt vehicula. Suspendisse scelerisque urna sapien, ac varius ex luctus quis. Nullam luctus sollicitudin tortor vitae auctor. In non arcu metus. Nam venenatis dignissim felis, non pharetra urna blandit eget. Fusce pulvinar magna in nunc dignissim molestie. Suspendisse sollicitudin nulla orci, vel hendrerit dui consequat nec. Aenean magna odio, tempus ut tempor vel, volutpat a augue. Suspendisse potenti. Integer imperdiet aliquet sapien et auctor.</p><br/><a href='#' style='color:blue; font-size:12px;'>Link text reuse anchor component</a>",
   };
 
-  useEffect(() => {
-    const renderNotificationContent = ():ReactNode => {
-        const notificationContent = document.getElementById("notificationContent");
-        return(
-            <>{notificationContent ? notificationContent.innerHTML = `${data.content}` : ""}</>
-        ) 
-      }
-    renderNotificationContent();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  const renderHtmlString = (htmlString: string) => {
+    return <div dangerouslySetInnerHTML={{__html : htmlString}}></div>
+  }
 
   return (
     <div
@@ -73,7 +66,7 @@ function DetailNotification({ params }: pageProps) {
                 <div><h3 className="font-[700] text-[36px]">{data.title}</h3></div>
                 <div><p className="flex gap-[8px]"><Image src={clockIcon} alt="clockIcon"></Image>{data.time}</p></div>
                 <div className="h-[480px] overflow-hidden rounded-[10px]"><Image src={thumbnail} alt="thumbnail" className="w-[100%] h-[100%] object-cover"></Image></div>
-                <div id="notificationContent"></div>
+                <div id="notificationContent">{renderHtmlString(data.content)}</div>
             </div>
         </div>
     </div>

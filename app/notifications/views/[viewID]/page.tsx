@@ -21,7 +21,7 @@ function View({ params }: pageProps) {
         img: thumbnail,
         title: "Noteworthy technology acquisitions 2021",
         second_title:
-            "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+            "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
         time: "August 7th 2023, 6:25:59 am",
     },
     {
@@ -131,9 +131,9 @@ function View({ params }: pageProps) {
   ];
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
 
-  const increaseIndex = 6;
-  const [notifications, setNotitications] = useState(notificationList.slice(0, increaseIndex));
-  const [countNotificationPage, setCountNotificationPage] = useState(Math.round(notificationList.length/increaseIndex));
+  const increaseIndex = 5;
+  const [notifications, setNotitications] = useState(notificationList.slice(0, increaseIndex+1));
+  const [countNotificationPage, setCountNotificationPage] = useState(Math.ceil(notificationList.length/increaseIndex));
   const pages: { param: string; startIndex: number; endIndex: number; }[] = [];
   
 
@@ -195,7 +195,7 @@ function View({ params }: pageProps) {
                     <div className="p-[20px] flex flex-col gap-[12px]">
                         <div className="flex flex-col gap-[8px]">
                             <h3 className="font-[700] text-[24px]">{item.title}</h3>
-                            <p className="font-[400] text-[16px]">{item.second_title}</p >
+                            <p className="font-[400] text-[16px] h-[48px] overflow-hidden">{item.second_title}</p >
                             <p className="flex gap-[8px]"><Image src={clockIcon} alt="clockIcon"></Image>{item.time}</p>
                         </div>
                         <div>
@@ -214,7 +214,7 @@ function View({ params }: pageProps) {
         </div>
 
         <Pagination 
-        id={params.viewID} 
+        paramID={params.viewID} 
         route={"/notifications/views/"}
         countNumberOfPage={countNotificationPage} 
         pages={pages} 

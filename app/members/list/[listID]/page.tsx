@@ -203,8 +203,8 @@ function MemberList({params}: pageProps) {
     ]
 
     const increaseIndex = 8;
-    const [members, setMembers] = useState(memberList.slice(0, increaseIndex));
-    const [countListPage, setCountListPage] = useState(Math.round(memberList.length/increaseIndex));
+    const [members, setMembers] = useState(memberList.slice(0, increaseIndex+1));
+    const [countListPage, setCountListPage] = useState(Math.ceil(memberList.length/increaseIndex));
     const pages: { param: string; startIndex: number; endIndex: number; }[] = [];
 
     return (
@@ -305,7 +305,7 @@ function MemberList({params}: pageProps) {
                 </div>
 
                 <Pagination 
-                id={params.listID} 
+                paramID={params.listID} 
                 countNumberOfPage={countListPage} 
                 pages={pages} 
                 increaseIndex={increaseIndex} 
