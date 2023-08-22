@@ -176,7 +176,7 @@ function Slidebar() {
               >
                 <li  className={`py-[6px] hover:bg-gray-100 rounded-md ${isViewNotification ? "bg-gray-100" : ""}`} onClick={handleViewNotification}>
                   <Link
-                    href="/notifications/views"
+                    href="/notifications/views/1"
                     className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
                     <span

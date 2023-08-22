@@ -2,16 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import { useAppContext } from '@/app/context/AppContext';
 import Image from 'next/image';
-import Link from 'next/link';
 
 import searchIcon from '@icon/page/member/list/search-outline.svg'
 import checkIcon from '@icon/page/member/list/check-circle.svg'
 import trashIcon from '@icon/page/member/list/trash.svg'
-import addUserIcon from '@icon/page/member/list/user-add.svg'
-import importIcon from '@icon/page/member/list/save.svg'
 
 import MemberItem from '@/components/MemberItem/';
 import Button from '@/components/Button';
+import Pagination from '@/components/Pagination';
 
 interface pageProps {
     params: {listID: string};
@@ -204,40 +202,10 @@ function MemberList({params}: pageProps) {
         },
     ]
 
-    const paramsValue = params.listID;
     const increaseIndex = 8;
     const [members, setMembers] = useState(memberList.slice(0, increaseIndex));
     const [countListPage, setCountListPage] = useState(Math.round(memberList.length/increaseIndex));
-    const pages: { param: string; startIndex: number; endInsex: number; }[] = [];
-
-    const renderPageButton = ()=> {
-        const buttons = [];
-        let startIndex = 0;
-        let endIndex = 0;
-        for(let i = 1; i <= countListPage; i++) {
-            buttons.push(<Link href={`/members/list/${i}`} key={i}><button className={`px-[12px] py-[4px] border-r-[1px] ${params.listID === i.toString() ? "bg-blue-300" : ""}`}>{i}</button></Link>);
-            pages.push({
-                param: i.toString(),
-                startIndex: startIndex,
-                endInsex: startIndex + increaseIndex,
-            })
-            endIndex = startIndex + increaseIndex;
-            startIndex = endIndex + 1;
-            endIndex = startIndex + increaseIndex;
-        }
-        return buttons
-    }
-
-    useEffect(() => {
-        const handleNextPage = () => {
-            const page = pages[parseInt(params.listID) - 1];
-            if(page) {
-                setMembers(memberList.slice(page.startIndex, page.endInsex))
-            }
-        }
-        handleNextPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    const pages: { param: string; startIndex: number; endIndex: number; }[] = [];
 
     return (
         <div className={`w-[100%] ${isOpenSlidebar ? isMouseVisit ? "sm:w-[calc(100%-250px)]" : "sm:w-[calc(100%-65px)]" : "sm:w-[calc(100%-250px)]"} absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}>
@@ -336,19 +304,15 @@ function MemberList({params}: pageProps) {
                     </div>
                 </div>
 
-                <div className='w-[100%] flex justify-center items-center pb-[40px]'>
-                    <div className='border-[1px] rounded-md font-[14px]'>
-                        <button className={`px-[12px] py-[4px] border-r-[1px] ${params.listID === "1" ? "text-slate-300 pointer-events-none" : ""}`}
-                        ><Link href={`/members/list/${params.listID === "1" ? "1" : parseInt(params.listID) -1}`}>Previous</Link></button>
-                    
-                        {
-                            renderPageButton()
-                        }
-                        
-                        <button className={`px-[12px] py-[4px] ${params.listID === countListPage.toString() ? "pointer-events-none text-slate-300" : ""}`}
-                        ><Link href={`/members/list/${parseInt(params.listID) + 1}`}>Next</Link></button>
-                    </div>
-                </div>
+                <Pagination 
+                id={params.listID} 
+                countNumberOfPage={countListPage} 
+                pages={pages} 
+                increaseIndex={increaseIndex} 
+                sliceSetData={setMembers} 
+                data={memberList} 
+                route={'/members/list/'}
+                ></Pagination>
             </div>
         </div>
     )
