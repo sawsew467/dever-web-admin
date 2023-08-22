@@ -1,14 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import bell from "@assets/images/sidebar/bell.svg";
-import chevrondown from "@assets/images/sidebar/chevron-down.svg";
-import usersgroup from "@assets/images/sidebar/users-group.svg";
-import gridplus from "@assets/images/sidebar/grid-plus.svg";
+import bell from "@icon/components/sidebar/bell.svg";
+import chevrondown from "@icon/components/sidebar/chevron-down.svg";
+import usersgroup from "@icon/components/sidebar/users-group.svg";
+import gridplus from "@icon/components/sidebar/grid-plus.svg";
 import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { GetServerSidePropsContext } from "next";
 
 
 function Slidebar() {
@@ -252,7 +250,7 @@ function Slidebar() {
               >
                 <li className={`py-[6px] hover:bg-gray-100 rounded-md ${isMemberList ? "bg-gray-100" : ""}`} onClick={handleMemberList}>
                   <Link
-                    href="/members/list"
+                    href="/members/list/1"
                     className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${isOpenSlidebar ? isMouseVisit ? "pl-11" : "" : "pl-11"} group `}
                   >
                      <span
