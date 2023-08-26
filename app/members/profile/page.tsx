@@ -101,15 +101,15 @@ function Profile() {
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex flex-row'><span className='font-[400] text-[16px]'>Email address:</span></div>
-                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>thangtvbde170145@fpt.edu.vn</span></div>
+                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>{userData.email}</span></div>
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Email address:</span></div>
-                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>thangtvbde170145@fpt.edu.vn</span></div>
+                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Home address:</span></div>
+                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>{userData.homeAddress}</span></div>
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Email address:</span></div>
-                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>thangtvbde170145@fpt.edu.vn</span></div>
+                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Phone number:</span></div>
+                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>{userData.phone}</span></div>
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex flex-row'><span className='font-[700] text-[20px]'>Social media:</span></div>
@@ -127,9 +127,9 @@ function Profile() {
                             <div className='flex flex-wrap gap-[8px]'>
                                 {
                                     userData?.skills.map((item, index) => (
-                                        <>
-                                            <p key={index} className='py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]'>{item.replace('#', '')}</p>
-                                        </>
+                                        
+                                        <p key={index} className='py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]'>{item.replace('#', '')}</p>
+                                        
                                     ))
                                 }
                             </div>
@@ -141,9 +141,9 @@ function Profile() {
                             <div className='flex flex-wrap gap-[8px]'>
                                 {
                                     userData?.hobbies.map((item, index) => (
-                                        <>
-                                            <p key={index} className='py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]'>{item.replace('#', '')}</p>
-                                        </>
+                                        
+                                        <p key={index} className='py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]'>{item.replace('#', '')}</p>
+                                       
                                     ))
                                 }
                             </div>
@@ -195,9 +195,9 @@ function Profile() {
                                 {
                                     userData?.project.map((item, index) => {
                                         return (
-                                            <>
+                                        
                                                 <div className='flex flex-row shadow-primary rounded-[16px] h-fit overflow-hidden relative' key={index}>
-                                                    <div className='w-[30%] h-[100%] hidden lg:block absolute'>
+                                                    <div className='w-[30%] h-[100%] absolute'>
                                                         <Image src={projectImage} alt='project' className='w-[100%] h-full object-cover'></Image>
                                                     </div>
                                                     <div className='lg:w-[70%] w-[100%] p-[20px] flex flex-col gap-[16px] ml-[30%]'>
@@ -219,11 +219,12 @@ function Profile() {
                                                             href={item.link} 
                                                             method={() => {}} 
                                                             tailwind={'text-white'}
+                                                        
                                                         ></Button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </>
+                                            
                                         )
                                     })
                                 }
