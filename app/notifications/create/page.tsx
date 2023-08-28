@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useAppContext } from '@/app/context/AppContext';
 
 import BrowseFile from '@/components/BrowseFile';
-import TextEditorLarge from '@/components/EditorLarge';
+import EditorLarge from '@/components/EditorLarge';
 
 function CreateNotification() {
     const {isOpenSlidebar, isMouseVisit} = useAppContext();
@@ -29,9 +29,9 @@ function CreateNotification() {
                         ></BrowseFile>
                     </div>
                     <div>
-                        <TextEditorLarge
+                        <EditorLarge
                         formTitle='Notification content'
-                        ></TextEditorLarge>
+                        ></EditorLarge>
                     </div>
                 </div>
 

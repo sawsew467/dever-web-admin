@@ -15,7 +15,6 @@ import type {
 } from 'lexical';
 
 import './ImageNode.css';
-import Image from 'next/image';
 
 import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
 import {useCollaborationContext} from '@lexical/react/LexicalCollaborationContext';
@@ -92,7 +91,8 @@ function LazyImage({
 }): JSX.Element {
   useSuspenseImage(src);
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       className={className || undefined}
       src={src}
       alt={altText}
@@ -161,11 +161,13 @@ export default function ImageComponent({
     (event: KeyboardEvent) => {
       const latestSelection = $getSelection();
       const buttonElem = buttonRef.current;
+
       if (
         isSelected &&
         $isNodeSelection(latestSelection) &&
         latestSelection.getNodes().length === 1
       ) {
+
         if (showCaption) {
           // Move focus into nested editor
           $setSelection(null);
@@ -335,7 +337,7 @@ export default function ImageComponent({
           <LazyImage
             className={
               isFocused
-                ? `focused ${$isNodeSelection(selection) ? 'draggable' : ''}`
+                ? `focused ${$isNodeSelection(selection) ? ' draggable' : ''}`
                 : null
             }
             src={src}
@@ -363,7 +365,7 @@ export default function ImageComponent({
                 />
               ) : (
                 <HistoryPlugin externalHistoryState={historyState} />
-              )} */}
+              )}
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable className="ImageNode__contentEditable" />
@@ -375,11 +377,24 @@ export default function ImageComponent({
                 }
                 ErrorBoundary={LexicalErrorBoundary}
               />
-              {/* {showNestedEditorTreeView === true ? <TreeViewPlugin /> : null} */}
+              {showNestedEditorTreeView === true ? <TreeViewPlugin /> : null} */}
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable className="ImageNode__contentEditable" />
+                }
+                placeholder={
+                  <Placeholder className="ImageNode__placeholder">
+                    Enter a caption...
+                  </Placeholder>
+                }
+                ErrorBoundary={LexicalErrorBoundary}
+              />
             </LexicalNestedComposer>
           </div>
         )}
+        
         {resizable && $isNodeSelection(selection) && isFocused && (
+          
           <ImageResizer
             showCaption={showCaption}
             setShowCaption={setShowCaption}

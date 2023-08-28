@@ -58,18 +58,15 @@ import FloatingLinkEditorPlugin from '@/plugins/FloatingLinkEditorPlugin';
 import DraggableBlockPlugin from '@/plugins/DraggableBlockPlugin';
 import CodeActionMenuPlugin from '@/plugins/CodeActionMenuPlugin';
 import TableActionMenuPlugin from '@/plugins/TableActionMenuPlugin';
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
-import ContextMenuPlugin from '@/plugins/ContextMenuPlugin';
+// import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+// import ContextMenuPlugin from '@/plugins/ContextMenuPlugin';
 import SpeechToTextPlugin from '@/plugins/SpeechToTextPlugin';
-import {HeadingNode, QuoteNode} from '@lexical/rich-text'
 
 interface IPros {
     formTitle: string
 }
 
-function placeholder() {
-    return <div className="editor-placeholder">Enter some rich text...</div>;
-}
+
 
 const editorConfig = {
     onError(error: Error) {
@@ -110,7 +107,7 @@ function EditorLarge({formTitle}:IPros) {
             </div>
 
 
-            <div>
+            <div className='editor-shell'>
                 <LexicalComposer initialConfig={editorConfig}>
                    <TableContext>
                         <div className='border-2 rounded-[10px]'>
@@ -142,12 +139,11 @@ function EditorLarge({formTitle}:IPros) {
                                         </div>
                                     </div>
                                     }
-                                    placeholder={<Placeholder className='absolute top-[15px] left-[10px] text-[14px] text-gray-500'>{"Enter some rich text..."}</Placeholder>}
+                                    placeholder={<Placeholder className='absolute top-[15px] left-[16px] text-[14px] text-gray-500'>{"Enter some rich text..."}</Placeholder>}
                                     ErrorBoundary={LexicalErrorBoundary}
                                 />
 
                                 <MarkdownShortcutPlugin />
-                                <CodeHighlightPlugin />
                                 <ListPlugin />
                                 <CheckListPlugin />
                                 <ListMaxIndentLevelPlugin maxDepth={7} />
@@ -185,7 +181,6 @@ function EditorLarge({formTitle}:IPros) {
                                 <YouTubePlugin />
                                 <FigmaPlugin />
                                 <LexicalClickableLinkPlugin />
-                                <FloatingTextFormatToolbarPlugin/>
                                 <HorizontalRulePlugin />
                                 <EquationsPlugin />
                                 <ExcalidrawPlugin />
@@ -194,8 +189,23 @@ function EditorLarge({formTitle}:IPros) {
                                 <PageBreakPlugin />       
                                 <DraggableBlockPlugin/>
                                 <CodeActionMenuPlugin/>
-                                <TableActionMenuPlugin/>
+                                <CodeHighlightPlugin/>
                                 <ActionsPlugin isRichText={true} /> 
+
+                                {floatingAnchorElem && (<>
+                                    <>
+                                        <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                                        <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
+                                        <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
+                                        <TableActionMenuPlugin
+                                        anchorElem={floatingAnchorElem}
+                                        cellMerge={true}
+                                        />
+                                        <FloatingTextFormatToolbarPlugin
+                                        anchorElem={floatingAnchorElem}
+                                        />
+                                    </>
+                                </>)}
 
                                 
                             </div>

@@ -8,7 +8,6 @@
 "use client"
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {$wrapNodeInElement, mergeRegister} from '@lexical/utils';
-import Image from 'next/image';
 import {
   $createParagraphNode,
   $createRangeSelection,
@@ -38,7 +37,7 @@ import {
   $isImageNode,
   ImageNode,
   ImagePayload,
-} from '../../nodes/ImageNode';
+} from '../../nodes/ImageNode'
 import Button from '../../ui/Button';
 import {DialogActions, DialogButtonsList} from '../../ui/Dialog';
 import FileInput from '../../ui/FileInput';
@@ -56,7 +55,7 @@ export function InsertImageUriDialogBody({
   onClick,
 }: {
   onClick: (payload: InsertImagePayload) => void;
-}) {
+  }) {
   const [src, setSrc] = useState('');
   const [altText, setAltText] = useState('');
 
@@ -161,8 +160,8 @@ export function InsertImageDialog({
     };
   }, [activeEditor]);
 
-  const onClick = (payload: any) => {
-    console.log(payload);
+  const onClick = (payload: InsertImagePayload) => {
+    // console.log(payload);
     activeEditor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
     onClose();
   };
@@ -171,7 +170,7 @@ export function InsertImageDialog({
     <>
       {!mode && (
         <DialogButtonsList>
-          <Button
+          {/* <Button
             data-test-id="image-modal-option-sample"
             onClick={() =>
               onClick(
@@ -179,16 +178,16 @@ export function InsertImageDialog({
                   ? {
                       altText:
                         'Daylight fir trees forest glacier green high ice landscape',
-                      src: landscapeImage,
+                      src: '',
                     }
                   : {
                       altText: 'Yellow flower in tilt shift lens',
-                      src: yellowFlowerImage,
+                      src: '',
                     },
               )
             }>
             Sample
-          </Button>
+          </Button> */}
           <Button
             data-test-id="image-modal-option-url"
             onClick={() => setMode('url')}>
@@ -260,10 +259,17 @@ export default function ImagesPlugin({
   return null;
 }
 
-const TRANSPARENT_IMAGE =
-  'data:image/*;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-const img = document.createElement('img');
-img.src = TRANSPARENT_IMAGE;
+// const TRANSPARENT_IMAGE =
+//   'data:image/*;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+// const img = document.createElement('img');
+// img.src = TRANSPARENT_IMAGE;
+let img:HTMLImageElement;
+if (typeof window !== 'undefined') {
+  const TRANSPARENT_IMAGE =
+    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  img = document.createElement('img');
+  img.src = TRANSPARENT_IMAGE;
+}
 
 function onDragStart(event: DragEvent): boolean {
   const node = getImageNodeInSelection();
