@@ -10,10 +10,11 @@ import arrowRightIcon from '@icon/components/Button/arrow-right.svg'
 import uploadIcon from '@icon/components/Button/cloud-upload.svg'
 import importIcon from '@icon/components/Button/save.svg'
 import searchIcon from '@icon/components/Button/search-outline.svg'
+import paperAirline from '@icon/components/Button/paper-airplane.svg'
 
 interface buttonPros {
     textContent: string;
-    icon:"edit" | "delete" | "add" | "arrowLeft" | "arrowRight" | "upload" | "import" | "search" ;
+    icon:"edit" | "delete" | "add" | "arrowLeft" | "arrowRight" | "upload" | "import" | "search" | "public" ;
     iconPosition: "left" | "right"
     backgroundColor: string;
     href: string;
@@ -34,7 +35,7 @@ function Button({textContent, icon, iconPosition, backgroundColor, href, method,
             }}
             >
                 <Image
-                src={icon === "edit" ? editIcon : icon === "delete" ? delectIcon : icon === "add" ? addUserIcon : icon === "arrowLeft" ? arrowLeftIcon : icon === "arrowRight" ? arrowRightIcon : icon === "upload" ? uploadIcon : icon === "import" ? importIcon : icon === "search" ? searchIcon : ""}
+                src={icon === "edit" ? editIcon : icon === "delete" ? delectIcon : icon === "add" ? addUserIcon : icon === "arrowLeft" ? arrowLeftIcon : icon === "arrowRight" ? arrowRightIcon : icon === "upload" ? uploadIcon : icon === "import" ? importIcon : icon === "search" ? searchIcon : icon === "public" ? paperAirline : ""}
                 alt={icon}
                 style={{
                     width: "16px",

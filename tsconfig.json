@@ -24,9 +24,13 @@
       "@assets/*" : ["./assets/*"],
       "@icon/*": ["./assets/icon/*"],
       "@image/*" : ["./assets/images/*"],
-      "@Component/*": ["./components/*"]
+      "@Component/*": ["./components/*"],
+      "@lexial/*" : ["./lexical/*"],
+      "@theme/*" : ["./theme/*"],
+      "@nodes/*" : ["./nodes/*"],
+      "@imageInput/*" : ["./images/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/plugins/AutoLinkPlugin.js", "components/plugins/ListMaxIndentLevelPlugin.js", "components/plugins/ToolbarPlugin.js", "components/plugins/CodeHighlightPlugin.js", "components/EditorLarge/index.tsx", "components/plugins/TreeViewPlugin.js"],
   "exclude": ["node_modules"]
 }

@@ -105,15 +105,15 @@ function Profile({params}: pageProps) {
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex flex-row'><span className='font-[400] text-[16px]'>Email address:</span></div>
-                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>thangtvbde170145@fpt.edu.vn</span></div>
+                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>{userData.email}</span></div>
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Email address:</span></div>
-                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>thangtvbde170145@fpt.edu.vn</span></div>
+                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Home address:</span></div>
+                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>{userData.homeAddress}</span></div>
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Email address:</span></div>
-                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>thangtvbde170145@fpt.edu.vn</span></div>
+                                <div className='flex flex-row'><span className='font-[400] text-[16px]'>Phone number:</span></div>
+                                <div className='flex flex-row'><span className='font-[700] text-[16px]'>{userData.phone}</span></div>
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex flex-row'><span className='font-[700] text-[20px]'>Social media:</span></div>
