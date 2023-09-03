@@ -151,6 +151,8 @@ function Slidebar() {
                   <Image
                     src={bell}
                     alt="Picture of the author"
+                    width={100}
+                    height={100}
                     className="w-[24px] h-[24px]"
                   />
                   <span className="pl-[12px] text-[16px]"
@@ -164,6 +166,8 @@ function Slidebar() {
                     src={chevrondown}
                     alt="Picture of the author"
                     className="r-0"
+                    width={20}
+                    height={20}
                     style={{
                       display: isOpenSlidebar ? isMouseVisit ? "" : "none" : ""
                     }}
@@ -225,7 +229,9 @@ function Slidebar() {
                   <Image
                     src={usersgroup}
                     alt="Picture of the author"
-                    className="w-[24px] h-[24px] "
+                    width={100}
+                    height={100}
+                    className="w-[24px] h-[24px]"
                   />
                   <span className="pl-[12px] text-[16px] "
                   style={{
@@ -238,6 +244,8 @@ function Slidebar() {
                     src={chevrondown}
                     alt="Picture of the author"
                     className="r-0"
+                    width={20}
+                    height={20}
                     style={{
                       display: isOpenSlidebar ? isMouseVisit ? "" : "none" : ""
                     }}
@@ -319,6 +327,8 @@ function Slidebar() {
                     src={gridplus}
                     alt="Picture of the author"
                     className="w-[24px] h-[24px] "
+                    width={100}
+                    height={100}
                   />
                   <span className="pl-[12px] text-[16px] "
                   style={{
@@ -331,6 +341,8 @@ function Slidebar() {
                     src={chevrondown}
                     alt="Picture of the author"
                     className="r-0"
+                    width={20}
+                    height={20}
                     style={{
                       display: isOpenSlidebar ? isMouseVisit ? "" : "none" : ""
                     }}
@@ -351,7 +363,7 @@ function Slidebar() {
                         display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
                       }}
                       className="whitespace-nowrap"
-                    >Blog List</span>
+                    >View Blogs</span>
                     <span
                       className="px-[14px]"
                       style={{
@@ -370,7 +382,7 @@ function Slidebar() {
                         display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
                       }}
                       className="whitespace-nowrap"
-                    >Your blog</span>
+                    >Blog list</span>
                     <span
                       className="px-[14px]"
                       style={{
