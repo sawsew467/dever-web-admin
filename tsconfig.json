@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -25,10 +25,13 @@
       "@icon/*": ["./assets/icon/*"],
       "@image/*" : ["./assets/images/*"],
       "@component/*": ["./components/*"],
-      "@lexial/*" : ["./lexical/*"],
-      "@theme/*" : ["./theme/*"],
-      "@nodes/*" : ["./nodes/*"],
-      "@imageInput/*" : ["./images/*"]
+      "@lexial/*" : ["./lexical_Lib/lexical/*"],
+      "@theme/*" : ["./lexical_Lib/theme/*"],
+      "@nodes/*" : ["./lexical_Lib/nodes/*"],
+      "@imageInput/*" : ["./lexical_Lib/images/*"],
+      "@plugins/*" : ["./lexical_Lib/plugins/*"],
+      "@ui/*" : ["./lexical_Lib/ui/*"],
+      "@lexicalLib/*" : ["./lexical_Lib/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/plugins/AutoLinkPlugin.js", "components/plugins/ListMaxIndentLevelPlugin.js", "components/plugins/ToolbarPlugin.js", "components/plugins/CodeHighlightPlugin.js", "components/EditorLarge/index.tsx", "components/plugins/TreeViewPlugin.js"],

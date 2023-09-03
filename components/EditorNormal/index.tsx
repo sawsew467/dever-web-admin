@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import PlaygroundEditorTheme from '@theme/PlaygroundEditorTheme';
+import PlaygroundEditorTheme from '@/lexical_Lib/theme/EditorTheme';
 import TableCellNodes from '@nodes/TableCellNodes'
-import PlaygroundNodes from '@/nodes/PlaygroundNodes';
+import PlaygroundNodes from '@nodes/PlaygroundNodes';
 
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -13,23 +13,23 @@ import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 
-import HTMLSerializerPlugin from '@/plugins/HtmlSerializerPlugin';
+import HTMLSerializerPlugin from '@plugins/HtmlSerializerPlugin';
 
-import AutoLinkPlugin from '@/plugins/AutoLinkPlugin';
-import CodeHighlightPlugin from '@/plugins/CodeHighlightPlugin';
-import YouTubePlugin from '@/plugins/YouTubePlugin';
-import TwitterPlugin from '@/plugins/TwitterPlugin';
-import FigmaPlugin from '@/plugins/FigmaPlugin';
-import CodeActionMenuPlugin from '@/plugins/CodeActionMenuPlugin';
-import AutoEmbedPlugin from '@/plugins/AutoEmbedPlugin';
-import Placeholder from '@/ui/Placeholder';
-import ToolbarPlugin from '@/plugins/ToolbarNormalPlugin';
+import AutoLinkPlugin from '@plugins/AutoLinkPlugin';
+import CodeHighlightPlugin from '@plugins/CodeHighlightPlugin';
+import YouTubePlugin from '@plugins/YouTubePlugin';
+import TwitterPlugin from '@plugins/TwitterPlugin';
+import FigmaPlugin from '@plugins/FigmaPlugin';
+import CodeActionMenuPlugin from '@plugins/CodeActionMenuPlugin';
+import AutoEmbedPlugin from '@plugins/AutoEmbedPlugin';
+import Placeholder from '@ui/Placeholder';
+import ToolbarPlugin from '@plugins/ToolbarNormalPlugin';
 
 import {$generateNodesFromDOM} from '@lexical/html';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import DomToLexicalPlugin from '@/plugins/DomToLexicalPlugin.tsx';
-import TreeViewPlugin from '@/plugins/TreeViewPlugin';
-import EditorSaveButtonPlugin from '@/plugins/EditorSaveButtonPlugin';
+import DomToLexicalPlugin from '@plugins/DomToLexicalPlugin.tsx';
+import TreeViewPlugin from '@plugins/TreeViewPlugin';
+import EditorSaveButtonPlugin from '@plugins/EditorSaveButtonPlugin';
 
 
 const editorConfig = {
@@ -101,7 +101,7 @@ function EditorNormal({htmlString, setHtmlString,isNeedSave}: TPros) {
                 {isNeedSave ? <EditorSaveButtonPlugin 
                                 setHtmlString={setHtmlString}/> 
                             : <HTMLSerializerPlugin
-                                setHtml={setHtmlString}/>}
+                                setHtmlString={setHtmlString}/>}
             </LexicalComposer>
         </div>
     )

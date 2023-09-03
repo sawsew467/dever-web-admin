@@ -1,7 +1,7 @@
 import React, {useState } from 'react'
 import Button from '../Button'
 
-import PlaygroundEditorTheme from '@theme/PlaygroundEditorTheme';
+import PlaygroundEditorTheme from '@/lexical_Lib/theme/EditorTheme';
 import PlaygroundNodes from '@nodes/PlaygroundNodes'
 
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
@@ -19,49 +19,49 @@ import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin';
 import {HorizontalRulePlugin} from '@lexical/react/LexicalHorizontalRulePlugin';
-import FloatingTextFormatToolbarPlugin from '@/plugins/FloatingTextFormatToolbarPlugin';
 import {TabIndentationPlugin} from '@lexical/react/LexicalTabIndentationPlugin';
 
-import { TableContext } from '@/plugins/TablePlugin';
-import ToolbarPlugin from '@/plugins/ToolbarPlugin';
-import TreeViewPlugin from '@/plugins/TreeViewPlugin';
-import Placeholder from '@/ui/Placeholder';
-import DragDropPaste from '@/plugins/DragDropPastePlugin';
-import AutoEmbedPlugin from '@/plugins/AutoEmbedPlugin';
-import ComponentPickerPlugin from '@/plugins/ComponentPickerPlugin'
-import EmojiPickerPlugin from '@/plugins/EmojiPickerPlugin';
-import NewMentionsPlugin from '@/plugins/MentionsPlugin';
-import EmojisPlugin from '@/plugins/EmojisPlugin';
-import KeywordsPlugin from '@/plugins/KeywordsPlugin';
-// import CommentPlugin from '@/plugins/CommentPlugin';
-import AutoLinkPlugin from '@/plugins/AutoLinkPlugin';
-import MarkdownShortcutPlugin from '@/plugins/MarkdownShortcutPlugin';
-import CodeHighlightPlugin from '@/plugins/CodeHighlightPlugin';
-import LinkPlugin from '@/plugins/LinkPlugin';
-import ListMaxIndentLevelPlugin from '@/plugins/ListMaxIndentLevelPlugin';
-import TableCellResizer from '@/plugins/TableCellResizer';
-import {TablePlugin as NewTablePlugin} from '@/plugins/TablePlugin';
-import MentionsPlugin from '@/plugins/MentionsPlugin';
-import ImagesPlugin from '@/plugins/ImagesPlugin';
-import InlineImagePlugin from '@/plugins/InlineImagePlugin';
-import PollPlugin from '@/plugins/PollPlugin';
-import YouTubePlugin from '@/plugins/YouTubePlugin';
-import TwitterPlugin from '@/plugins/TwitterPlugin';
-import FigmaPlugin from '@/plugins/FigmaPlugin';
-import EquationsPlugin from '@/plugins/EquationsPlugin';
-import ExcalidrawPlugin from '@/plugins/ExcalidrawPlugin';
-import TabFocusPlugin from '@/plugins/TabFocusPlugin';
-import PageBreakPlugin from '@/plugins/PageBreakPlugin';
-import ActionsPlugin from '@/plugins/ActionsPlugin';
-import StickyPlugin from '@/plugins/StickyPlugin';
-import FloatingLinkEditorPlugin from '@/plugins/FloatingLinkEditorPlugin';
-import DraggableBlockPlugin from '@/plugins/DraggableBlockPlugin';
-import CodeActionMenuPlugin from '@/plugins/CodeActionMenuPlugin';
-import TableActionMenuPlugin from '@/plugins/TableActionMenuPlugin';
-import SpeechToTextPlugin from '@/plugins/SpeechToTextPlugin';
-import HTMLSerializerPlugin from '@/plugins/HtmlSerializerPlugin';
-// import AutocompletePlugin from '@/plugins/AutocompletePlugin';
-import TextCounterPlugin from '@/plugins/TextCounterPlugin';
+import FloatingTextFormatToolbarPlugin from '@plugins/FloatingTextFormatToolbarPlugin';
+import { TableContext } from '@plugins/TablePlugin';
+import ToolbarPlugin from '@plugins/ToolbarPlugin';
+import TreeViewPlugin from '@plugins/TreeViewPlugin';
+import Placeholder from '@ui/Placeholder';
+import DragDropPaste from '@plugins/DragDropPastePlugin';
+import AutoEmbedPlugin from '@plugins/AutoEmbedPlugin';
+import ComponentPickerPlugin from '@plugins/ComponentPickerPlugin'
+import EmojiPickerPlugin from '@plugins/EmojiPickerPlugin';
+import NewMentionsPlugin from '@plugins/MentionsPlugin';
+import EmojisPlugin from '@plugins/EmojisPlugin';
+import KeywordsPlugin from '@plugins/KeywordsPlugin';
+// import CommentPlugin from '@plugins/CommentPlugin';
+import AutoLinkPlugin from '@plugins/AutoLinkPlugin';
+import MarkdownShortcutPlugin from '@plugins/MarkdownShortcutPlugin';
+import CodeHighlightPlugin from '@plugins/CodeHighlightPlugin';
+import LinkPlugin from '@plugins/LinkPlugin';
+import ListMaxIndentLevelPlugin from '@plugins/ListMaxIndentLevelPlugin';
+import TableCellResizer from '@plugins/TableCellResizer';
+import {TablePlugin as NewTablePlugin} from '@plugins/TablePlugin';
+import MentionsPlugin from '@plugins/MentionsPlugin';
+import ImagesPlugin from '@plugins/ImagesPlugin';
+import InlineImagePlugin from '@plugins/InlineImagePlugin';
+import PollPlugin from '@plugins/PollPlugin';
+import YouTubePlugin from '@plugins/YouTubePlugin';
+import TwitterPlugin from '@plugins/TwitterPlugin';
+import FigmaPlugin from '@plugins/FigmaPlugin';
+import EquationsPlugin from '@plugins/EquationsPlugin';
+import ExcalidrawPlugin from '@plugins/ExcalidrawPlugin';
+import TabFocusPlugin from '@plugins/TabFocusPlugin';
+import PageBreakPlugin from '@plugins/PageBreakPlugin';
+import ActionsPlugin from '@plugins/ActionsPlugin';
+import StickyPlugin from '@plugins/StickyPlugin';
+import FloatingLinkEditorPlugin from '@plugins/FloatingLinkEditorPlugin';
+import DraggableBlockPlugin from '@plugins/DraggableBlockPlugin';
+import CodeActionMenuPlugin from '@plugins/CodeActionMenuPlugin';
+import TableActionMenuPlugin from '@plugins/TableActionMenuPlugin';
+import SpeechToTextPlugin from '@plugins/SpeechToTextPlugin';
+import HTMLSerializerPlugin from '@plugins/HtmlSerializerPlugin';
+// import AutocompletePlugin from '@plugins/AutocompletePlugin';
+import TextCounterPlugin from '@plugins/TextCounterPlugin';
 import UnlinkButton from '../UnlinkButton';
 
 interface IPros {
