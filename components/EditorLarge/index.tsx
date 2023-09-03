@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import React, {useState } from 'react'
 import Button from '../Button'
 
 import PlaygroundEditorTheme from '@theme/PlaygroundEditorTheme';
@@ -33,7 +33,7 @@ import EmojiPickerPlugin from '@/plugins/EmojiPickerPlugin';
 import NewMentionsPlugin from '@/plugins/MentionsPlugin';
 import EmojisPlugin from '@/plugins/EmojisPlugin';
 import KeywordsPlugin from '@/plugins/KeywordsPlugin';
-import CommentPlugin from '@/plugins/CommentPlugin';
+// import CommentPlugin from '@/plugins/CommentPlugin';
 import AutoLinkPlugin from '@/plugins/AutoLinkPlugin';
 import MarkdownShortcutPlugin from '@/plugins/MarkdownShortcutPlugin';
 import CodeHighlightPlugin from '@/plugins/CodeHighlightPlugin';
@@ -58,15 +58,15 @@ import FloatingLinkEditorPlugin from '@/plugins/FloatingLinkEditorPlugin';
 import DraggableBlockPlugin from '@/plugins/DraggableBlockPlugin';
 import CodeActionMenuPlugin from '@/plugins/CodeActionMenuPlugin';
 import TableActionMenuPlugin from '@/plugins/TableActionMenuPlugin';
-// import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
-// import ContextMenuPlugin from '@/plugins/ContextMenuPlugin';
 import SpeechToTextPlugin from '@/plugins/SpeechToTextPlugin';
+import HTMLSerializerPlugin from '@/plugins/HtmlSerializerPlugin';
+// import AutocompletePlugin from '@/plugins/AutocompletePlugin';
+import TextCounterPlugin from '@/plugins/TextCounterPlugin';
+import UnlinkButton from '../UnlinkButton';
 
 interface IPros {
     formTitle: string
 }
-
-
 
 const editorConfig = {
     onError(error: Error) {
@@ -88,7 +88,8 @@ const cellEditorConfig = {
   };
 
 function EditorLarge({formTitle}:IPros) {
-    const [editorState, setEditorState] = useState<any>('');
+    const [html,setHtml] = useState<string>('');
+    const [textCounting, setTextContentCounting] = useState<number>(0);
 
     const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
@@ -98,6 +99,10 @@ function EditorLarge({formTitle}:IPros) {
           setFloatingAnchorElem(_floatingAnchorElem);
         }
     };
+
+    console.log(html);
+    
+
 
     return (
         <div className='flex flex-col gap-[8px]'>
@@ -112,25 +117,22 @@ function EditorLarge({formTitle}:IPros) {
                    <TableContext>
                         <div className='border-2 rounded-[10px]'>
                            <div>
-                            <ToolbarPlugin/>
+                           {<ToolbarPlugin/>}
                            </div>
                             <div className='relative'>
-                            
+                                <HistoryPlugin />
                                 <DragDropPaste />
                                 <AutoFocusPlugin />
                                 <ClearEditorPlugin />
                                 <ComponentPickerPlugin />
                                 <EmojiPickerPlugin />
                                 <AutoEmbedPlugin />
-
                                 <NewMentionsPlugin/>
                                 <EmojisPlugin />
                                 <HashtagPlugin />
                                 <KeywordsPlugin />
                                 <SpeechToTextPlugin />
                                 <AutoLinkPlugin/>
-                                <CommentPlugin
-                                providerFactory={undefined}/>
                                 <RichTextPlugin
                                     contentEditable={
                                     <div className="editor-scroller">
@@ -139,7 +141,7 @@ function EditorLarge({formTitle}:IPros) {
                                         </div>
                                     </div>
                                     }
-                                    placeholder={<Placeholder className='absolute top-[15px] left-[16px] text-[14px] text-gray-500'>{"Enter some rich text..."}</Placeholder>}
+                                    placeholder={<Placeholder className='absolute top-[15px] left-[20px] text-[14px] text-gray-500'>{"Enter some rich text..."}</Placeholder>}
                                     ErrorBoundary={LexicalErrorBoundary}
                                 />
 
@@ -161,7 +163,7 @@ function EditorLarge({formTitle}:IPros) {
                                         placeholder={null}
                                         ErrorBoundary={LexicalErrorBoundary}
                                     />
-                                    <MentionsPlugin />
+                                    {/* <MentionsPlugin /> */}
                                     <HistoryPlugin />
                                     <ImagesPlugin captionsEnabled={false} />
                                     <LinkPlugin />
@@ -206,10 +208,13 @@ function EditorLarge({formTitle}:IPros) {
                                         />
                                     </>
                                 </>)}
-
-                                
                             </div>
                             <TreeViewPlugin/>
+                            <HTMLSerializerPlugin 
+                            setHtml={setHtml}/>
+                            <TextCounterPlugin
+                            setTextContentCounting={setTextContentCounting}
+                            />
                         </div>
                    </TableContext>
                 </LexicalComposer>
@@ -217,18 +222,17 @@ function EditorLarge({formTitle}:IPros) {
 
             <div className='mt-[12px] flex flex-row justify-between'>
                 <div>
-                    <Button 
+                    <UnlinkButton 
                     textContent={'Publish notification'} 
                     icon={'public'} 
                     iconPosition={'left'} 
                     backgroundColor={'bg-blue-700'} 
-                    href={'#'} 
                     method={() => {}} 
                     tailwind={'text-white'}
-                    ></Button>
+                    ></UnlinkButton>
                 </div>
                 <div>
-                    <p className='font-[500] select-none'>{""} </p>
+                    <p className='font-[500] select-none'>{textCounting == 0 ? `${textCounting + " word"}` : `${textCounting + " words"}`} </p>
                 </div>
             </div>
         </div>

@@ -729,19 +729,19 @@ export default function ToolbarPlugin(): JSX.Element {
         </DropDown>
       ) : (
         <>
-          <FontDropDown
+          {/* <FontDropDown
             disabled={!isEditable}
             style={'font-family'}
             value={fontFamily}
             editor={editor}
-          />
-          <FontDropDown
+          /> */}
+          {/* <FontDropDown
             disabled={!isEditable}
             style={'font-size'}
             value={fontSize}
             editor={editor}
-          />
-          <Divider />
+          /> */}
+          {/* <Divider /> */}
           <button
             disabled={!isEditable}
             onClick={() => {
@@ -810,15 +810,6 @@ export default function ToolbarPlugin(): JSX.Element {
             onChange={onFontColorSelect}
             title="text color"
           />
-          <DropdownColorPicker
-            disabled={!isEditable}
-            buttonClassName="toolbar-item color-picker"
-            buttonAriaLabel="Formatting background color"
-            buttonIconClassName="icon bg-color"
-            color={bgColor}
-            onChange={onBgColorSelect}
-            title="bg color"
-          />
           <DropDown
             disabled={!isEditable}
             buttonClassName="toolbar-item spaced"
@@ -870,247 +861,9 @@ export default function ToolbarPlugin(): JSX.Element {
               <span className="text">Clear Formatting</span>
             </DropDownItem>
           </DropDown>
-          <Divider />
-          {rootType === 'table' && (
-            <>
-              <DropDown
-                disabled={!isEditable}
-                buttonClassName="toolbar-item spaced"
-                buttonLabel="Table"
-                buttonAriaLabel="Open table toolkit"
-                buttonIconClassName="icon table secondary">
-                <DropDownItem
-                  onClick={() => {
-                    /**/
-                  }}
-                  className="item">
-                  <span className="text">TODO</span>
-                </DropDownItem>
-              </DropDown>
-              <Divider />
-            </>
-          )}
-          <DropDown
-            disabled={!isEditable}
-            buttonClassName="toolbar-item spaced"
-            buttonLabel="Insert"
-            buttonAriaLabel="Insert specialized editor node"
-            buttonIconClassName="icon plus">
-            <DropDownItem
-              onClick={() => {
-                activeEditor.dispatchCommand(
-                  INSERT_HORIZONTAL_RULE_COMMAND,
-                  undefined,
-                );
-              }}
-              className="item">
-              <i className="icon horizontal-rule" />
-              <span className="text">Horizontal Rule</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                activeEditor.dispatchCommand(INSERT_PAGE_BREAK, undefined);
-              }}
-              className="item">
-              <i className="icon page-break" />
-              <span className="text">Page Break</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Image', (onClose) => (
-                  <InsertImageDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item">
-              <i className="icon image" />
-              <span className="text">Image</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Inline Image', (onClose) => (
-                  <InsertInlineImageDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item">
-              <i className="icon image" />
-              <span className="text">Inline Image</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() =>
-                insertGifOnClick({
-                  altText: 'Cat typing on a laptop',
-                  src: catTypingGif.src,
-                })
-              }
-              className="item">
-              <i className="icon gif" />
-              <span className="text">GIF</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                activeEditor.dispatchCommand(
-                  INSERT_EXCALIDRAW_COMMAND,
-                  undefined,
-                );
-              }}
-              className="item">
-              <i className="icon diagram-2" />
-              <span className="text">Excalidraw</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Table', (onClose) => (
-                  <InsertTableDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item">
-              <i className="icon table" />
-              <span className="text">Table</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Table', (onClose) => (
-                  <InsertNewTableDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item">
-              <i className="icon table" />
-              <span className="text">Table (Experimental)</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Poll', (onClose) => (
-                  <InsertPollDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item">
-              <i className="icon poll" />
-              <span className="text">Poll</span>
-            </DropDownItem>
-
-            <DropDownItem
-              onClick={() => {
-                showModal('Insert Equation', (onClose) => (
-                  <InsertEquationDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item">
-              <i className="icon equation" />
-              <span className="text">Equation</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                editor.update(() => {
-                  const root = $getRoot();
-                  const stickyNode = $createStickyNode(0, 0);
-                  root.append(stickyNode);
-                });
-              }}
-              className="item">
-              <i className="icon sticky" />
-              <span className="text">Sticky Note</span>
-            </DropDownItem>
-            <DropDownItem
-              onClick={() => {
-                editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
-              }}
-              className="item">
-              <i className="icon caret-right" />
-              <span className="text">Collapsible container</span>
-            </DropDownItem>
-            {EmbedConfigs.map((embedConfig) => (
-              <DropDownItem
-                key={embedConfig.type}
-                onClick={() => {
-                  activeEditor.dispatchCommand(
-                    INSERT_EMBED_COMMAND,
-                    embedConfig.type,
-                  );
-                }}
-                className="item">
-                {embedConfig.icon}
-                <span className="text">{embedConfig.contentName}</span>
-              </DropDownItem>
-            ))}
-          </DropDown>
         </>
       )}
-      <Divider />
-      <DropDown
-        disabled={!isEditable}
-        buttonLabel="Align"
-        buttonIconClassName="icon left-align"
-        buttonClassName="toolbar-item spaced alignment"
-        buttonAriaLabel="Formatting options for text alignment">
-        <DropDownItem
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
-          }}
-          className="item">
-          <i className="icon left-align" />
-          <span className="text">Left Align</span>
-        </DropDownItem>
-        <DropDownItem
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
-          }}
-          className="item">
-          <i className="icon center-align" />
-          <span className="text">Center Align</span>
-        </DropDownItem>
-        <DropDownItem
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
-          }}
-          className="item">
-          <i className="icon right-align" />
-          <span className="text">Right Align</span>
-        </DropDownItem>
-        <DropDownItem
-          onClick={() => {
-            activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
-          }}
-          className="item">
-          <i className="icon justify-align" />
-          <span className="text">Justify Align</span>
-        </DropDownItem>
-        <Divider />
-        <DropDownItem
-          onClick={() => {
-            activeEditor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
-          }}
-          className="item">
-          <i className={'icon ' + (isRTL ? 'indent' : 'outdent')} />
-          <span className="text">Outdent</span>
-        </DropDownItem>
-        <DropDownItem
-          onClick={() => {
-            activeEditor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
-          }}
-          className="item">
-          <i className={'icon ' + (isRTL ? 'outdent' : 'indent')} />
-          <span className="text">Indent</span>
-        </DropDownItem>
-      </DropDown>
-
+      
       {modal}
     </div>
   );

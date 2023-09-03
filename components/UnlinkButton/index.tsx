@@ -1,7 +1,6 @@
 "use client"
 import React, { MouseEventHandler } from 'react'
 import Image from 'next/image'
-import Link from 'next/link';
 import editIcon from '@icon/components/Button/pencil-alt.svg'
 import delectIcon from '@icon/components/Button/delect.svg'
 import addUserIcon from '@icon/components/Button/user-add.svg'
@@ -17,18 +16,16 @@ interface buttonPros {
     icon:"edit" | "delete" | "add" | "arrowLeft" | "arrowRight" | "upload" | "import" | "search" | "public" | '';
     iconPosition: "left" | "right"
     backgroundColor: string;
-    href: string;
     method: MouseEventHandler<HTMLButtonElement>;
     tailwind: string,
 }
 
-function Button({textContent, icon, iconPosition, backgroundColor, href, method, tailwind}:buttonPros) {
+function UnlinkButton ({textContent, icon, iconPosition, backgroundColor, method, tailwind}:buttonPros) {
     return (
         <button className={`rounded-[8px] px-[12px] py-[8px] text-[12px] ${backgroundColor} ${tailwind}`}
         onClick={method}
         >
-            <Link
-            href={href}
+            <div
             className='flex gap-[8px]'
             style={{
                 flexDirection: iconPosition === "left" ? "row" : "row-reverse"
@@ -46,9 +43,9 @@ function Button({textContent, icon, iconPosition, backgroundColor, href, method,
                     />
                 }
                 <p>{textContent}</p>
-            </Link>
+            </div>
         </button>
     )
 }
 
-export default Button
+export default UnlinkButton

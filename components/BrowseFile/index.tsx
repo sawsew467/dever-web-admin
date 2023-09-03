@@ -4,6 +4,7 @@ import Image from 'next/image'
 import uploadIcon from "@icon/components/BrowseFile/upload.svg"
 
 import Button from '../Button'
+import UnlinkButton from '../UnlinkButton';
 
 interface IPros {
     formTitle: string,
@@ -89,15 +90,14 @@ function BrowseFile({formTitle, fileStorage, setFileStorage}:IPros) {
                             </div>
                             <div>
                                 <input type="file" name='file' id='fileImporter' className='hidden' multiple ref={fileInputRef} onChange={handleOnChangeSeleteFile}/>
-                                <Button 
+                                <UnlinkButton 
                                     textContent={'Browse another File'} 
                                     icon={'search'} 
                                     iconPosition={'left'} 
                                     backgroundColor={'bg-blue-700'} 
-                                    href={''} 
                                     method={() => handleBrowseFile()} 
                                     tailwind={'text-white'}                
-                                ></Button>
+                                ></UnlinkButton>
                             </div>
                             
                         </div>

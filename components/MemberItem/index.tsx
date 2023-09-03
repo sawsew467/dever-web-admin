@@ -4,7 +4,7 @@ import Image from 'next/image'
 import avatar from '@image/page/member/list/Thang.png'
 import Link from 'next/link'
 
-import Button from '@Component/Button'
+import Button from '@component/Button'
 
 interface memberPros {
     id: number,
