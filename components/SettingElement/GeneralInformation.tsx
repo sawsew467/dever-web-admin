@@ -214,7 +214,7 @@ function GeneralInformation(): JSX.Element {
           ></Image>
         </button>
       </div>
-      <div className=" grid grid-cols-2 lg:flex-row gap-[20px] select-none">
+      <div className=" grid grid-cols-1 lg:grid-cols-2 gap-[20px] select-none">
         <Input
           title={"fist name"}
           value={firstName}
