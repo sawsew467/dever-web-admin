@@ -65,7 +65,10 @@ import TextCounterPlugin from '@/plugins/TextCounterPlugin';
 import UnlinkButton from '../UnlinkButton';
 
 interface IPros {
-    formTitle: string
+    formTitle: string;
+    htmlString: string;
+    setHtmlString: React.Dispatch<React.SetStateAction<string>>;
+    pageName: "create_notification" | "create_blog" | "any";
 }
 
 const editorConfig = {
@@ -87,8 +90,7 @@ const cellEditorConfig = {
     theme: PlaygroundEditorTheme,
   };
 
-function EditorLarge({formTitle}:IPros) {
-    const [html,setHtml] = useState<string>('');
+function EditorLarge({formTitle, htmlString, setHtmlString, pageName}:IPros) {
     const [textCounting, setTextContentCounting] = useState<number>(0);
 
     const [floatingAnchorElem, setFloatingAnchorElem] =
@@ -100,15 +102,26 @@ function EditorLarge({formTitle}:IPros) {
         }
     };
 
-    console.log(html);
+    console.log(htmlString);
+
+    const handleSubmitNotification = () => {
+        console.log("POST NOTIFICATION TO SEVER!");
+    }
+
+    const handleSubmitBlog = () => {
+        console.log("POST BLOG TO SEVER")
+    }
+
+    const handleSubmit = () => {
+        if(pageName === "create_notification") handleSubmitNotification()
+        else if (pageName === "create_blog") handleSubmitBlog()
+        else return;
+    }
     
-
-
     return (
         <div className='flex flex-col gap-[8px]'>
              <div>
                 <h4 className='select-none font-[500]'>{formTitle}:</h4>
-                {/* <button onClick={() => {}}>show text</button> */}
             </div>
 
 
@@ -211,7 +224,7 @@ function EditorLarge({formTitle}:IPros) {
                             </div>
                             <TreeViewPlugin/>
                             <HTMLSerializerPlugin 
-                            setHtml={setHtml}/>
+                            setHtmlString={setHtmlString}/>
                             <TextCounterPlugin
                             setTextContentCounting={setTextContentCounting}
                             />
@@ -227,7 +240,7 @@ function EditorLarge({formTitle}:IPros) {
                     icon={'public'} 
                     iconPosition={'left'} 
                     backgroundColor={'bg-blue-700'} 
-                    method={() => {}} 
+                    method={() => {handleSubmit()}} 
                     tailwind={'text-white'}
                     ></UnlinkButton>
                 </div>

@@ -3,16 +3,16 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import {$generateHtmlFromNodes} from '@lexical/html';
 
 interface IPros {
-    setHtml: React.Dispatch<React.SetStateAction<string>>
+    setHtmlString: React.Dispatch<React.SetStateAction<string>>
 }
 
-function HTMLSerializerPlugin({setHtml}:IPros) {
+function HTMLSerializerPlugin({setHtmlString}:IPros) {
     const [editor] = useLexicalComposerContext();
     useEffect(() => {
         const removeUpdateListener = editor.registerUpdateListener(({editorState}) => {
             editorState.read(()=> {
                 const htmlString = $generateHtmlFromNodes(editor, null);
-                setHtml(htmlString);
+                setHtmlString(htmlString);
             })
         })
         return () => {

@@ -363,7 +363,7 @@ function Slidebar() {
                         display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
                       }}
                       className="whitespace-nowrap"
-                    >Blog List</span>
+                    >View Blogs</span>
                     <span
                       className="px-[14px]"
                       style={{
@@ -382,7 +382,7 @@ function Slidebar() {
                         display: isOpenSlidebar ? isMouseVisit ? "" : "none" : "",
                       }}
                       className="whitespace-nowrap"
-                    >Your blog</span>
+                    >Blog list</span>
                     <span
                       className="px-[14px]"
                       style={{

@@ -3,7 +3,6 @@ import React, {useState, useRef} from 'react'
 import EditIconAnimate from '@icon/components/Button/edit.gif'
 import EditIconPause from '@icon/components/Button/edit_pause.png'
 import Image from 'next/image';
-import Button from '../Button';
 import Input from './Input';
 import Selection from './Selection';
 import UnlinkButton from '../UnlinkButton';
@@ -179,6 +178,7 @@ function GeneralInformation():JSX.Element {
             joinDate: joinDate,
         }
         setGeneralInfomationState(getData);        
+        //API HERE
     }
     
     console.log(generalInfomationState);
