@@ -19,23 +19,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const specialPaths = [
+    "/auth/sign-in",
+    "/auth/sign-up",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+  ];
   const pathname = usePathname();
-  const isSignInPage = pathname === "/auth/sign-in";
-  const isSignUpPage = pathname === "/auth/sign-up";
-  const isForgotPassPage = pathname === "/auth/forgot-password";
-  const isRestPassPage = pathname === "/auth/reset-password";
+  const isSpecial = specialPaths.includes(pathname);
   return (
-    <html lang="en"  suppressHydrationWarning={true}>
-      <body className={inter.className}  suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <AppProvider>
-          {!isSignInPage &&
-            !isSignUpPage &&
-            !isForgotPassPage &&
-            !isRestPassPage && <Header />}
-          {!isSignInPage &&
-            !isSignUpPage &&
-            !isForgotPassPage &&
-            !isRestPassPage && <Sidebar />}
+          {!isSpecial && <Header />}
+          {!isSpecial && <Sidebar />}
           {children}
         </AppProvider>
       </body>
