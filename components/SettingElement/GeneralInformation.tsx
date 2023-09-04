@@ -201,7 +201,7 @@ function GeneralInformation(): JSX.Element {
       <div className="flex flex-row justify-between items-center">
         <h3 className="font-[700] text-[24px]">General information</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-black cursor-pointer transition"
+          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
           onClick={() => {
             setIsEdit(!isEdit);
           }}
@@ -224,49 +224,19 @@ function GeneralInformation(): JSX.Element {
           isEdit={isEdit}
         />
         <Input
-          title={"Birthday"}
-          value={birthday}
-          onChange={(e) => handleChangeBirthday(e)}
-          isValidDataType={isBirthday}
-          type="date"
-          isEdit={isEdit}
-        />
-        <Selection
-          title="position"
-          options={position_options}
-          value={position}
-          isEdit={isEdit}
-          onChange={(e) => handleChangePosition(e)}
-        />
-        <Selection
-          title="major"
-          options={major_options}
-          value={major}
-          isEdit={isEdit}
-          onChange={(e) => handleChangeMajor(e)}
-        />
-        <Input
-          title={"work history"}
-          value={workHistory}
-          onChange={(e) => handleChangeWorkHistory(e)}
-          isValidDataType={isWorkHistory}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"join date"}
-          value={joinDate}
-          onChange={(e) => handleChangeJoinDate(e)}
-          isValidDataType={isJoinDate}
-          type="date"
-          isEdit={isEdit}
-        />
-        <Input
           title={"Last Name"}
           value={lastName}
           onChange={(e) => handleChangeLastName(e)}
           isValidDataType={isLastName}
           type="text"
+          isEdit={isEdit}
+        />
+        <Input
+          title={"Birthday"}
+          value={birthday}
+          onChange={(e) => handleChangeBirthday(e)}
+          isValidDataType={isBirthday}
+          type="date"
           isEdit={isEdit}
         />
         <Input
@@ -277,6 +247,13 @@ function GeneralInformation(): JSX.Element {
           type="text"
           isEdit={isEdit}
         />
+        <Selection
+          title="position"
+          options={position_options}
+          value={position}
+          isEdit={isEdit}
+          onChange={(e) => handleChangePosition(e)}
+        />
         <Input
           title={"Role"}
           value={role}
@@ -284,6 +261,13 @@ function GeneralInformation(): JSX.Element {
           isValidDataType={isRole}
           type="text"
           isEdit={isEdit}
+        />
+        <Selection
+          title="major"
+          options={major_options}
+          value={major}
+          isEdit={isEdit}
+          onChange={(e) => handleChangeMajor(e)}
         />
         <Input
           title={"Education"}
@@ -293,12 +277,28 @@ function GeneralInformation(): JSX.Element {
           type="text"
           isEdit={isEdit}
         />
+        <Input
+          title={"work history"}
+          value={workHistory}
+          onChange={(e) => handleChangeWorkHistory(e)}
+          isValidDataType={isWorkHistory}
+          type="text"
+          isEdit={isEdit}
+        />
         <Selection
           title="department"
           options={department_options}
           value={department}
           isEdit={isEdit}
           onChange={(e) => handleChangeDepartment(e)}
+        />
+        <Input
+          title={"join date"}
+          value={joinDate}
+          onChange={(e) => handleChangeJoinDate(e)}
+          isValidDataType={isJoinDate}
+          type="date"
+          isEdit={isEdit}
         />
       </div>
 

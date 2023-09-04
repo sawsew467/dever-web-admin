@@ -61,7 +61,7 @@ function ContactInfomation(): JSX.Element {
       <div className="flex flex-row justify-between items-center">
         <h3 className="font-[700] text-[24px]">Contact information</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-black cursor-pointer transition"
+          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
           onClick={() => {
             setIsEdit(!isEdit);
           }}

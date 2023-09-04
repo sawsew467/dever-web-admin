@@ -5,6 +5,7 @@ import AvatarChanging from "@component/SettingElement/AvatarChanging";
 import AboutUser from "@component/SettingElement/AboutUser";
 import ContactInfomation from "@/components/SettingElement/ContactInfomation";
 import GeneralInformation from "@/components/SettingElement/GeneralInformation";
+import SocialAccount from "@/components/SettingElement/SocialAccount";
 
 function SettingList() {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
@@ -29,6 +30,7 @@ function SettingList() {
           <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
             <AvatarChanging />
             <ContactInfomation />
+            <SocialAccount/>
           </div>
           <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
             <AboutUser />

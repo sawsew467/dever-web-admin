@@ -194,14 +194,14 @@ function Slidebar() {
                 className={isDropdownNotifications ? "pt-[6px]" : "hidden"}
               >
                 <li
-                  className={`py-[6px] hover:bg-gray-100 rounded-md ${
+                  className={` hover:bg-gray-100 rounded-md ${
                     isViewNotification ? "bg-gray-100" : ""
                   }`}
                   onClick={handleViewNotification}
                 >
                   <Link
                     href="/notifications/views/1"
-                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -232,14 +232,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${
+                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
                     isCreateNotification ? "bg-gray-100" : ""
                   }`}
                   onClick={handleCreateNotification}
                 >
                   <Link
                     href="/notifications/create"
-                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >
@@ -320,14 +320,14 @@ function Slidebar() {
                 className={isDropdownMembers ? "pt-[6px]" : "hidden"}
               >
                 <li
-                  className={`py-[6px] hover:bg-gray-100 rounded-md ${
+                  className={`hover:bg-gray-100 rounded-md ${
                     isMemberList ? "bg-gray-100" : ""
                   }`}
                   onClick={handleMemberList}
                 >
                   <Link
                     href="/members/list/1"
-                    className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -358,14 +358,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${
+                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
                     isProfile ? "bg-gray-100" : ""
                   }`}
                   onClick={handleProfile}
                 >
                   <Link
                     href="/members/profile/"
-                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >
@@ -396,14 +396,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${
+                  className={` mt-[6px] hover:bg-gray-100 rounded-md ${
                     isSetting ? "bg-gray-100" : ""
                   }`}
                   onClick={handleSetting}
                 >
                   <Link
                     href="/members/setting/"
-                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -485,14 +485,14 @@ function Slidebar() {
                 className={isDropdownBlogs ? "pt-[6px]" : "hidden"}
               >
                 <li
-                  className={`py-[6px] hover:bg-gray-100 rounded-md ${
+                  className={` hover:bg-gray-100 rounded-md ${
                     isBlogList ? "bg-gray-100" : ""
                   }`}
                   onClick={handleBlogList}
                 >
                   <Link
                     href="/blogs/list"
-                    className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -518,19 +518,19 @@ function Slidebar() {
                           : "none",
                       }}
                     >
-                      B
+                      V
                     </span>
                   </Link>
                 </li>
                 <li
-                  className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${
+                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
                     isYourBlog ? "bg-gray-100" : ""
                   }`}
                   onClick={handleYourBlog}
                 >
                   <Link
                     href="/blogs/detail/"
-                    className={`flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -556,19 +556,19 @@ function Slidebar() {
                           : "none",
                       }}
                     >
-                      Y
+                      B
                     </span>
                   </Link>
                 </li>
                 <li
-                  className={`py-[6px] mt-[6px] hover:bg-gray-100 rounded-md ${
+                  className={` mt-[6px] hover:bg-gray-100 rounded-md ${
                     isCreateBlog ? "bg-gray-100" : ""
                   }`}
                   onClick={handleCreateBlog}
                 >
                   <Link
                     href="/blogs/create"
-                    className={`flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >

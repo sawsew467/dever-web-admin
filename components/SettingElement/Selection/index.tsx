@@ -9,7 +9,6 @@ type TPros = {
 }
 
 function Selection({title ,options,value, isEdit,onChange}: TPros):JSX.Element {
-   
     const renderSelectOption = () => {
         const options_list = [];
         for (let option of options) {
@@ -30,7 +29,7 @@ function Selection({title ,options,value, isEdit,onChange}: TPros):JSX.Element {
              <span className='font-[300] text-[14px]'>{capitalizeFirstLetter(title)}</span>
             <select name="" id=""
               className={`w-full text-[14px] text-gray-700 border-gray-300  bg-gray-50 ${isEdit ? "text-black" : ""} rounded-[6px]`} 
-              disabled={!isEdit} value={value} onChange={(e) => onChange(e)}
+              disabled={!isEdit} value={value} onChange={(e) => {onChange(e)}}    
             >
                 {renderSelectOption()}
             </select>
