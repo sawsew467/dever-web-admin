@@ -3,7 +3,6 @@ import React from "react";
 import { Form, Formik } from "formik";
 import InputForm from "@/components/InputForm";
 import { registerSchema } from "@/app/validation";
-import Checkbox from "@/components/Checkbox";
 import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import ResetImg from "@image/page/authentication/reset/resetImage.jpg";
@@ -84,13 +83,12 @@ function ResetPassword() {
                         placeholder="Confirm your new password"
                       ></InputForm>
                     </div>
-                    <Checkbox type="checkbox" name="accepted"></Checkbox>
                     <button
                       disabled={isSubmitting}
                       type="submit"
                       className="mb-6 bg-[#0065A9] disabled:opacity-50 hover:bg-[#005294] px-5 py-3 leading-6 font-medium rounded-lg text-white text-base"
                     >
-                      Create an account
+                      Reset password
                     </button>
                     <div className=" text-sm leading-5 font-medium text-[#6B7280]">
                       Already have an account?

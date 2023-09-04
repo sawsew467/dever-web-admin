@@ -17,7 +17,6 @@ export const registerSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), ""], "Password must match")
     .required("This field is required"),
-  accepted: yup.boolean().oneOf([true], "Please accept the terms of service"),
 });
 
 export const resetSchema = yup.object().shape({
@@ -25,7 +24,6 @@ export const resetSchema = yup.object().shape({
     .string()
     .email("Please enter a valid email")
     .required("This field is required"),
-  accepted: yup.boolean().oneOf([true], "Please accept the terms of service"),
 });
 
 export const loginSchema = yup.object().shape({
@@ -33,9 +31,5 @@ export const loginSchema = yup.object().shape({
     .string()
     .email("Please enter a valid email")
     .required("This field is required"),
-  password: yup
-    .string()
-    .min(8)
-    .matches(passRule, { message: "Please enter a stronger password" })
-    .required("This field is required"),
+  password: yup.string().min(8).required("This field is required"),
 });

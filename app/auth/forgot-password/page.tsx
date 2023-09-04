@@ -5,7 +5,6 @@ import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import InputForm from "@/components/InputForm";
 import { resetSchema } from "@/app/validation";
-import Checkbox from "@/components/Checkbox";
 function ForgotPassword() {
   const onSubmit = async (values: object, actions: any) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -32,7 +31,7 @@ function ForgotPassword() {
               code to reset your password!
             </p>
             <Formik
-              initialValues={{ email: "", accepted: false }}
+              initialValues={{ email: "" }}
               validationSchema={resetSchema}
               onSubmit={onSubmit}
             >
@@ -50,7 +49,6 @@ function ForgotPassword() {
                       placeholder="name@company.com"
                     ></InputForm>
                   </div>
-                  <Checkbox type="checkbox" name="accepted"></Checkbox>
                   <button
                     disabled={isSubmitting}
                     type="submit"

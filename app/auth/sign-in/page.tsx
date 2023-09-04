@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Form, Formik } from "formik";
 import { loginSchema } from "@/app/validation";
 import InputForm from "@/components/InputForm";
-import Checkbox from "@/components/Checkbox";
+import Link from "next/link";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import LoginImg from "@image/page/authentication/signin/loginImage.jpg";
 function SignIn() {
@@ -78,28 +78,30 @@ function SignIn() {
                           Remember me
                         </p>
                       </div>
-                      <a
-                        href="https://www.fu-dever.com/auth/forgot-password"
+                      <Link
+                        href="/auth/forgot-password"
                         className="text-[#0098FF] text-sm leading-5 font-medium hover:underline"
                       >
+                        {" "}
                         Lost Password?
-                      </a>
+                      </Link>
                     </div>
                     <button
                       disabled={isSubmitting}
                       type="submit"
                       className="mb-6 bg-[#0065A9] disabled:opacity-50 hover:bg-[#005294] px-5 py-3 leading-6 font-medium rounded-lg text-white text-base"
                     >
-                      Create an account
+                      Login to your account
                     </button>
                     <div className=" text-sm leading-5 font-medium text-[#6B7280]">
                       Not registered?
-                      <a
-                        href="https://www.fu-dever.com/auth/sign-up"
+                      <Link
+                        href="/auth/sign-up"
                         className="text-[#0098FF] ml-1  hover:underline"
                       >
+                        {" "}
                         Create account
-                      </a>
+                      </Link>
                     </div>
                   </Form>
                 )}

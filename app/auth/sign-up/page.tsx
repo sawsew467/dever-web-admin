@@ -6,8 +6,7 @@ import { registerSchema } from "@/app/validation";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import SignupImage from "@image/page/authentication/signup/signupImage.jpg";
 import InputForm from "@/components/InputForm";
-import Checkbox from "@/components/Checkbox";
-
+import Link from "next/link";
 function SignUp() {
   const onSubmit = async (values: object, actions: any) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -42,7 +41,6 @@ function SignUp() {
                   email: "",
                   password: "",
                   confirmPassword: "",
-                  accepted: false,
                 }}
                 validationSchema={registerSchema}
                 onSubmit={onSubmit}
@@ -85,7 +83,6 @@ function SignUp() {
                         placeholder="Confirm your password"
                       ></InputForm>
                     </div>
-                    <Checkbox type="checkbox" name="accepted"></Checkbox>
                     <button
                       disabled={isSubmitting}
                       type="submit"
@@ -95,12 +92,13 @@ function SignUp() {
                     </button>
                     <div className=" text-sm leading-5 font-medium text-[#6B7280]">
                       Already have an account?
-                      <a
-                        href="https://www.fu-dever.com/auth/sign-in"
+                      <Link
+                        href="/auth/sign-in"
                         className="text-[#0098FF] ml-1  hover:underline"
                       >
+                        {" "}
                         Login here
-                      </a>
+                      </Link>
                     </div>
                   </Form>
                 )}
