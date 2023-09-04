@@ -20,10 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isSignInPage = pathname === "/sign-in";
-  const isSignUpPage = pathname === "/sign-up";
-  const isForgotPassPage = pathname === "/forgot-password";
-  const isRestPassPage = pathname === "/reset-password";
+  const isSignInPage = pathname === "/auth/sign-in";
+  const isSignUpPage = pathname === "/auth/sign-up";
+  const isForgotPassPage = pathname === "/auth/forgot-password";
+  const isRestPassPage = pathname === "/auth/reset-password";
   return (
     <html lang="en">
       <body className={inter.className}>
