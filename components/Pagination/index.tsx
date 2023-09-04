@@ -13,7 +13,7 @@ interface Ipros{
 
 function Pagination({paramID, route, countNumberOfPage, pages, increaseIndex, sliceSetData, data,}: Ipros) {
 
-    const renderPagination = ()=> {
+    const renderPagination = () => {
         const buttons = [];
         let startIndex = 0;
         let endIndex = 0;

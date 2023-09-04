@@ -25,8 +25,8 @@ export default function RootLayout({
   const isForgotPassPage = pathname === "/auth/forgot-password";
   const isRestPassPage = pathname === "/auth/reset-password";
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en"  suppressHydrationWarning={true}>
+      <body className={inter.className}  suppressHydrationWarning={true}>
         <AppProvider>
           {!isSignInPage &&
             !isSignUpPage &&
