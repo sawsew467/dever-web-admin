@@ -195,7 +195,10 @@ function SocialAccount() {
           {socialMediaState.length == 0 ? (
             <p
               className="font-[500] text-[14px] text-blue-700 cursor-pointer"
-              onClick={() => setIsAdd(true)}
+              onClick={() => {
+                setIsAdd(true)
+                setIsEdit(true)
+              }}
             >
               You haven&apos;t added any social accounts yet!
             </p>
