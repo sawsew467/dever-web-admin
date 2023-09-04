@@ -58,6 +58,8 @@ function SocialAccount() {
 
   const [isAlert, setIsAlert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
+  const [isWarning, setIsWarning] = useState<boolean>(false);
+  const [warningMessage, setWarningMessage] = useState<string>("");
 
   const handleOnChangePlatform = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -116,7 +118,7 @@ function SocialAccount() {
     return link;
   };
 
-  const handleCheckExistAccounts = (inputLink: string): boolean => {
+  const checkExistAccounts = (inputLink: string): boolean => {
     const linkExists = socialMediaState.some((item) => item.link === inputLink);
     if (linkExists) {
       setIsAlert(true);
@@ -136,11 +138,27 @@ function SocialAccount() {
     }
     return false;
   };
+  
+  const checkIsValidLink = (inputLink:string):boolean => {
+    const linkRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$/;
+    if(!linkRegex.test(inputLink)) {
+      setIsWarning(true);
+      setTimeout(() => {
+        setIsWarning(false);
+      }, 4000);
+      setWarningMessage("The input is not a link! ")
+      return true;
+    } else console.log(linkRegex.test(inputLink));
+    
+    return false;
+  }
 
   const handleSubmit = () => {
-    if (handleCheckExistAccounts(removeHttps(linkState))) {
+    if (checkExistAccounts(removeHttps(linkState))) {
       return;
-    } else {
+    } else if (checkIsValidLink(linkState)) 
+      return;
+    else {
       const getState = {
         platform: selectPlatformm,
         link: removeHttps(linkState),
@@ -259,13 +277,18 @@ function SocialAccount() {
         </>
       ) : null}
       {isAdd && isEdit ? (
-        <div className={`flex flex-col ${isAlert ? "gap-[20px]" : ""}`}>
+        <div className={`flex flex-col ${isAlert || isWarning ? "gap-[20px]" : ""}`}>
           <div id="alert">
             <Collapse in={isAlert}>
               <Alert severity="error" onClose={() => setIsAlert(false)}>
                 {alertMessage}
               </Alert>
             </Collapse>
+            <Collapse in={isWarning}>
+              <Alert severity="warning" onClose={() => setIsWarning(false)}>
+                {warningMessage}
+              </Alert>
+            </Collapse> 
           </div>
           <div className="">
             {" "}
