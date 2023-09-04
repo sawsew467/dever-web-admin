@@ -138,26 +138,26 @@ function SocialAccount() {
     }
     return false;
   };
-  
-  const checkIsValidLink = (inputLink:string):boolean => {
-    const linkRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$/;
-    if(!linkRegex.test(inputLink)) {
+
+  const checkIsValidLink = (inputLink: string): boolean => {
+    const linkRegex =
+      /^(https?:\/\/)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?$/;
+    if (!linkRegex.test(inputLink)) {
       setIsWarning(true);
       setTimeout(() => {
         setIsWarning(false);
       }, 4000);
-      setWarningMessage("The input is not a link! ")
+      setWarningMessage("The input is not a link! ");
       return true;
     } else console.log(linkRegex.test(inputLink));
-    
+
     return false;
-  }
+  };
 
   const handleSubmit = () => {
     if (checkExistAccounts(removeHttps(linkState))) {
       return;
-    } else if (checkIsValidLink(linkState)) 
-      return;
+    } else if (checkIsValidLink(linkState)) return;
     else {
       const getState = {
         platform: selectPlatformm,
@@ -196,8 +196,8 @@ function SocialAccount() {
             <p
               className="font-[500] text-[14px] text-blue-700 cursor-pointer"
               onClick={() => {
-                setIsAdd(true)
-                setIsEdit(true)
+                setIsAdd(true);
+                setIsEdit(true);
               }}
             >
               You haven&apos;t added any social accounts yet!
@@ -280,7 +280,11 @@ function SocialAccount() {
         </>
       ) : null}
       {isAdd && isEdit ? (
-        <div className={`flex flex-col ${isAlert || isWarning ? "gap-[20px]" : ""}`}>
+        <div
+          className={`flex flex-col ${
+            isAlert || isWarning ? "gap-[20px]" : ""
+          }`}
+        >
           <div id="alert">
             <Collapse in={isAlert}>
               <Alert severity="error" onClose={() => setIsAlert(false)}>
@@ -291,7 +295,7 @@ function SocialAccount() {
               <Alert severity="warning" onClose={() => setIsWarning(false)}>
                 {warningMessage}
               </Alert>
-            </Collapse> 
+            </Collapse>
           </div>
           <div className="">
             {" "}
