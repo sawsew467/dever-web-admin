@@ -194,7 +194,7 @@ function GeneralInformation(): JSX.Element {
     //API HERE
   };
 
-  console.log(generalInfomationState);
+  // console.log(generalInfomationState);
 
   return (
     <div className="flex flex-col gap-[20px] shadow-primary p-[24px] rounded-[10px]">
