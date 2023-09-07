@@ -226,19 +226,18 @@ function GeneralInformation() {
                     isEdit={isEdit}
                     title={"join date"}
                   />
-                  
                 </div>
 
                 {isEdit ? (
-                    <div>
-                      <button
-                        type="submit"
-                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  ) : null}
+                  <div>
+                    <button
+                      type="submit"
+                      className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                    >
+                      Save
+                    </button>
+                  </div>
+                ) : null}
               </Form>
             );
           }}

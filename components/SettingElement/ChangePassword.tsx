@@ -102,7 +102,7 @@ function ChangePassword(): JSX.Element {
                       Ensure that these requirements are met:
                     </h4>
                     <ul className="font-[300] list-disc ml-[24px]">
-                      <li>At least 10 characters (and up to 100 characters)</li>
+                      <li>At least 8 characters (and up to 100 characters)</li>
                       <li>At least one lowercase character</li>
                       <li>
                         Inclusion of at least one special character, e.g., ! @ #

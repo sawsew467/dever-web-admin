@@ -52,14 +52,22 @@ function FormikInput({
       />
       {type === "password" ? (
         <>
-          <div onClick={() => {if(isEdit) setIsEyeOpen(true)}}>
+          <div
+            onClick={() => {
+              if (isEdit) setIsEyeOpen(true);
+            }}
+          >
             <FaEye
               className={`absolute right-[20px] top-[34px] text-gray-500 ${
                 isEyeOpen && isEdit ? "hidden" : ""
               } ${isEdit ? "cursor-pointer" : ""}`}
             />
           </div>
-          <div onClick={() => {if(isEdit) setIsEyeOpen(false)}}>
+          <div
+            onClick={() => {
+              if (isEdit) setIsEyeOpen(false);
+            }}
+          >
             <FaEyeSlash
               className={`absolute right-[20px] top-[34px] text-gray-500 ${
                 isEyeOpen && isEdit ? "" : "hidden"

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Tags from "@yaireo/tagify/dist/react.tagify";
 import UnlinkButton from "@/components/UnlinkButton";
-import {TagifySettings } from "@yaireo/tagify";
-import './styling.scss'
+import { TagifySettings } from "@yaireo/tagify";
+import "./styling.scss";
 
 interface TagFieldProps {
   suggestions: string[];
@@ -22,7 +22,6 @@ const baseTagifySettings = {
     enabled: 0,
   },
   callbacks: {} as any,
-  
 };
 
 function TagField({
@@ -39,7 +38,7 @@ function TagField({
     setData(e.detail.tagify.value.map((item: { value: string }) => item.value));
   };
 
-  const settings:TagifySettings<Tagify.BaseTagData> = {
+  const settings: TagifySettings<Tagify.BaseTagData> = {
     ...baseTagifySettings,
     whitelist: suggestions,
     editTags: 1,
@@ -59,7 +58,7 @@ function TagField({
 
   const handleSubmitTags = () => {
     if (useTagFor === "skills") {
-      console.log("POST SKILL TAGS",data);
+      console.log("POST SKILL TAGS", data);
     }
     if (useTagFor === "hobbies") {
       console.log("POST HOBBIES TAGS", data);
@@ -68,13 +67,12 @@ function TagField({
 
   return (
     <div className="flex flex-col gap-[20px]">
-      <div className={`form-group border-[1px] border-gray-300  rounded-[6px] p-[6px] ${useTagFor === "skills" ? "isSkills" : "isHobbies"}
-      ${isEdit ? "" : "pointer-events-none"}`}>
-        <Tags
-          value={state}
-          settings={settings}
-          readOnly={false}
-        />
+      <div
+        className={`form-group border-[1px] border-gray-300  rounded-[6px] p-[6px] 
+        ${useTagFor === "skills" ? "isSkills" : "isHobbies"}
+      ${isEdit ? "" : "pointer-events-none"}`}
+      >
+        <Tags value={state} settings={settings} readOnly={false} />
       </div>
       {isEdit ? (
         <div>
