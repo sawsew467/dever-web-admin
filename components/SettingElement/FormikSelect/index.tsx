@@ -1,20 +1,18 @@
+import { useField } from "formik";
 import React from "react";
 
 type TPros = {
+  label: string;
+  id: string;
+  name: string;
+  isEdit: boolean;
   title: string;
   options: string[];
-  value: string;
-  isEdit: boolean;
-  onChange(event: React.ChangeEvent<HTMLSelectElement>): void;
 };
 
-function Selection({
-  title,
-  options,
-  value,
-  isEdit,
-  onChange,
-}: TPros): JSX.Element {
+function FormikSelect({ label, title, isEdit, options, ...props }: TPros) {
+  const [field, meta] = useField(props);
+
   const renderSelectOption = () => {
     const options_list = [];
     for (let option of options) {
@@ -33,28 +31,34 @@ function Selection({
     const restOfString = inputString.slice(1);
     return firstChar + restOfString;
   };
+  const lowercaseFirstLetter = (inputString: string): string => {
+    if (inputString.length === 0) return inputString;
+    const firstChar = inputString.charAt(0).toLocaleLowerCase();
+    const restOfString = inputString.slice(1);
+    return firstChar + restOfString;
+  };
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <span className="font-[300] text-[14px]">
         {capitalizeFirstLetter(title)}
       </span>
       <select
-        name=""
-        id=""
-        className={`w-full text-[14px] text-gray-700 border-gray-300  bg-gray-50 ${
+        {...field}
+        {...props}
+        className={`w-full text-sm font-medium text-gray-700 border-gray-300  bg-gray-50 ${
           isEdit ? "text-black" : ""
         } rounded-[6px]`}
         disabled={!isEdit}
-        value={value}
-        onChange={(e) => {
-          onChange(e);
-        }}
       >
+        <option value="">Select a {lowercaseFirstLetter(title)}...</option>
         {renderSelectOption()}
       </select>
+      {meta.error && meta.touched && (
+        <p className="text-[12px] font-medium text-[#fc8181]">{meta.error}</p>
+      )}
     </div>
   );
 }
 
-export default Selection;
+export default FormikSelect;

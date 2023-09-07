@@ -10,8 +10,8 @@ interface InputProps {
 
 function InputForm({ label, ...props }: InputProps) {
   const [field, meta] = useField(props);
-  console.log(meta);
-  console.log(field);
+  // console.log(meta);
+  // console.log(field);
 
   return (
     <>
