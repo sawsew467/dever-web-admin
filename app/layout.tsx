@@ -1,12 +1,12 @@
 "use client";
 import "./globals.css";
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { AppProvider } from "./context/AppContext";
 import { usePathname } from "next/navigation";
-
+import ToastNotificationComp from "@/components/ToastNotificationComp";
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
@@ -35,6 +35,7 @@ export default function RootLayout({
           {!isSpecial && <Sidebar />}
           {children}
         </AppProvider>
+        <ToastNotificationComp/>
       </body>
     </html>
   );

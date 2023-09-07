@@ -7,11 +7,13 @@ import Logo from "@image/page/authentication/signin/logo.svg";
 import SignupImage from "@image/page/authentication/signup/signupImage.jpg";
 import InputForm from "@/components/InputForm";
 import Link from "next/link";
+import {toast} from "react-toastify"
+
 function SignUp() {
   const onSubmit = async (values: object, actions: any) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
-    alert("success");
+    toast.success("Sign up successfully !");
   };
   return (
     <section>
