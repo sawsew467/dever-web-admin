@@ -14,7 +14,13 @@ type TPros = {
   title: string;
 };
 
-function FormikInput({ label, title, isEdit,type,...props }: TPros): JSX.Element {
+function FormikInput({
+  label,
+  title,
+  isEdit,
+  type,
+  ...props
+}: TPros): JSX.Element {
   const [field, meta] = useField(props);
   const [isEyeOpen, setIsEyeOpen] = useState<boolean>(false);
 
@@ -25,7 +31,6 @@ function FormikInput({ label, title, isEdit,type,...props }: TPros): JSX.Element
     return firstChar + restOfString;
   };
 
-
   return (
     <div className="flex flex-col relative">
       <span className="font-[300] text-[14px]">
@@ -35,26 +40,34 @@ function FormikInput({ label, title, isEdit,type,...props }: TPros): JSX.Element
         {...field}
         {...props}
         type={isEyeOpen ? "text" : type}
-        disabled = {!isEdit}
+        disabled={!isEdit}
         className={
           meta.error && meta.touched
             ? "p-[10px] text-sm font-medium leading-5 w-full border-solid border-[1px] border-red-500  outline-[#0065A9] rounded-[6px] bg-gray-50"
             : "p-[10px] text-sm font-medium leading-5 w-full border-solid border-[1px] border-gray-300  outline-[#0065A9] rounded-[6px] bg-gray-50"
         }
         style={{
-            color: !isEdit ? "rgb(107 114 128)" : "#000"
+          color: !isEdit ? "rgb(107 114 128)" : "#000",
         }}
       />
-      {
-        type === "password" ? <>
-          <div onClick={() => setIsEyeOpen(true)}>
-            <FaEye className ={`absolute cursor-pointer right-[20px] top-[34px] ${isEyeOpen && isEdit? "hidden" : ""}`}/>
+      {type === "password" ? (
+        <>
+          <div onClick={() => {if(isEdit) setIsEyeOpen(true)}}>
+            <FaEye
+              className={`absolute right-[20px] top-[34px] text-gray-500 ${
+                isEyeOpen && isEdit ? "hidden" : ""
+              } ${isEdit ? "cursor-pointer" : ""}`}
+            />
           </div>
-         <div onClick={() => setIsEyeOpen(false)}>
-         <FaEyeSlash className ={`absolute cursor-pointer right-[20px] top-[34px] ${isEyeOpen && isEdit? "" : "hidden"}`}/>
-         </div>
-        </> : null
-      }
+          <div onClick={() => {if(isEdit) setIsEyeOpen(false)}}>
+            <FaEyeSlash
+              className={`absolute right-[20px] top-[34px] text-gray-500 ${
+                isEyeOpen && isEdit ? "" : "hidden"
+              } ${isEdit ? "cursor-pointer" : ""}`}
+            />
+          </div>
+        </>
+      ) : null}
       {meta.error && meta.touched && (
         <p className="text-[12px] font-medium text-[#fc8181]">{meta.error}</p>
       )}

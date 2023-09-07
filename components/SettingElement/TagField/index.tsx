@@ -68,11 +68,12 @@ function TagField({
 
   return (
     <div className="flex flex-col gap-[20px]">
-      <div className={`form-group border-[1px] border-gray-300  rounded-[6px] p-[6px] ${useTagFor === "skills" ? "isSkills" : "isHobbies"}`}>
+      <div className={`form-group border-[1px] border-gray-300  rounded-[6px] p-[6px] ${useTagFor === "skills" ? "isSkills" : "isHobbies"}
+      ${isEdit ? "" : "pointer-events-none"}`}>
         <Tags
           value={state}
           settings={settings}
-          readOnly={!isEdit}
+          readOnly={false}
         />
       </div>
       {isEdit ? (

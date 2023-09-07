@@ -1,12 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
-import { toast } from 'react-toastify';
-import { changePasswordSchema } from '@component/SettingElement/Validation/validation';
-import FormikInput from './FormikInput';
-import Image from 'next/image';
+import React, { useState, useRef } from "react";
+import { Form, Formik, FormikHelpers } from "formik";
+import { toast } from "react-toastify";
+import { changePasswordSchema } from "@component/SettingElement/Validation/validation";
+import FormikInput from "./FormikInput";
+import Image from "next/image";
 
-import EditIconAnimate from '@icon/components/Button/edit.gif';
-import EditIconPause from '@icon/components/Button/edit_pause.png';
+import EditIconAnimate from "@icon/components/Button/edit.gif";
+import EditIconPause from "@icon/components/Button/edit_pause.png";
 
 type TPasswordFieldValue = {
   currentPassword: string;
@@ -14,7 +14,7 @@ type TPasswordFieldValue = {
   confirmNewPassword: string;
 };
 
-function ChangePassword() {
+function ChangePassword(): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TPasswordFieldValue> | null>(null);
 
@@ -25,7 +25,7 @@ function ChangePassword() {
     console.log(values);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
-    toast.info('Change passsword successfully!');
+    toast.info("Changed passsword successfully!");
   };
 
   const handleEditClick = () => {
@@ -54,9 +54,9 @@ function ChangePassword() {
       <div>
         <Formik
           initialValues={{
-            currentPassword: '',
-            newPassword: '',
-            confirmNewPassword: '',
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: "",
           }}
           validationSchema={changePasswordSchema}
           onSubmit={onSubmit}
@@ -96,24 +96,31 @@ function ChangePassword() {
                     title="Confirm new password"
                   />
 
-                  <div className='text-[14px]'>
-                    <h3 className='font-[800]'>Password requirements:</h3>
-                    <h4 className='font-[700]'>Ensure that these requirements are met:</h4>
-                    <ul className='font-[300] list-disc ml-[24px]'>
-                        <li>At least 10 characters (and up to 100 characters)</li>
-                        <li>At least one lowercase character</li>
-                        <li>Inclusion of at least one special character, e.g., ! @ # ?</li>
+                  <div className="text-[14px]">
+                    <h3 className="font-[800]">Password requirements:</h3>
+                    <h4 className="font-[700]">
+                      Ensure that these requirements are met:
+                    </h4>
+                    <ul className="font-[300] list-disc ml-[24px]">
+                      <li>At least 10 characters (and up to 100 characters)</li>
+                      <li>At least one lowercase character</li>
+                      <li>
+                        Inclusion of at least one special character, e.g., ! @ #
+                        ?
+                      </li>
                     </ul>
                   </div>
-                  
-                  {
-                    isEdit ? <div>
-                    <button
-                    type='submit'
-                    className='rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white'
-                    >Save</button>
-                  </div> : null
-                  }
+
+                  {isEdit ? (
+                    <div>
+                      <button
+                        type="submit"
+                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
               </Form>
             );
