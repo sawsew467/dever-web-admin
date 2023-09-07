@@ -33,6 +33,7 @@ function AboutUser(): JSX.Element {
             htmlString={htmlString}
             setHtmlString={setHtmlString}
             isNeedSave={true}
+            useEditorFor={"about"}
           />
         </>
       ) : null}
