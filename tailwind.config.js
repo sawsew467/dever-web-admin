@@ -26,10 +26,11 @@ module.exports = {
       },
       boxShadow: {
         primary: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)"
-      }
+      },
     },
   },
   plugins: [
-    require("flowbite/plugin")
+    require("flowbite/plugin"),
+    require('tailwindcss-animated'),
   ],
 }

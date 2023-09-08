@@ -14,7 +14,7 @@ interface pageProps {
 function DetailNotification({ params }: pageProps) {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
   const data = {
-    id:0,
+    id: 0,
     title: "Noteworthy technology acquisitions 2021",
     time: "August 7th 2023, 6:25:59 am",
     img: thumbnail,
@@ -23,8 +23,8 @@ function DetailNotification({ params }: pageProps) {
   };
 
   const renderHtmlString = (htmlString: string) => {
-    return <div dangerouslySetInnerHTML={{__html : htmlString}}></div>
-  }
+    return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
+  };
 
   return (
     <div
@@ -33,42 +33,55 @@ function DetailNotification({ params }: pageProps) {
           ? isMouseVisit
             ? "sm:w-[calc(100%-250px)]"
             : "sm:w-[calc(100%-65px)]"
-            : "sm:w-[calc(100%-250px)]"
-        } absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}
+          : "sm:w-[calc(100%-250px)]"
+      } absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}
     >
-        <div className="py-[20px] px-[16px] flex flex-col gap-[30px]">
-            <div className="flex justify-between">
-                <div>
-                    <h1 className="font-[700] text-[24px]">Notifications Details</h1>
-                </div>
-                <div className="flex flex-row gap-[20px]">
-                    <Button 
-                        textContent={"Create notification"} 
-                        icon={"edit"} 
-                        iconPosition={"left"} 
-                        backgroundColor={"bg-green-700"} 
-                        href={"/notifications/create"} 
-                        method={() =>{}} 
-                        tailwind={"text-white"}
-                    ></Button>
-                    <Button 
-                        textContent={"Notification"} 
-                        icon={"arrowLeft"} 
-                        iconPosition={"left"} 
-                        backgroundColor={"bg-blue-700"} 
-                        href={"/notifications/views/1"} 
-                        method={() =>{}} 
-                        tailwind={"text-white"}
-                    ></Button>
-                </div>
-            </div>
-            <div className="p-[30px] shadow-primary rounded-[10px] flex flex-col gap-[30px]">
-                <div><h3 className="font-[700] text-[36px]">{data.title}</h3></div>
-                <div><p className="flex gap-[8px]"><Image src={clockIcon} alt="clockIcon"></Image>{data.time}</p></div>
-                <div className="h-[480px] overflow-hidden rounded-[10px]"><Image src={thumbnail} alt="thumbnail" className="w-[100%] h-[100%] object-cover"></Image></div>
-                <div id="notificationContent">{renderHtmlString(data.content)}</div>
-            </div>
+      <div className="py-[20px] px-[16px] flex flex-col gap-[30px]">
+        <div className="flex justify-between">
+          <div>
+            <h1 className="font-[700] text-[24px]">Notifications Details</h1>
+          </div>
+          <div className="flex flex-row gap-[20px]">
+            <Button
+              textContent={"Create notification"}
+              icon={"edit"}
+              iconPosition={"left"}
+              backgroundColor={"bg-green-700"}
+              href={"/notifications/create"}
+              method={() => {}}
+              tailwind={"text-white"}
+            ></Button>
+            <Button
+              textContent={"Notification"}
+              icon={"arrowLeft"}
+              iconPosition={"left"}
+              backgroundColor={"bg-blue-700"}
+              href={"/notifications/views/1"}
+              method={() => {}}
+              tailwind={"text-white"}
+            ></Button>
+          </div>
         </div>
+        <div className="p-[30px] shadow-primary rounded-[10px] flex flex-col gap-[30px]">
+          <div>
+            <h3 className="font-[700] text-[36px]">{data.title}</h3>
+          </div>
+          <div>
+            <p className="flex gap-[8px]">
+              <Image src={clockIcon} alt="clockIcon"></Image>
+              {data.time}
+            </p>
+          </div>
+          <div className="h-[480px] overflow-hidden rounded-[10px]">
+            <Image
+              src={thumbnail}
+              alt="thumbnail"
+              className="w-[100%] h-[100%] object-cover"
+            ></Image>
+          </div>
+          <div id="notificationContent">{renderHtmlString(data.content)}</div>
+        </div>
+      </div>
     </div>
   );
 }

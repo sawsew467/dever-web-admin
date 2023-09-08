@@ -6,12 +6,17 @@ import Logo from "@image/page/authentication/signin/logo.svg";
 import InputForm from "@/components/InputForm";
 import { resetSchema } from "@/app/validation";
 import {toast} from "react-toastify"
+<<<<<<< HEAD
+
+=======
+>>>>>>> 79c5d70034d6cf386e2e9fa58f2e92c592ddc331
 function ForgotPassword() {
   const onSubmit = async (values: object, actions: any) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
     toast.info("Check your email to reset password !")
   };
+  
   return (
     <section>
       <div className="h-screen w-full flex justify-center bg-[#F9FAFB] bg-opacity-50 items-center">

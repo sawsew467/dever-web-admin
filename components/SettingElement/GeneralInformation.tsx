@@ -1,13 +1,14 @@
-import React, { useState, useRef } from "react";
-
+import React, { useRef, useState } from "react";
+import { Form, Formik, FormikHelpers } from "formik";
+import { toast } from "react-toastify";
+import { generalInformationSchema } from "@component/SettingElement/Validation/validation";
+import FormikSelect from "./FormikSelect";
+import FormikInput from "./FormikInput";
+import Image from "next/image";
 import EditIconAnimate from "@icon/components/Button/edit.gif";
 import EditIconPause from "@icon/components/Button/edit_pause.png";
-import Image from "next/image";
-import Input from "./Input";
-import Selection from "./Selection";
-import UnlinkButton from "../UnlinkButton";
 
-type GeneralState = {
+type TGeneralFieldValues = {
   firstName: string;
   lastName: string;
   birthday: string;
@@ -21,8 +22,7 @@ type GeneralState = {
   joinDate: string;
 };
 
-function GeneralInformation(): JSX.Element {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+function GeneralInformation() {
   const fakeData = {
     id: 0,
     firstName: "Tran Van",
@@ -38,97 +38,6 @@ function GeneralInformation(): JSX.Element {
     email: "thangtvbde170145@fpt.edu.vn",
     phone: "0828 828 497",
     joinDate: "2021-09-12",
-  };
-
-  const [firstName, setFirstName] = useState<string>(fakeData.firstName);
-  const [lastName, setLastName] = useState<string>(fakeData.lastName);
-  const [birthday, setBirthday] = useState<string>(fakeData.birthday);
-  const [homeAddress, setHomeAddress] = useState<string>(fakeData.homeAddress);
-  const [position, setPosition] = useState<string>(fakeData.position);
-  const [role, setRole] = useState<string>(fakeData.role);
-  const [major, setMajor] = useState<string>(fakeData.major);
-  const [education, setEducation] = useState<string>(fakeData.education);
-  const [workHistory, setWorkHistory] = useState<string>(fakeData.workHistory);
-  const [department, setDepartment] = useState<string>(fakeData.department);
-  const [joinDate, setJoinDate] = useState<string>(fakeData.joinDate);
-
-  const [isFirstName, setIsFirstName] = useState<boolean>(true);
-  const [isLastName, setIsLastName] = useState<boolean>(true);
-  const [isBirthday, setIsBirthday] = useState<boolean>(true);
-  const [isHomeAddress, setIsHomeAddress] = useState<boolean>(true);
-  const [isPosition, setIsPosition] = useState<boolean>(true);
-  const [isRole, setIsRole] = useState<boolean>(true);
-  const [isMajor, setIsMajor] = useState<boolean>(true);
-  const [isEducation, setIsEducation] = useState<boolean>(true);
-  const [isWorkHistory, setIsWorkHistory] = useState<boolean>(true);
-  const [isDepartment, setIsDepartment] = useState<boolean>(true);
-  const [isJoinDate, setIsJoinDate] = useState<boolean>(true);
-
-  const handleChangeFirstName = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFirstName(event.target.value);
-    setIsFirstName(true);
-  };
-
-  const handleChangeLastName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(event.target.value);
-    setIsLastName(true);
-  };
-
-  const handleChangeBirthday = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBirthday(event.target.value);
-    setIsBirthday(true);
-  };
-
-  const handleChangeHomeAddress = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setHomeAddress(event.target.value);
-    setIsHomeAddress(true);
-  };
-
-  const handleChangePosition = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setPosition(event.target.value);
-    setIsPosition(true);
-  };
-
-  const handleChangeRole = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(event.target.value);
-    setIsRole(true);
-  };
-
-  const handleChangeMajor = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setMajor(event.target.value);
-    setIsMajor(true);
-  };
-
-  const handleChangeEducation = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEducation(event.target.value);
-    setIsEducation(true);
-  };
-
-  const handleChangeWorkHistory = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setWorkHistory(event.target.value);
-    setIsWorkHistory(true);
-  };
-
-  const handleChangeDepartment = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setDepartment(event.target.value);
-    setIsDepartment(true);
-  };
-
-  const handleChangeJoinDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setJoinDate(event.target.value);
-    setIsJoinDate(true);
   };
 
   const position_options = [
@@ -161,161 +70,179 @@ function GeneralInformation(): JSX.Element {
     "Administrative Board",
   ];
 
-  const [generalInfomationState, setGeneralInfomationState] =
-    useState<GeneralState>({
-      firstName: firstName,
-      lastName: lastName,
-      birthday: birthday,
-      homeAddress: homeAddress,
-      position: position,
-      role: role,
-      major: major,
-      education: education,
-      workHistory: workHistory,
-      department: department,
-      joinDate: joinDate,
-    });
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const formikRef = useRef<FormikHelpers<TGeneralFieldValues> | null>(null);
 
-  const handleSaveForm = () => {
-    const getData = {
-      firstName: firstName,
-      lastName: lastName,
-      birthday: birthday,
-      homeAddress: homeAddress,
-      position: position,
-      role: role,
-      major: major,
-      education: education,
-      workHistory: workHistory,
-      department: department,
-      joinDate: joinDate,
-    };
-    setGeneralInfomationState(getData);
-    //API HERE
+  const onSubmit = async (
+    values: TGeneralFieldValues,
+    actions: FormikHelpers<TGeneralFieldValues>
+  ) => {
+    console.log(values);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    actions.resetForm();
+    toast.info("Save general information successfully!");
   };
 
-  console.log(generalInfomationState);
+  const handleEditClick = () => {
+    if (formikRef.current) {
+      formikRef.current.resetForm();
+    }
+    setIsEdit(!isEdit);
+  };
 
   return (
-    <div className="flex flex-col gap-[20px] shadow-primary p-[24px] rounded-[10px]">
-      <div className="flex flex-row justify-between items-center">
-        <h3 className="font-[700] text-[24px]">General information</h3>
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
+      <div className="flex flex-row justify-between">
+        <h3 className="font-[700] text-[24px]">General infomation</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-black cursor-pointer transition"
-          onClick={() => {
-            setIsEdit(!isEdit);
-          }}
+          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
+          onClick={handleEditClick}
         >
           <Image
             src={isEdit ? EditIconAnimate : EditIconPause}
             alt="Edit"
             width={18}
             height={18}
-          ></Image>
+          />
         </button>
       </div>
-      <div className=" grid grid-cols-2 lg:flex-row gap-[20px] select-none">
-        <Input
-          title={"fist name"}
-          value={firstName}
-          onChange={(e) => handleChangeFirstName(e)}
-          isValidDataType={isFirstName}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"Birthday"}
-          value={birthday}
-          onChange={(e) => handleChangeBirthday(e)}
-          isValidDataType={isBirthday}
-          type="date"
-          isEdit={isEdit}
-        />
-        <Selection
-          title="position"
-          options={position_options}
-          value={position}
-          isEdit={isEdit}
-          onChange={(e) => handleChangePosition(e)}
-        />
-        <Selection
-          title="major"
-          options={major_options}
-          value={major}
-          isEdit={isEdit}
-          onChange={(e) => handleChangeMajor(e)}
-        />
-        <Input
-          title={"work history"}
-          value={workHistory}
-          onChange={(e) => handleChangeWorkHistory(e)}
-          isValidDataType={isWorkHistory}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"join date"}
-          value={joinDate}
-          onChange={(e) => handleChangeJoinDate(e)}
-          isValidDataType={isJoinDate}
-          type="date"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"Last Name"}
-          value={lastName}
-          onChange={(e) => handleChangeLastName(e)}
-          isValidDataType={isLastName}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"Home Address"}
-          value={homeAddress}
-          onChange={(e) => handleChangeHomeAddress(e)}
-          isValidDataType={isHomeAddress}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"Role"}
-          value={role}
-          onChange={(e) => handleChangeRole(e)}
-          isValidDataType={isRole}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Input
-          title={"Education"}
-          value={education}
-          onChange={(e) => handleChangeEducation(e)}
-          isValidDataType={isEducation}
-          type="text"
-          isEdit={isEdit}
-        />
-        <Selection
-          title="department"
-          options={department_options}
-          value={department}
-          isEdit={isEdit}
-          onChange={(e) => handleChangeDepartment(e)}
-        />
-      </div>
 
-      {isEdit ? (
-        <div>
-          <UnlinkButton
-            textContent={"Save"}
-            icon={""}
-            iconPosition={"left"}
-            backgroundColor={"bg-blue-700"}
-            method={() => {
-              handleSaveForm();
-            }}
-            tailwind={"text-white"}
-          ></UnlinkButton>
-        </div>
-      ) : null}
+      <div>
+        <Formik
+          initialValues={{
+            firstName: fakeData.firstName,
+            lastName: fakeData.lastName,
+            birthday: fakeData.birthday,
+            homeAddress: fakeData.homeAddress,
+            position: fakeData.position,
+            role: fakeData.role,
+            major: fakeData.major,
+            education: fakeData.education,
+            workHistory: fakeData.workHistory,
+            department: fakeData.department,
+            joinDate: fakeData.joinDate,
+          }}
+          validationSchema={generalInformationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formikProps) => {
+            formikRef.current = formikProps;
+            return (
+              <Form className="flex flex-col gap-[20px]">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-[20px] select-none">
+                  <FormikInput
+                    label={"firstName"}
+                    id={"firstName"}
+                    name={"firstName"}
+                    placeholder={"Enter your fisrt name..."}
+                    type={"text"}
+                    isEdit={isEdit}
+                    title={"first name"}
+                  />
+                  <FormikInput
+                    label={"lastName"}
+                    id={"lastName"}
+                    name={"lastName"}
+                    placeholder={"Enter your last name..."}
+                    type={"text"}
+                    isEdit={isEdit}
+                    title={"Last name"}
+                  />
+                  <FormikInput
+                    label={"birthday"}
+                    id={"birthday"}
+                    name={"birthday"}
+                    placeholder={"Enter your birthday..."}
+                    type={"date"}
+                    isEdit={isEdit}
+                    title={"birthday"}
+                  />
+                  <FormikInput
+                    label={"homeAddress"}
+                    id={"homeAddress"}
+                    name={"homeAddress"}
+                    placeholder={"Enter your home address..."}
+                    type={"text"}
+                    isEdit={isEdit}
+                    title={"home address"}
+                  />
+                  <FormikSelect
+                    label={"position"}
+                    id={"position"}
+                    name={"position"}
+                    isEdit={isEdit}
+                    title={"position"}
+                    options={position_options}
+                  />
+                  <FormikInput
+                    label={"role"}
+                    id={"role"}
+                    name={"role"}
+                    placeholder={"Enter your role..."}
+                    type={"text"}
+                    isEdit={isEdit}
+                    title={"roles"}
+                  />
+                  <FormikSelect
+                    label={"major"}
+                    id={"major"}
+                    name={"major"}
+                    isEdit={isEdit}
+                    title={"major"}
+                    options={major_options}
+                  />
+                  <FormikInput
+                    label={"education"}
+                    id={"education"}
+                    name={"education"}
+                    placeholder={"Enter your educations..."}
+                    type={"text"}
+                    isEdit={isEdit}
+                    title={"education"}
+                  />
+                  <FormikInput
+                    label={"workHistory"}
+                    id={"workHistory"}
+                    name={"workHistory"}
+                    placeholder={"Enter your work history..."}
+                    type={"text"}
+                    isEdit={isEdit}
+                    title={"work history"}
+                  />
+                  <FormikSelect
+                    label={"department"}
+                    id={"department"}
+                    name={"department"}
+                    isEdit={isEdit}
+                    title={"department"}
+                    options={department_options}
+                  />
+                  <FormikInput
+                    label={"joinDate"}
+                    id={"joinDate"}
+                    name={"joinDate"}
+                    placeholder={"Enter your join date..."}
+                    type={"date"}
+                    isEdit={isEdit}
+                    title={"join date"}
+                  />
+                </div>
+
+                {isEdit ? (
+                  <div>
+                    <button
+                      type="submit"
+                      className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                    >
+                      Save
+                    </button>
+                  </div>
+                ) : null}
+              </Form>
+            );
+          }}
+        </Formik>
+      </div>
     </div>
   );
 }
