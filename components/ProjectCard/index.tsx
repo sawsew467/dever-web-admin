@@ -20,7 +20,7 @@ function ProjectCard({img, title, desc, link, canEdit, method, isEdit}: Tpros) {
   };
 
   return (
-    <div className="flex flex-row shadow-secondary rounded-[16px] h-fit overflow-hidden relative hover:scale-[1.02] transition"
+    <div className="flex flex-row shadow-secondary rounded-[16px] h-fit overflow-hidden relative hover:scale-[1.02] transition duration-400"
     >
       <div className="w-[30%] h-[100%] absolute">
         <Image

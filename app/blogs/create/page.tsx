@@ -1,59 +1,70 @@
-// "use client";
-// import React, { useState } from "react";
-// import { useAppContext } from "@/app/context/AppContext";
+"use client";
+import React, { useState } from "react";
+import { useAppContext } from "@/app/context/AppContext";
 
-// import BrowseImage from "@/components/BrowseImage";
-// import EditorLarge from "@/components/EditorLarge";
+import BrowseFile from "@/components/BrowseImage";
+import EditorLarge from "@/components/EditorLarge";
+import BlogTag from "@/components/BlogTag";
 
-// function CreateBlog() {
-//   const { isOpenSlidebar, isMouseVisit } = useAppContext();
+function CreateBlog() {
+  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const [importedImage, setImportedImage] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string>('');
+  const [htmlString, setHtmlStringg] = useState<string>("");
+  console.log(imageURL);
+  
 
-//   const [importedImage, setImportedImage] = useState<File | null>(null);
-//   const [htmlString, setHtmlStringg] = useState<string>("");
+  return (
+    <div
+      className={`w-[100%] ${
+        isOpenSlidebar
+          ? isMouseVisit
+            ? "sm:w-[calc(100%-250px)]"
+            : "sm:w-[calc(100%-65px)]"
+          : "sm:w-[calc(100%-250px)]"
+      } absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}
+    >
+      <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
+        <div>
+          <h1 className="font-[700] text-[24px] select-none">
+            Create blog
+          </h1>
+        </div>
 
-//   return (
-//     <div
-//       className={`w-[100%] ${
-//         isOpenSlidebar
-//           ? isMouseVisit
-//             ? "sm:w-[calc(100%-250px)]"
-//             : "sm:w-[calc(100%-65px)]"
-//           : "sm:w-[calc(100%-250px)]"
-//       } absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}
-//     >
-//       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
-//         <div>
-//           <h1 className="font-[700] text-[24px] select-none">Create blog</h1>
-//         </div>
+        <div className="flex flex-col gap-[20px]">
+          <div className="flex flex-col gap-[8px]">
+            <h4 className="select-none font-[500]">Your title:</h4>
+            <input
+              type="text"
+              placeholder="Write title here"
+              className="border-2 border-gray-300 rounded-[12px] w-full"
+            />
+          </div>
+          <div>
+            <BrowseFile
+              formTitle="Your thumbnail"
+              fileStorage={importedImage}
+              setFileStorage={setImportedImage}
+              setFileURL={setImageURL}
+              page = "create_blog"
+            ></BrowseFile>
+          </div>
+          <div>
+            <BlogTag
+            ></BlogTag>
+          </div>
+          <div>
+            <EditorLarge
+              formTitle="Your content"
+              htmlString={htmlString}
+              setHtmlString={setHtmlStringg}
+              pageName="create_notification"
+            ></EditorLarge>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-//         <div className="flex flex-col gap-[20px]">
-//           <div className="flex flex-col gap-[8px]">
-//             <h4 className="select-none font-[500]">Blog title:</h4>
-//             <input
-//               type="text"
-//               placeholder="Write title here"
-//               className="border-2 border-gray-300 rounded-[12px] w-full"
-//             />
-//           </div>
-//           <div>
-//             <BrowseImage
-//               formTitle="Blog thumbnail"
-//               fileStorage={importedImage}
-//               setFileStorage={setImportedImage}
-//             ></BrowseImage>
-//           </div>
-//           <div>
-//             <EditorLarge
-//               formTitle="Blog content"
-//               htmlString={htmlString}
-//               setHtmlString={setHtmlStringg}
-//               pageName={"create_blog"}
-//             ></EditorLarge>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default CreateBlog;
+export default CreateBlog;

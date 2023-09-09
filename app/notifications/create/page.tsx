@@ -45,6 +45,7 @@ function CreateNotification() {
               fileStorage={importedImage}
               setFileStorage={setImportedImage}
               setFileURL={setImageURL}
+              page="create_notification"
             ></BrowseFile>
           </div>
           <div>

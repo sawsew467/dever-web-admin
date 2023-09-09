@@ -12,6 +12,7 @@ interface IPros {
   fileStorage: File | null;
   setFileStorage: React.Dispatch<React.SetStateAction<File | null>>;
   setFileURL: React.Dispatch<React.SetStateAction<string>>;
+  page: string;
 }
 
 function BrowseImage({
@@ -19,6 +20,7 @@ function BrowseImage({
   fileStorage,
   setFileStorage,
   setFileURL,
+  page
 }: IPros) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(true);
@@ -84,7 +86,7 @@ function BrowseImage({
       file: File
     ): Promise<string | null | undefined> => {
       const CLOUD_NAME = "dy1uuo6ql";
-      const UPLOAD_PRESET = "fu-dever-notification-image";
+      const UPLOAD_PRESET = page === "create_notification" ? "fu-dever-notification-image" : page === "create_blog" ? "fu-dever-blog-image" : '';
       try {
         const formData = new FormData();
         formData.append("file", file);
@@ -108,7 +110,7 @@ function BrowseImage({
 
       handleGetImageURL(fileStorage);
     }
-  }, [fileStorage, setFileURL]);
+  }, [fileStorage, page, setFileURL]);
 
   return (
     <div className="flex flex-col gap-[8px]">
