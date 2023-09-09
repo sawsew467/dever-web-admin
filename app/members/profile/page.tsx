@@ -10,8 +10,6 @@ import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
 import facebookIcon from "@icon/page/member/profile/facebook.svg";
 import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
-import branchIcon from "@icon/page/member/profile/code-merge.svg";
-import projectImage from "@image/page/notification/list/thumbnail.png";
 import ProjectCard from "@/components/ProjectCard";
 
 function Profile() {
@@ -69,24 +67,24 @@ function Profile() {
     project: [
       {
         id: 0,
-        img: "Image",
+        img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
         title: "Noteworthy technology acquisitions 2021",
         desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-        link: "https://github.com/sawsew467/dever-web-frontend",
+        link: "github.com/sawsew467/dever-web-frontend",
       },
       {
         id: 1,
-        img: "Image",
+        img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
         title: "Noteworthy technology acquisitions 2021",
         desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-        link: "https://github.com/sawsew467/dever-web-frontend",
+        link: "github.com/sawsew467/dever-web-frontend",
       },
       {
         id: 2,
-        img: "Image",
+        img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
         title: "Noteworthy technology acquisitions 2021",
         desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-        link: "https://github.com/sawsew467/dever-web-frontend",
+        link: "github.com/sawsew467/dever-web-frontend",
       },
     ],
   };
@@ -299,6 +297,9 @@ function Profile() {
                       title={item.title}
                       desc={item.desc}
                       link={item.link}
+                      canEdit={false}
+                      method={() => {}}
+                      isEdit={false}
                     />
                   );
                 })}

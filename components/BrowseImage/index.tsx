@@ -113,7 +113,7 @@ function BrowseImage({
   return (
     <div className="flex flex-col gap-[8px]">
       <div>
-        <h4 className="select-none font-[300] text-[14px]">{formTitle}:</h4>
+        <h4 className="select-none font-[500]">{formTitle}:</h4>
       </div>
       <div
         className="h-fit w-full border-2 border-dashed rounded-[8px] gap-[16px]"
@@ -141,8 +141,8 @@ function BrowseImage({
                   </> :     <Image
                   src={URL.createObjectURL(fileStorage)}
                   alt="imageFromFile"
-                  width={100}
-                  height={100}
+                  width={6000}
+                  height={4000}
                   className="w-[100%] h-[100%] object-fill"
                 ></Image>
                 }

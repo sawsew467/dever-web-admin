@@ -28,9 +28,12 @@ module.exports = {
         primary: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
         secondary: "4px 4px 8px 0px rgba(0, 0, 0, 0.10)"
       },
-      translate: {
-        primary: "-50%,-50%"
-      }
+      transitionProperty: {
+        'height': 'height'
+      },
+      variants: {
+        height: ['responsive', 'hover', 'focus']
+    }
     },
   },
   plugins: [

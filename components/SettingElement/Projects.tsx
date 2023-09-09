@@ -18,34 +18,34 @@ type TProjectCreateFieldsValue = {
 };
 
 type TProjectState = {
-  title: string,
-  desc: string,
-  img: string,
-  link: string,
-}
+  title: string;
+  desc: string;
+  img: string;
+  link: string;
+};
 
 function Projects() {
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [hmtlString, setHtmlString] = useState<string>("");
   const [importedImage, setImportedImage] = useState<File | null>(null);
-  const [imageURL, setImageURL] = useState<string>('');
+  const [imageURL, setImageURL] = useState<string>("");
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TProjectCreateFieldsValue> | null>(
     null
   );
 
   console.log(imageURL);
-  
 
   const project_List = [
     {
       title: "Noteworthy technology acquisitions 2021",
       desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-      img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694272639/FU_DEVER_ADMIN/project_image/gsetwusdcqtbvbdql0zm.jpg",
+      img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
       link: "github.com/sawsew467/dever-web-frontend",
     },
   ];
-  const [projectState, setProjectState] = useState<TProjectState[]>(project_List);
+  const [projectState, setProjectState] =
+    useState<TProjectState[]>(project_List);
 
   const removeHttps = (link: string): string => {
     if (link.startsWith("http://")) {
@@ -60,17 +60,20 @@ function Projects() {
     values: TProjectCreateFieldsValue,
     actions: FormikHelpers<TProjectCreateFieldsValue>
   ) => {
-    const {title, demo} = values;
+    const { title, demo } = values;
     const newProjectData = {
       title: title,
       desc: hmtlString,
       img: imageURL,
       link: removeHttps(demo),
-    }
-    setProjectState((prevProjectState) => [...prevProjectState, newProjectData]);
+    };
+    setProjectState((prevProjectState) => [
+      ...prevProjectState,
+      newProjectData,
+    ]);
     console.log(values);
     console.log("POST NEW PROJECT: ", newProjectData);
-    
+
     await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
     toast.info("Create project successfully!");
@@ -84,6 +87,17 @@ function Projects() {
     setIsEdit(!isEdit);
     setIsAdd(false);
     setImportedImage(null);
+  };
+
+  //demo function
+
+  //delete by index in state
+  const handleDeleteProject = (itemIndex: number) => {
+    const deteted = projectState.filter(
+      (value: TProjectState, index: number) => index !== itemIndex
+    );
+    setProjectState([...deteted]);
+    console.log("DELETE PROJECT ID:", itemIndex);
   };
 
   return (
@@ -103,21 +117,39 @@ function Projects() {
         </button>
       </div>
       <div className="flex flex-col gap-[20px]">
-        {projectState.map((item, index) => {
-          return (
-            <ProjectCard
-              key={index}
-              img={item.img}
-              title={item.title}
-              desc={item.desc}
-              link={item.link}
-            />
-          );
-        })}
+        {projectState.length == 0 ? (
+          <p className="font-[500] text-[14px] text-blue-700 cursor-pointer "
+          onClick={() => {
+            setIsEdit(true);
+            setIsAdd(true);
+          }}
+          >You haven&apos;t posted any projects yet</p>
+        ) : (
+          <>
+            {projectState.map((item, index) => {
+              return (
+                <ProjectCard
+                  key={index}
+                  img={item.img}
+                  title={item.title}
+                  desc={item.desc}
+                  link={item.link}
+                  canEdit={true}
+                  method={() => handleDeleteProject(index)}
+                  isEdit={isEdit}
+                />
+              );
+            })}
+          </>
+        )}
       </div>
       {isEdit ? (
         <div>
-          <AddButton text={projectState.length == 0 ? "Add" : "Add more"} isAdd={isAdd} setIsAdd={setIsAdd} />
+          <AddButton
+            text={projectState.length == 0 ? "Add" : "Add more"}
+            isAdd={isAdd}
+            setIsAdd={setIsAdd}
+          />
         </div>
       ) : null}
       {isEdit && isAdd ? (
