@@ -33,7 +33,7 @@ function FormikInput({
 
   return (
     <div className="flex flex-col relative">
-      <span className="font-[300] text-[14px]">
+      <span className="font-[300] text-[14px] mb-[6px]">
         {capitalizeFirstLetter(title)}
       </span>
       <input
@@ -58,7 +58,7 @@ function FormikInput({
             }}
           >
             <FaEye
-              className={`absolute right-[20px] top-[34px] text-gray-500 ${
+              className={`absolute right-[20px] top-[40px] text-gray-500 ${
                 isEyeOpen && isEdit ? "hidden" : ""
               } ${isEdit ? "cursor-pointer" : ""}`}
             />
@@ -69,7 +69,7 @@ function FormikInput({
             }}
           >
             <FaEyeSlash
-              className={`absolute right-[20px] top-[34px] text-gray-500 ${
+              className={`absolute right-[20px] top-[40px] text-gray-500 ${
                 isEyeOpen && isEdit ? "" : "hidden"
               } ${isEdit ? "cursor-pointer" : ""}`}
             />

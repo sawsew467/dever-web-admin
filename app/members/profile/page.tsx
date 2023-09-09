@@ -12,6 +12,7 @@ import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
 import branchIcon from "@icon/page/member/profile/code-merge.svg";
 import projectImage from "@image/page/notification/list/thumbnail.png";
+import ProjectCard from "@/components/ProjectCard";
 
 function Profile() {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
@@ -292,48 +293,13 @@ function Profile() {
               <div className=" flex flex-col gap-[20px]">
                 {userData?.project.map((item, index) => {
                   return (
-                    <div
-                      className="flex flex-row shadow-primary rounded-[16px] h-fit overflow-hidden relative"
+                    <ProjectCard
                       key={index}
-                    >
-                      <div className="w-[30%] h-[100%] absolute">
-                        <Image
-                          src={projectImage}
-                          alt="project"
-                          className="w-[100%] h-full object-cover"
-                        ></Image>
-                      </div>
-                      <div className="lg:w-[70%] w-[100%] p-[20px] flex flex-col gap-[16px] ml-[30%]">
-                        <div className="flex flex-col gap-[8px]">
-                          <h3 className="font-[700] text-[24px]">
-                            {item.title}
-                          </h3>
-                          <div className="text-[16px] font-[400] text-gray-500 h-[48px] overflow-hidden">
-                            {renderHtmlString(item.desc)}
-                          </div>
-                        </div>
-                        <div className="flex gap-[8px]">
-                          <Image src={branchIcon} alt="codeMerge"></Image>
-                          <a
-                            href={item.link}
-                            className="text-[16px]  font-[400px]"
-                          >
-                            {item.link}
-                          </a>
-                        </div>
-                        <div>
-                          <Button
-                            textContent={"Demo"}
-                            icon={"arrowRight"}
-                            iconPosition={"right"}
-                            backgroundColor={"bg-blue-700"}
-                            href={item.link}
-                            method={() => {}}
-                            tailwind={"text-white"}
-                          ></Button>
-                        </div>
-                      </div>
-                    </div>
+                      img={item.img}
+                      title={item.title}
+                      desc={item.desc}
+                      link={item.link}
+                    />
                   );
                 })}
               </div>

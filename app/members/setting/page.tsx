@@ -9,6 +9,7 @@ import SocialAccount from "@/components/SettingElement/SocialAccount";
 import Skills from "@/components/SettingElement/Skills";
 import Hobbies from "@/components/SettingElement/Hobbies";
 import ChangePassword from "@/components/SettingElement/ChangePassword";
+import Projects from "@/components/SettingElement/Projects";
 
 function SettingList() {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
@@ -41,6 +42,7 @@ function SettingList() {
           <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
             <AboutUser />
             <GeneralInformation />
+            <Projects/>
           </div>
         </div>
       </div>

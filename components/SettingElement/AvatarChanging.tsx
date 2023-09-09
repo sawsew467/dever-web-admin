@@ -4,17 +4,13 @@ import Avatar from "@image/page/member/profile/Thang.png";
 import UnlinkButton from "@component/UnlinkButton";
 
 import axios from "axios";
-
-type TPros = {
-  imageState: File | null;
-  setImageState: React.Dispatch<React.SetStateAction<File | null>>;
-};
+import { toast } from "react-toastify";
 
 function AvatarChanging(): JSX.Element {
   const fileInputRef = useRef(null);
   const [imageState, setImageState] = useState<File | null>(null);
-  const [imageSource, setImageSource] = useState(undefined);
-  console.log(imageSource);
+  const [imageSource, setImageSource] = useState<string | undefined | null>(null);
+  // console.log(imageSource);
 
   const handleBrowseImage = () => {
     document.getElementById("imageImporter")?.click();
@@ -44,7 +40,7 @@ function AvatarChanging(): JSX.Element {
     file: File
   ): Promise<string | null | undefined> => {
     const CLOUD_NAME = "dy1uuo6ql";
-    const UPLOAD_PRESET = "fu-dever";
+    const UPLOAD_PRESET = "fu-dever-user-image";
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -54,7 +50,11 @@ function AvatarChanging(): JSX.Element {
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         formData
       );
-      setImageSource(responseData.data.secure_url);
+      const imageURL = responseData.data.secure_url;
+      setImageSource(imageURL);
+      await new Promise((resolve) => setTimeout(resolve,0));
+      toast.info("Save image successfully!");
+      
     } catch (error) {
       console.error("Error uploading image: ", error);
       return null;

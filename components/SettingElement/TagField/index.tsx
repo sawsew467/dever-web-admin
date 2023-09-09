@@ -32,7 +32,7 @@ function TagField({
   useTagFor,
 }: TagFieldProps) {
   const [data, setData] = useState<string[]>(state);
-  console.log("DATA", data);
+  // console.log("DATA", data);
 
   const handleChange = (e: CustomEvent) => {
     setData(e.detail.tagify.value.map((item: { value: string }) => item.value));

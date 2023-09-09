@@ -154,7 +154,7 @@ function SocialAccount() {
     return false;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (checkExistAccounts(removeHttps(linkState))) {
       return;
     } else if (checkIsValidLink(linkState)) return;
