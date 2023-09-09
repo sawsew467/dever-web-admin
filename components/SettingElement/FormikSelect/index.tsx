@@ -10,7 +10,13 @@ type TPros = {
   options: string[];
 };
 
-function FormikSelect({ label, title, isEdit, options, ...props }: TPros) {
+function FormikSelect({
+  label,
+  title,
+  isEdit,
+  options,
+  ...props
+}: TPros): JSX.Element {
   const [field, meta] = useField(props);
 
   const renderSelectOption = () => {
