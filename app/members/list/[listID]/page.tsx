@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "@/app/context/AppContext";
 import Image from "next/image";
 
 import searchIcon from "@icon/page/member/list/search-outline.svg";
@@ -10,13 +9,16 @@ import trashIcon from "@icon/page/member/list/trash.svg";
 import MemberItem from "@/components/MemberItem/";
 import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface pageProps {
   params: { listID: string };
 }
 
 function MemberList({ params }: pageProps) {
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
 
   // fake data
   const memberList = [

@@ -5,8 +5,10 @@ import bell from "@icon/components/sidebar/bell.svg";
 import chevrondown from "@icon/components/sidebar/chevron-down.svg";
 import usersgroup from "@icon/components/sidebar/users-group.svg";
 import gridplus from "@icon/components/sidebar/grid-plus.svg";
-import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { changeIsMouseVisit } from "@/redux/slices/app";
 
 function Slidebar() {
   const [isDropdownNotifications, setIsDropdownNotifications] =
@@ -117,7 +119,9 @@ function Slidebar() {
     setIsCreateBlog(true);
   };
 
-  const { isOpenSlidebar, isMouseVisit, setIsMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -130,8 +134,8 @@ function Slidebar() {
         <h1></h1>
         <div
           className="h-full bg-[#ffffff]"
-          onMouseEnter={() => setIsMouseVisit(true)}
-          onMouseLeave={() => setIsMouseVisit(false)}
+          onMouseEnter={() => dispatch(changeIsMouseVisit(true))}
+          onMouseLeave={() => dispatch(changeIsMouseVisit(false))}
         >
           <ul
             className="ml-[12px] mr-[12px] "

@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { useAppContext } from "@/app/context/AppContext";
 
 import BrowseFile from "@/components/BrowseImage";
 import EditorLarge from "@/components/EditorLarge";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 function CreateNotification() {
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
   const [importedImage, setImportedImage] = useState<File | null>(null);
   const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");

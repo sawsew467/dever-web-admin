@@ -1,6 +1,5 @@
 "use client";
 import React, { ReactNode, useEffect } from "react";
-import { useAppContext } from "@/app/context/AppContext";
 import Image from "next/image";
 import Button from "@/components/Button";
 
@@ -11,9 +10,12 @@ import facebookIcon from "@icon/page/member/profile/facebook.svg";
 import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
 import ProjectCard from "@/components/ProjectCard";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 function Profile() {
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
 
   const userData = {
     id: 0,

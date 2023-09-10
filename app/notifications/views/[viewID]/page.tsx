@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -10,11 +9,16 @@ import clockIcon from "@icon/page/notification/list/clock.svg";
 
 import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface pageProps {
   params: { viewID: string };
 }
 function View({ params }: pageProps) {
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+
   const notificationList = [
     {
       id: 0,
@@ -129,7 +133,6 @@ function View({ params }: pageProps) {
       time: "August 7th 2023, 6:25:59 am",
     },
   ];
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
 
   const increaseIndex = 5;
   const [notifications, setNotitications] = useState(
