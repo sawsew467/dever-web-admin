@@ -8,6 +8,8 @@ import { AppProvider } from "./context/AppContext";
 import { usePathname } from "next/navigation";
 import ToastNotificationComp from "@/components/ToastNotificationComp";
 const inter = Inter({ subsets: ["latin"] });
+import { Provider } from "react-redux";
+import { store } from "../redux/store";
 
 // export const metadata: Metadata = {
 //   title: "Dever Admin",
@@ -27,15 +29,18 @@ export default function RootLayout({
   ];
   const pathname = usePathname();
   const isSpecial = specialPaths.includes(pathname);
+  
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className} suppressHydrationWarning={true}>
-        <AppProvider>
-          {!isSpecial && <Header />}
-          {!isSpecial && <Sidebar />}
-          {children}
-        </AppProvider>
-        <ToastNotificationComp/>
+        <Provider store={store}>
+          <AppProvider>
+            {!isSpecial && <Header />}
+            {!isSpecial && <Sidebar />}
+            {children}
+          </AppProvider>
+          <ToastNotificationComp />
+        </Provider>
       </body>
     </html>
   );
