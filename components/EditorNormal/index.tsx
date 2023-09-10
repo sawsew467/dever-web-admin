@@ -30,6 +30,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import DomToLexicalPlugin from "@plugins/DomToLexicalPlugin.tsx";
 import TreeViewPlugin from "@plugins/TreeViewPlugin";
 import EditorSaveButtonPlugin from "@plugins/EditorSaveButtonPlugin";
+import FloatingTextFormatToolbarPlugin from "@/lexical_Lib/plugins/FloatingTextFormatToolbarPlugin";
 
 const editorConfig = {
   onError(error: Error) {
@@ -75,13 +76,17 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
               }
               placeholder={
                 <Placeholder className="absolute top-[15px] left-[12px] text-[14px] text-gray-500">
-                  {"Enter your bio..."}
+                  {"Write your content here..."}
                 </Placeholder>
               }
               ErrorBoundary={LexicalErrorBoundary}
             />
             {isNeedSave ? <DomToLexicalPlugin html={htmlString} /> : null}
             {/* <TreeViewPlugin/> */}
+            {floatingAnchorElem && (
+              <FloatingTextFormatToolbarPlugin
+              anchorElem={floatingAnchorElem}/>
+            )}
             <HistoryPlugin />
             <AutoFocusPlugin />
             <HashtagPlugin />

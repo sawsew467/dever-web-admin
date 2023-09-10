@@ -2,14 +2,17 @@
 import React, { useState } from "react";
 import { useAppContext } from "@/app/context/AppContext";
 
-import BrowseFile from "@/components/BrowseFile";
+import BrowseFile from "@/components/BrowseImage";
 import EditorLarge from "@/components/EditorLarge";
+import BlogTag from "@/components/BlogTag";
 
 function CreateBlog() {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
-
   const [importedImage, setImportedImage] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");
+  console.log(imageURL);
+  
 
   return (
     <div
@@ -23,12 +26,14 @@ function CreateBlog() {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div>
-          <h1 className="font-[700] text-[24px] select-none">Create blog</h1>
+          <h1 className="font-[700] text-[24px] select-none">
+            Create blog
+          </h1>
         </div>
 
         <div className="flex flex-col gap-[20px]">
           <div className="flex flex-col gap-[8px]">
-            <h4 className="select-none font-[500]">Blog title:</h4>
+            <h4 className="select-none font-[500]">Your title:</h4>
             <input
               type="text"
               placeholder="Write title here"
@@ -37,17 +42,23 @@ function CreateBlog() {
           </div>
           <div>
             <BrowseFile
-              formTitle="Blog thumbnail"
+              formTitle="Your thumbnail"
               fileStorage={importedImage}
               setFileStorage={setImportedImage}
+              setFileURL={setImageURL}
+              page = "create_blog"
             ></BrowseFile>
           </div>
           <div>
+            <BlogTag
+            ></BlogTag>
+          </div>
+          <div>
             <EditorLarge
-              formTitle="Blog content"
+              formTitle="Your content"
               htmlString={htmlString}
               setHtmlString={setHtmlStringg}
-              pageName={"create_blog"}
+              pageName="create_notification"
             ></EditorLarge>
           </div>
         </div>

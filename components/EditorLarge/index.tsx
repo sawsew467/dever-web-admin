@@ -230,7 +230,7 @@ function EditorLarge({
                   </>
                 )}
               </div>
-              <TreeViewPlugin />
+              {/* <TreeViewPlugin /> */}
               <HTMLSerializerPlugin setHtmlString={setHtmlString} />
               <TextCounterPlugin
                 setTextContentCounting={setTextContentCounting}

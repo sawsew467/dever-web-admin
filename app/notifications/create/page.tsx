@@ -2,13 +2,16 @@
 import React, { useState } from "react";
 import { useAppContext } from "@/app/context/AppContext";
 
-import BrowseFile from "@/components/BrowseFile";
+import BrowseFile from "@/components/BrowseImage";
 import EditorLarge from "@/components/EditorLarge";
 
 function CreateNotification() {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
   const [importedImage, setImportedImage] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");
+  console.log(imageURL);
+  
 
   return (
     <div
@@ -41,6 +44,8 @@ function CreateNotification() {
               formTitle="Notification thumbnail"
               fileStorage={importedImage}
               setFileStorage={setImportedImage}
+              setFileURL={setImageURL}
+              page="create_notification"
             ></BrowseFile>
           </div>
           <div>

@@ -10,7 +10,13 @@ type TPros = {
   options: string[];
 };
 
-function FormikSelect({ label, title, isEdit, options, ...props }: TPros) {
+function FormikSelect({
+  label,
+  title,
+  isEdit,
+  options,
+  ...props
+}: TPros): JSX.Element {
   const [field, meta] = useField(props);
 
   const renderSelectOption = () => {
@@ -39,14 +45,14 @@ function FormikSelect({ label, title, isEdit, options, ...props }: TPros) {
   };
 
   return (
-    <div className="w-full relative">
-      <span className="font-[300] text-[14px]">
+    <div className="w-full relative flex flex-col justify-between">
+      <span className="font-[300] text-[14px] mb-[6px]">
         {capitalizeFirstLetter(title)}
       </span>
       <select
         {...field}
         {...props}
-        className={`w-full text-sm font-medium text-gray-700 border-gray-300  bg-gray-50 ${
+        className={`w-full text-sm font-medium text-gray-700 border-gray-300  bg-gray-50 py-[10px] ${
           isEdit ? "text-black" : ""
         } rounded-[6px]`}
         disabled={!isEdit}

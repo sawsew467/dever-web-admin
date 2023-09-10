@@ -10,8 +10,7 @@ import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
 import facebookIcon from "@icon/page/member/profile/facebook.svg";
 import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
-import branchIcon from "@icon/page/member/profile/code-merge.svg";
-import projectImage from "@image/page/notification/list/thumbnail.png";
+import ProjectCard from "@/components/ProjectCard";
 
 function Profile() {
   const { isOpenSlidebar, isMouseVisit } = useAppContext();
@@ -68,24 +67,24 @@ function Profile() {
     project: [
       {
         id: 0,
-        img: "Image",
+        img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
         title: "Noteworthy technology acquisitions 2021",
         desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-        link: "https://github.com/sawsew467/dever-web-frontend",
+        link: "github.com/sawsew467/dever-web-frontend",
       },
       {
         id: 1,
-        img: "Image",
+        img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
         title: "Noteworthy technology acquisitions 2021",
         desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-        link: "https://github.com/sawsew467/dever-web-frontend",
+        link: "github.com/sawsew467/dever-web-frontend",
       },
       {
         id: 2,
-        img: "Image",
+        img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
         title: "Noteworthy technology acquisitions 2021",
         desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-        link: "https://github.com/sawsew467/dever-web-frontend",
+        link: "github.com/sawsew467/dever-web-frontend",
       },
     ],
   };
@@ -292,48 +291,16 @@ function Profile() {
               <div className=" flex flex-col gap-[20px]">
                 {userData?.project.map((item, index) => {
                   return (
-                    <div
-                      className="flex flex-row shadow-primary rounded-[16px] h-fit overflow-hidden relative"
+                    <ProjectCard
                       key={index}
-                    >
-                      <div className="w-[30%] h-[100%] absolute">
-                        <Image
-                          src={projectImage}
-                          alt="project"
-                          className="w-[100%] h-full object-cover"
-                        ></Image>
-                      </div>
-                      <div className="lg:w-[70%] w-[100%] p-[20px] flex flex-col gap-[16px] ml-[30%]">
-                        <div className="flex flex-col gap-[8px]">
-                          <h3 className="font-[700] text-[24px]">
-                            {item.title}
-                          </h3>
-                          <div className="text-[16px] font-[400] text-gray-500 h-[48px] overflow-hidden">
-                            {renderHtmlString(item.desc)}
-                          </div>
-                        </div>
-                        <div className="flex gap-[8px]">
-                          <Image src={branchIcon} alt="codeMerge"></Image>
-                          <a
-                            href={item.link}
-                            className="text-[16px]  font-[400px]"
-                          >
-                            {item.link}
-                          </a>
-                        </div>
-                        <div>
-                          <Button
-                            textContent={"Demo"}
-                            icon={"arrowRight"}
-                            iconPosition={"right"}
-                            backgroundColor={"bg-blue-700"}
-                            href={item.link}
-                            method={() => {}}
-                            tailwind={"text-white"}
-                          ></Button>
-                        </div>
-                      </div>
-                    </div>
+                      img={item.img}
+                      title={item.title}
+                      desc={item.desc}
+                      link={item.link}
+                      canEdit={false}
+                      method={() => {}}
+                      isEdit={false}
+                    />
                   );
                 })}
               </div>
