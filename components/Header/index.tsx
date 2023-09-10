@@ -7,15 +7,22 @@ import moon from "@icon/components/header/moon.svg";
 import avatar from "@icon/components/header/avatar.svg";
 import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { toggleIsDarkMode, toggleIsOpenSlidebar } from "@/redux/slices/app";
+
 function Header() {
-  const { isDarkMode, setIsOpenSlidebar, setIsDarkMode } = useAppContext();
+  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+
+  const dispatch = useDispatch();
 
   const handleOpenMenu = () => {
-    setIsOpenSlidebar((isOpenSlidebar) => !isOpenSlidebar);
+    dispatch(toggleIsOpenSlidebar())
   };
 
   const handleSetDarkMode = () => {
-    setIsDarkMode((isDarkMode) => !isDarkMode);
+    dispatch(toggleIsDarkMode());
     const html = document.documentElement;
     html.classList.toggle("dark");
   };
