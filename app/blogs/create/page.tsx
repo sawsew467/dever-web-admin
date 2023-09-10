@@ -7,13 +7,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
 function CreateBlog() {
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
   const [importedImage, setImportedImage] = useState<File | null>(null);
   const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");
-  console.log(imageURL);
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
-  
 
   return (
     <div

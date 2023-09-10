@@ -103,8 +103,6 @@ function BrowseImage({
     };
 
     if (fileStorage) {
-      console.log("Oke");
-
       handleGetImageURL(fileStorage);
     }
   }, [fileStorage, setFileURL]);

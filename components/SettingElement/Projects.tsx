@@ -34,8 +34,6 @@ function Projects() {
     null
   );
 
-  console.log(imageURL);
-
   const project_List = [
     {
       title: "Noteworthy technology acquisitions 2021",
