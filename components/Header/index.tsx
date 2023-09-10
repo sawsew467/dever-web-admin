@@ -5,7 +5,6 @@ import menu from "@icon/components/header/menu.svg";
 import logo from "@icon/components/header/logo.svg";
 import moon from "@icon/components/header/moon.svg";
 import avatar from "@icon/components/header/avatar.svg";
-import { useAppContext } from "@/app/context/AppContext";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";

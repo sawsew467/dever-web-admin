@@ -1,18 +1,20 @@
 "use client";
 import React, { ReactNode, useEffect } from "react";
 import Image from "next/image";
-import { useAppContext } from "@/app/context/AppContext";
 
 import thumbnail from "@image/page/notification/list/thumbnail.png";
 import clockIcon from "@icon/page/notification/list/clock.svg";
 import Button from "@/components/Button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface pageProps {
   params: { notifyID: string };
 }
 
 function DetailNotification({ params }: pageProps) {
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
   const data = {
     id: 0,
     title: "Noteworthy technology acquisitions 2021",

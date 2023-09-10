@@ -22,7 +22,6 @@ function BrowseImage({
 }: IPros) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(true);
-  console.log(isUploading);
 
   const fileInputRef = useRef(null);
 

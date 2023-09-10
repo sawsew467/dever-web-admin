@@ -4,7 +4,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import { AppProvider } from "./context/AppContext";
 import { usePathname } from "next/navigation";
 import ToastNotificationComp from "@/components/ToastNotificationComp";
 const inter = Inter({ subsets: ["latin"] });
@@ -34,11 +33,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className} suppressHydrationWarning={true}>
         <Provider store={store}>
-          <AppProvider>
             {!isSpecial && <Header />}
             {!isSpecial && <Sidebar />}
             {children}
-          </AppProvider>
           <ToastNotificationComp />
         </Provider>
       </body>

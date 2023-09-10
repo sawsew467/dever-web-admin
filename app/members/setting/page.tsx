@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { useAppContext } from "@/app/context/AppContext";
 import AvatarChanging from "@component/SettingElement/AvatarChanging";
 import AboutUser from "@component/SettingElement/AboutUser";
 import ContactInfomation from "@/components/SettingElement/ContactInfomation";
@@ -10,9 +9,12 @@ import Skills from "@/components/SettingElement/Skills";
 import Hobbies from "@/components/SettingElement/Hobbies";
 import ChangePassword from "@/components/SettingElement/ChangePassword";
 import Projects from "@/components/SettingElement/Projects";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 function SettingList() {
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
 
   return (
     <div

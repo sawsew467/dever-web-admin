@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
-import { useAppContext } from "@/app/context/AppContext";
 
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 function BlogList() {
-  const { isOpenSlidebar, isMouseVisit } = useAppContext();
+  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
 
   return (
     <div

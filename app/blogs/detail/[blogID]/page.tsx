@@ -1,13 +1,15 @@
 "use client"
+import { RootState } from '@/redux/store';
 import React from 'react'
-import {useAppContext } from '@/app/context/AppContext'
+import { useSelector } from 'react-redux';
 
 interface pageProps {
     params: {blogID: string};
 }
 
 function BlogDetail({params}: pageProps) {
-    const {isOpenSlidebar, isMouseVisit} = useAppContext();
+    const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
+    const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
 
     return (
         <div className={`w-[100%] ${isOpenSlidebar ? isMouseVisit ? "sm:w-[calc(100%-250px)]" : "sm:w-[calc(100%-65px)]" : "sm:w-[calc(100%-250px)]"} absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}>
