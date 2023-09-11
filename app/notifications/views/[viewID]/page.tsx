@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 
 import thumbnail from "@image/page/notification/list/thumbnail.png";
@@ -16,8 +15,12 @@ interface pageProps {
   params: { viewID: string };
 }
 function View({ params }: pageProps) {
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const isMouseVisit = useSelector(
+    (state: RootState) => state.app.isMouseVisit
+  );
 
   const notificationList = [
     {
