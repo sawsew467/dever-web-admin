@@ -1,5 +1,10 @@
 "use client";
+import { useRouter } from 'next/navigation'
 import React from "react";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { login } from "../../../redux/slices/userInfor";
+import { loginAccount } from "../../../apis/auth"
 import Image from "next/image";
 import { Form, Formik } from "formik";
 import { loginSchema } from "@/app/validation";
@@ -8,13 +13,71 @@ import Link from "next/link";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import LoginImg from "@image/page/authentication/signin/loginImage.jpg";
 import {toast} from "react-toastify"
+import { ValidationError, string } from "yup";
+import jwt_decode from "jwt-decode";
+
+
+type UserLogin = {
+  email: string;
+  password: string;
+}
+
+type EncodeType = {
+  email : string;
+  sub : string;
+  UserRole : string;
+}
+
+
 function SignIn() {
-  const onSubmit = async (values: object, actions: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.resetForm();
-    toast.success("Sign in successfully !");
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const onSubmit = async (values: UserLogin, actions: any) => {
+  
+    try {
+      const loginResponse = await loginAccount(values);
+      const token = loginResponse.data; 
+
+      var test = token.accessToken;
+      var decoded:EncodeType = jwt_decode(test);
+      const user = {
+        email: decoded!.email,
+        sub: decoded!.sub,
+        UserRole: decoded!.UserRole,
+      };
+      
+     
+      dispatch(
+        login({
+          token,
+          user
+        })
+      );
+      
+      toast.success("Login success !");
+      setTimeout(() => {  router.push('/');
+      }, 500);
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) {
+        if (error?.name === "ValidationError") {
+          toast.error(error.errors[0]);
+        }
+      }
+      if (axios.isAxiosError(error)) {
+        if (
+          error.response?.status === 401 ||
+          error.response?.status === 404 ||
+          error.response?.status === 400
+        ) {
+          toast.error("Wrong password or email");
+        }
+      }
+      actions.resetForm();
     //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
-  };
+  }
+};
+
+  
   return (
     <section>
       <div className="h-screen w-full flex justify-center bg-[#F9FAFB] bg-opacity-50 items-center">
