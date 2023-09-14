@@ -1,8 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation'
-import React from "react";
+import React,{useState} from "react";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { login } from "../../../redux/slices/userInfor";
 import { loginAccount } from "../../../apis/auth"
 import Image from "next/image";
@@ -13,39 +12,47 @@ import Link from "next/link";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import LoginImg from "@image/page/authentication/signin/loginImage.jpg";
 import {toast} from "react-toastify"
-import { ValidationError, string } from "yup";
+import axios from "axios";
+import { ValidationError } from "yup";
 import jwt_decode from "jwt-decode";
 
 
 type UserLogin = {
   email: string;
   password: string;
+  remember : boolean
 }
 
 type EncodeType = {
   email : string;
   sub : string;
   UserRole : string;
+  "remember-me" : boolean
 }
 
 
 function SignIn() {
   const dispatch = useDispatch();
+  const [remember,setRemember] = useState(false);
+  const onHandleChoiceRemember = (status:boolean)=>{
+    setRemember(status)    
+  }
   const router = useRouter();
   const onSubmit = async (values: UserLogin, actions: any) => {
   
     try {
+      values.remember = remember;
       const loginResponse = await loginAccount(values);
-      const token = loginResponse.data; 
+      const token = loginResponse.data
 
-      var test = token.accessToken;
-      var decoded:EncodeType = jwt_decode(test);
+      var decoded:EncodeType = jwt_decode(token.accessToken);
+      
       const user = {
         email: decoded!.email,
         sub: decoded!.sub,
         UserRole: decoded!.UserRole,
+        remember: decoded!['remember-me']
       };
-      
      
       dispatch(
         login({
@@ -135,11 +142,12 @@ function SignIn() {
                     <div className="mb-6 flex w-full justify-between items-center">
                       <div className="flex items-center  gap-3">
                         <input
+                        onClick={()=>onHandleChoiceRemember(!remember)}
                           id="remember"
                           type="checkbox"
                           className="h-4 w-4 rounded bg-[#F9FAFB] border-[#D1D5DB] outline-[#0065A9] peer-checked:bg-[#0065A9]  "
                         ></input>
-                        <p className=" text-sm leading-5 font-medium">
+                        <p  className=" text-sm leading-5 font-medium">
                           Remember me
                         </p>
                       </div>

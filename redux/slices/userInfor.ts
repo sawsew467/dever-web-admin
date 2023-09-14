@@ -1,51 +1,54 @@
+"use client";
 import { createSlice } from "@reduxjs/toolkit";
+import { setCookie } from "cookies-next";
 
 type User = {
-  email: string,
-  sub: string,
-  UserRole : string,
+  email: string;
+  sub: string;
+  UserRole: string;
+  remember: boolean;
 };
-
-type Token = {
-    accessToken : string;
-    refreshToken : string;
-};
-
-
 type AppState = {
   currentUser: User;
-  keyToken : Token
 };
 
 const initialState: AppState = {
   currentUser: {
     email: "",
     sub: "",
-    UserRole : "",
+    UserRole: "",
+    remember: false,
   },
-  keyToken : {
-    accessToken:"",
-    refreshToken:""
-  }
 };
 
 export const counterSlice = createSlice({
   name: "userInfor",
   initialState,
   reducers: {
-    login: (state, action) => {     
-      console.log("hiiiiiiiiii");
-      
+    login: (state, action) => {
       state.currentUser = action.payload.user;
-      state.keyToken = action.payload.token;
+      setCookie("accessToken", action.payload.token.accessToken, {
+        maxAge: 3600,
+      });
+      if (!action.payload.user.remember) {
+        setCookie("refreshToken", action.payload.token.refreshToken, {
+          maxAge: 7200,
+        });
+      } else {
+        setCookie("refreshToken", action.payload.token.refreshToken, {
+          maxAge: 302400,
+        });
+      }
     },
     logout: (state) => {
       state.currentUser = initialState.currentUser;
+      setCookie("accessToken", "", { maxAge: 0 });
+      setCookie("refreshToken", "", { maxAge: 0 });
     },
   },
 });
 
 // Action creators được tạo ra cho mỗi hàm reducer
-export const { login, logout} = counterSlice.actions;
+export const { login, logout } = counterSlice.actions;
 
 export default counterSlice.reducer;
