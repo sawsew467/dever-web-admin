@@ -78,6 +78,9 @@ function SignIn() {
         ) {
           toast.error("Wrong password or email");
         }
+        if(error.response?.status === 422) 
+        var userError = error.response.data.errors.match(/\[(.*?)\]/);
+        toast.error(userError[1]+" has not confirmed email");
       }
       actions.resetForm();
     //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
