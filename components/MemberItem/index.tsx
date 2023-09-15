@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import avatar from "@image/page/member/list/Thang.png";
 import Link from "next/link";
@@ -14,13 +14,19 @@ interface memberPros {
   position: string;
   department: string;
   status: string;
+  isSelected: boolean
 }
 
 interface IPros {
   value: memberPros;
+  selecteFunct: (id:number) => void;
 }
 
-function MemberItem({ value }: IPros) {
+function MemberItem({ value, selecteFunct }: IPros) {
+  const handleCheckboxChange = () => {
+    selecteFunct(value.id);
+  }
+
   return (
     <div className="flex justify-between border-b-2 h-[78px]">
       <div className="flex">
@@ -28,7 +34,9 @@ function MemberItem({ value }: IPros) {
           <input
             type="checkbox"
             value=""
-            id=""
+            id={value.id.toString()}
+            checked={value.isSelected}
+            onChange={() => handleCheckboxChange()}
             className="outline-none border-1 border-slate-200 rounded-[4px] focus:ring-offset-[shadow] cursor-pointer"
           />
         </div>

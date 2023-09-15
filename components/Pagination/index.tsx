@@ -1,5 +1,6 @@
 import React, { SetStateAction, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Ipros {
   paramID: string;
@@ -20,6 +21,7 @@ function Pagination({
   sliceSetData,
   data,
 }: Ipros) {
+  const router = useRouter();
   const renderPagination = () => {
     const buttons = [];
     let startIndex = 0;
@@ -71,12 +73,9 @@ function Pagination({
           className={`px-[12px] py-[4px] border-r-[1px] ${
             paramID === "1" ? "text-slate-300 pointer-events-none" : ""
           }`}
+          onClick = {() => {router.push(`${route}/${paramID === "1" ? "1" : parseInt(paramID) - 1}`)}}
         >
-          <Link
-            href={`${route}/${paramID === "1" ? "1" : parseInt(paramID) - 1}`}
-          >
-            Previous
-          </Link>
+          Previous
         </button>
 
         {renderPagination()}
@@ -87,8 +86,9 @@ function Pagination({
               ? "pointer-events-none text-slate-300"
               : ""
           }`}
+          onClick={() => {router.push(`${route}/${parseInt(paramID) + 1}`)}}
         >
-          <Link href={`${route}/${parseInt(paramID) + 1}`}>Next</Link>
+          Next
         </button>
       </div>
     </div>

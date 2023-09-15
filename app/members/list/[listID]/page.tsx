@@ -12,16 +12,32 @@ import Pagination from "@/components/Pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-interface pageProps {
+type pageProps = {
   params: { listID: string };
-}
+};
+
+type memberPros = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  position: string;
+  department: string;
+  status: string;
+  isSelected: boolean;
+};
 
 function MemberList({ params }: pageProps) {
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const isMouseVisit = useSelector(
+    (state: RootState) => state.app.isMouseVisit
+  );
+  const [selectAll, setSelectAll] = useState<boolean>(false);
 
   // fake data
-  const memberList = [
+  const memberList: memberPros[] = [
     {
       id: 1,
       firstName: "Tran Van",
@@ -30,6 +46,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 2,
@@ -39,6 +56,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Pending",
+      isSelected: false,
     },
     {
       id: 3,
@@ -48,6 +66,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Expired",
+      isSelected: false,
     },
     {
       id: 4,
@@ -57,6 +76,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 5,
@@ -66,6 +86,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 6,
@@ -75,6 +96,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Expired",
+      isSelected: false,
     },
     {
       id: 7,
@@ -84,6 +106,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 8,
@@ -93,6 +116,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 9,
@@ -102,6 +126,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 10,
@@ -111,6 +136,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Pending",
+      isSelected: false,
     },
     {
       id: 11,
@@ -120,6 +146,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Expired",
+      isSelected: false,
     },
     {
       id: 12,
@@ -129,6 +156,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Pending",
+      isSelected: false,
     },
     {
       id: 13,
@@ -138,6 +166,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Pending",
+      isSelected: false,
     },
     {
       id: 14,
@@ -147,6 +176,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 15,
@@ -156,6 +186,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 16,
@@ -165,6 +196,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 17,
@@ -174,6 +206,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 18,
@@ -183,6 +216,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Pending",
+      isSelected: false,
     },
     {
       id: 19,
@@ -192,6 +226,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
     {
       id: 20,
@@ -201,6 +236,7 @@ function MemberList({ params }: pageProps) {
       position: "President",
       department: "Board of Directors",
       status: "Active",
+      isSelected: false,
     },
   ];
 
@@ -212,6 +248,28 @@ function MemberList({ params }: pageProps) {
     Math.ceil(memberList.length / increaseIndex)
   );
   const pages: { param: string; startIndex: number; endIndex: number }[] = [];
+
+  const handleSelectAllChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const isChecked = event.target.checked;
+    setSelectAll(isChecked);
+    const updatedMembers = members.map((member) => ({
+      ...member,
+      isSelected: isChecked,
+    }));
+    setMembers(updatedMembers);
+  };
+
+  const toggleMemberSelection = (id: number) => {
+    setMembers((prevMembers) =>
+      prevMembers.map((member) =>
+        member.id === id
+          ? { ...member, isSelected: !member.isSelected }
+          : member
+      )
+    );
+  };
 
   return (
     <div
@@ -298,8 +356,11 @@ function MemberList({ params }: pageProps) {
             {/* checkbox */}
             <div className="w-[48px] flex items-center justify-center">
               <input
+                id="select_all"
                 type="checkbox"
                 value="Name"
+                checked={selectAll}
+                onChange={(e) => handleSelectAllChange(e)}
                 className="outline-none border-1 border-slate-200 rounded-[4px] focus:ring-offset-[shadow] cursor-pointer"
               />
             </div>
@@ -324,7 +385,11 @@ function MemberList({ params }: pageProps) {
 
           <div id="tableBody">
             {members.map((value, index) => (
-              <MemberItem key={index} value={value}></MemberItem>
+              <MemberItem
+                key={index}
+                value={value}
+                selecteFunct={toggleMemberSelection}
+              ></MemberItem>
             ))}
           </div>
         </div>
