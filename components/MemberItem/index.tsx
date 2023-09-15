@@ -26,6 +26,7 @@ function MemberItem({ value, selecteFunct }: IPros) {
   const handleCheckboxChange = () => {
     selecteFunct(value.id);
   }
+  const [isClickPending, setIsClickPending] = useState<boolean>(false);
 
   return (
     <div className="flex justify-between border-b-2 h-[78px]">
@@ -61,19 +62,32 @@ function MemberItem({ value, selecteFunct }: IPros) {
           <p>{value.department}</p>
         </div>
         {/* status */}
-        <div className="w-[100px] flex p-[16px] items-center text-[12px]">
+        <div className="w-[100px] flex p-[16px] items-center text-[12px] relative">
           <p
             className={`py-[2px] px-[10px]  rounded-[6px] font-[500] 
                 ${
                   value.status === "Active"
                     ? "bg-primaryGreenBland text-green-800"
                     : value.status === "Pending"
-                    ? "bg-primaryYellowBland text-primaryBrown"
+                    ? "bg-primaryYellowBland text-primaryBrown cursor-pointer"
                     : "bg-primaryRedBland text-primaryRed"
                 }`}
+          onClick={() => {
+            if(value.status === "Pending") {
+              setIsClickPending(!isClickPending);
+            }
+          }}
           >
             {value.status}
           </p>
+          {value.status === "Pending" && isClickPending ? <div className="flex flex-col ml-[10px] shadow-primary rounded-md">
+            <p className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"
+              onClick={() => {setIsClickPending(false)}}
+            >Approve</p>
+            <p className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-red-300 hover:text-red-700 text-center rounded-b-[4px]"
+              onClick={() => {setIsClickPending(false)}}
+            >Reject</p>
+          </div> : null}
         </div>
       </div>
 
