@@ -8,6 +8,7 @@ export const END_POINT = {
   REGISTER: "/Auth/register",
   ME: "Auth/me",
   TOKEN: "/Auth/refresh-token",
+  RESET : "/Auth/change-password"
 };
 
 type UserLogin = {
@@ -15,6 +16,12 @@ type UserLogin = {
   password: string;
   remember : boolean
 };
+
+type UserChange = {
+  email : string,
+  newPassword : string,
+  oldPassword : string,
+}
 type Token = {
   AccessToken: string;
   RefreshToken: string;
@@ -28,6 +35,11 @@ type LoginResponse = {
   returnTime: string;
 };
 
+type UserRegister = { 
+   email : string, 
+   password : string,
+};
+
 export const loginAccount = (payload: UserLogin) => {
   return axiosClient.post<LoginResponse>(END_POINT.LOGIN, {
     email: payload.email,
@@ -35,17 +47,27 @@ export const loginAccount = (payload: UserLogin) => {
     RememberMe : payload.remember
   });
 };
-export const registerAccount = (payload: UserLogin) => {
+export const registerAccount = (payload: UserRegister) => {
   return axiosClient.post(END_POINT.REGISTER, {
-    username: payload.email,
+    email: payload.email,
     password: payload.password,
+    UserRole : "admin"
   });
 };
+
+export const resetAccount = (payload: UserChange) => {
+  return axiosClient.patch(END_POINT.RESET, {
+    email : payload.email,
+    oldPassword: payload.oldPassword,
+    newPassword: payload.newPassword
+  });
+};
+
 
 export const refreshAccessToken = (payload: Token) => {
  try {
   if(!payload.RefreshToken) return Error();
-  return axiosClient.post(END_POINT.TOKEN, {
+  return axiosClient.put(END_POINT.TOKEN, {
     AccessToken: payload.AccessToken,
     RefreshToken: payload.RefreshToken,
   });

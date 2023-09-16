@@ -1,17 +1,48 @@
 "use client";
 import React from "react";
+
 import { Form, Formik } from "formik";
 import InputForm from "@/components/InputForm";
-import { registerSchema } from "@/app/validation";
 import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import ResetImg from "@image/page/authentication/reset/resetImage.jpg";
+import { registerAccount } from "@/apis/auth";
+
+type UserRegister = {
+  email : string,
+  password : string,
+  userRole : string
+}
 function ResetPassword() {
-  const onSubmit = async (values: object, actions: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.resetForm();
-    alert("success");
-  };
+  const onSubmit = async (values: UserRegister, actions: any) => {
+  
+  //   try {
+  //     const loginResponse = await registerAccount(values);
+  //     const token = loginResponse.data;
+      
+    
+  //   } catch (error: unknown) {
+  //     if (error instanceof ValidationError) {
+  //       if (error?.name === "ValidationError") {
+  //         toast.error(error.errors[0]);
+  //       }
+  //     }
+  //     if (axios.isAxiosError(error)) {
+  //       if (
+  //         error.response?.status === 401 ||
+  //         error.response?.status === 404 ||
+  //         error.response?.status === 400
+  //       ) {
+  //         toast.error("Wrong password or email");
+  //       }
+  //       if(error.response?.status === 422) 
+  //       var userError = error.response.data.errors.match(/\[(.*?)\]/);
+  //       toast.error(userError[1]+" has not confirmed email");
+  //     }
+  //     actions.resetForm();
+  //   //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
+  // }
+};
   return (
     <section>
       <div className="h-screen w-full flex justify-center bg-[#F9FAFB] bg-opacity-50 items-center">

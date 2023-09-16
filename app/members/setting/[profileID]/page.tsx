@@ -11,6 +11,7 @@ import ChangePassword from "@/components/SettingElement/ChangePassword";
 import Projects from "@/components/SettingElement/Projects";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import withAuth from "@/ultils/hoc";
 interface pageProps {
   params: { profileID: string };
 }
@@ -55,4 +56,4 @@ function MemberSetting({ params }: pageProps) {
   );
 }
 
-export default MemberSetting;
+export default withAuth(MemberSetting);

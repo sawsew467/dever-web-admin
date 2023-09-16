@@ -11,7 +11,7 @@ import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
+import withAuth from "@/ultils/hoc";
 interface pageProps {
   params: { viewID: string };
 }
@@ -254,4 +254,4 @@ function View({ params }: pageProps) {
   );
 }
 
-export default View;
+export default withAuth(View);
