@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <Provider store={store}>
           <Helmet>
-            <title>Dever Admin</title>
+            <title>Fu-Dever Space</title>
             <meta name="description" content="FU-Dever Admin" />
           </Helmet>
           {!isSpecial && <Header />}
