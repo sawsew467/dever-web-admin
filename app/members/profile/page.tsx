@@ -12,10 +12,16 @@ import youtubeIcon from "@icon/page/member/profile/youtube.svg";
 import ProjectCard from "@/components/ProjectCard";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { getMemberInfo } from "@/apis/profile";
+import axios from "axios";
 
 function Profile() {
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const isMouseVisit = useSelector(
+    (state: RootState) => state.app.isMouseVisit
+  );
 
   const userData = {
     id: 0,
@@ -94,6 +100,29 @@ function Profile() {
   const renderHtmlString = (htmlString: string) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
   };
+
+  const handleGetUserProfile = async () => {
+    try {
+      const access_token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      if (access_token) {
+        const response = await getMemberInfo(
+          "2957784d-6159-4678-aeff-e27f9f66030d",
+          access_token
+        );
+        const data = response.data;
+        console.log(data);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleGetUserProfile();
+  },[])
 
   return (
     <div

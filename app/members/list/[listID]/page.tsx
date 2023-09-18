@@ -11,19 +11,23 @@ import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import axios from "axios";
+import { getAllMemberInfo } from "@/apis/profile";
 
 type pageProps = {
   params: { listID: string };
 };
 
 type memberPros = {
-  id: number;
-  firstName: string;
-  lastName: string;
+  id: string;
+  fullname: string;
+  avatarUrl: string;
   email: string;
   position: string;
   department: string;
-  status: string;
+  status: {
+    value: string;
+  };
   isSelected: boolean;
 };
 
@@ -36,234 +40,64 @@ function MemberList({ params }: pageProps) {
   );
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
-  // fake data
-  const memberList: memberPros[] = [
-    {
-      id: 1,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 2,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Pending",
-      isSelected: false,
-    },
-    {
-      id: 3,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Expired",
-      isSelected: false,
-    },
-    {
-      id: 4,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 5,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 6,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Expired",
-      isSelected: false,
-    },
-    {
-      id: 7,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 8,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 9,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 10,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Pending",
-      isSelected: false,
-    },
-    {
-      id: 11,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Expired",
-      isSelected: false,
-    },
-    {
-      id: 12,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Pending",
-      isSelected: false,
-    },
-    {
-      id: 13,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Pending",
-      isSelected: false,
-    },
-    {
-      id: 14,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 15,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 16,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 17,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 18,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Pending",
-      isSelected: false,
-    },
-    {
-      id: 19,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-    {
-      id: 20,
-      firstName: "Tran Van",
-      lastName: "Bao Thang",
-      email: "thangtvbde170145@fpt.edu.vn",
-      position: "President",
-      department: "Board of Directors",
-      status: "Active",
-      isSelected: false,
-    },
-  ];
-
   const increaseIndex = 8;
-  const [members, setMembers] = useState(
-    memberList.slice(0, increaseIndex + 1)
-  );
-  const [countListPage, setCountListPage] = useState(
-    Math.ceil(memberList.length / increaseIndex)
-  );
+  const [allMemberData, setAllMemberData] = useState([]);
+  const [members, setMembers] = useState<memberPros[]>([]);
+  
+  const [countListPage, setCountListPage] = useState(0);
   const pages: { param: string; startIndex: number; endIndex: number }[] = [];
+
+  const handleGetAllMember = async () => {
+    try {
+      const access_token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      if (access_token) {
+        const response = await getAllMemberInfo(access_token);
+        const data = response.data;
+        setCountListPage( Math.ceil(data.length / increaseIndex));
+        const dataWithSelect = data.map((value: { id: string;
+          fullname: string;
+          avatarUrl: string;
+          email: string;
+          position: string;
+          department: string;
+          status: {
+            value: string;
+          };}) => {
+            return ({
+              ...value,
+              isSelected: false,
+            })
+        })
+
+        setAllMemberData(dataWithSelect);
+        setMembers(dataWithSelect.slice(0, increaseIndex+1));
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    handleGetAllMember();
+  },[]);
 
   const handleSelectAllChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const isChecked = event.target.checked;
     setSelectAll(isChecked);
-    const updatedMembers = members.map((member) => ({
+    const updatedMembers = members.map((member: any) => ({
       ...member,
       isSelected: isChecked,
     }));
     setMembers(updatedMembers);
   };
 
-  const toggleMemberSelection = (id: number) => {
-    setMembers((prevMembers) =>
-      prevMembers.map((member) =>
+  const toggleMemberSelection = (id: string) => {
+    setMembers((prevMembers: any) =>
+      prevMembers.map((member: any) =>
         member.id === id
           ? { ...member, isSelected: !member.isSelected }
           : member
@@ -389,6 +223,7 @@ function MemberList({ params }: pageProps) {
                 key={index}
                 value={value}
                 selecteFunct={toggleMemberSelection}
+                refreshApi = {handleGetAllMember}
               ></MemberItem>
             ))}
           </div>
@@ -400,7 +235,7 @@ function MemberList({ params }: pageProps) {
           pages={pages}
           increaseIndex={increaseIndex}
           sliceSetData={setMembers}
-          data={memberList}
+          data={allMemberData}
           route={"/members/list/"}
         ></Pagination>
       </div>

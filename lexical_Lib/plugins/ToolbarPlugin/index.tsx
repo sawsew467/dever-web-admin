@@ -1020,14 +1020,14 @@ export default function ToolbarPlugin(): JSX.Element {
               <i className="icon sticky" />
               <span className="text">Sticky Note</span>
             </DropDownItem>
-            <DropDownItem
+            {/* <DropDownItem
               onClick={() => {
                 editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
               }}
               className="item">
               <i className="icon caret-right" />
               <span className="text">Collapsible container</span>
-            </DropDownItem>
+            </DropDownItem> */}
             {EmbedConfigs.map((embedConfig) => (
               <DropDownItem
                 key={embedConfig.type}

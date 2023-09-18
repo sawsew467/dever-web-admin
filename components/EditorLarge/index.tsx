@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState , Suspense} from "react";
 import Button from "../Button";
 
 import PlaygroundEditorTheme from "@/lexical_Lib/theme/EditorTheme";
@@ -206,8 +207,7 @@ function EditorLarge({
                 <TabFocusPlugin />
                 <TabIndentationPlugin />
                 <PageBreakPlugin />
-                <DraggableBlockPlugin />
-                <CodeActionMenuPlugin />
+                <CodeActionMenuPlugin/>   
                 <CodeHighlightPlugin />
                 <ActionsPlugin isRichText={true} />
 

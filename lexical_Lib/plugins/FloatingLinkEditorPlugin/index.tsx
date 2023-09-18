@@ -309,10 +309,22 @@ function useFloatingLinkEditorToolbar(
 }
 
 export default function FloatingLinkEditorPlugin({
-  anchorElem = document.body,
+  anchorElem,
 }: {
   anchorElem?: HTMLElement;
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  return useFloatingLinkEditorToolbar(editor, anchorElem);
+
+  // Check if document is defined before using it as the default value
+  const defaultAnchorElem = typeof document !== 'undefined' ? document.body : null;
+
+  const resolvedAnchorElem = anchorElem || defaultAnchorElem;
+
+  // Ensure that resolvedAnchorElem is not null before calling the hook
+  if (resolvedAnchorElem !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useFloatingLinkEditorToolbar(editor, resolvedAnchorElem);
+  }
+
+  return null;
 }

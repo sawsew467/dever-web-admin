@@ -3,7 +3,7 @@ import {
   LexicalTypeaheadMenuPlugin,
   MenuOption,
   useBasicTypeaheadTriggerMatch,
-} from '@lexical/react/LexicalTypeaheadMenuPlugin';
+} from '../../react/LexicalTypeaheadMenuPlugin';
 import {
   $createTextNode,
   $getSelection,

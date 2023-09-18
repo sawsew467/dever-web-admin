@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import PlaygroundEditorTheme from "@/lexical_Lib/theme/EditorTheme";
 import TableCellNodes from "@nodes/TableCellNodes";
@@ -27,7 +28,7 @@ import ToolbarPlugin from "@plugins/ToolbarNormalPlugin";
 
 import { $generateNodesFromDOM } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import DomToLexicalPlugin from "@plugins/DomToLexicalPlugin.tsx";
+import DomToLexicalPlugin from "@/lexical_Lib/plugins/DomToLexicalPlugin";
 import TreeViewPlugin from "@plugins/TreeViewPlugin";
 import EditorSaveButtonPlugin from "@plugins/EditorSaveButtonPlugin";
 import FloatingTextFormatToolbarPlugin from "@/lexical_Lib/plugins/FloatingTextFormatToolbarPlugin";

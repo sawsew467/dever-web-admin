@@ -1,3 +1,4 @@
+"use client"
 import './index.css';
 
 import {
@@ -165,12 +166,24 @@ function getMouseInfo(event: MouseEvent): {
 }
 
 export default function CodeActionMenuPlugin({
-  anchorElem = document.body,
+  anchorElem = (typeof document !== 'undefined' ? document.body : null),
 }: {
-  anchorElem?: HTMLElement;
+  anchorElem?: HTMLElement | null;
 }): React.ReactPortal | null {
-  return createPortal(
-    <CodeActionMenuContainer anchorElem={anchorElem} />,
-    anchorElem,
-  );
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  
+  return (
+    anchorElem !== null ? createPortal(
+      isClient ? <CodeActionMenuContainer anchorElem={anchorElem} /> : null,
+      anchorElem,
+    ) : null
+  )
 }
+
+
+
+
