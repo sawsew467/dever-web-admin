@@ -7,7 +7,7 @@ import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import ResetImg from "@image/page/authentication/reset/resetImage.jpg";
 import { registerAccount } from "@/apis/auth";
-
+import withAuth from "@/ultils/hoc";
 type UserRegister = {
   email : string,
   password : string,
@@ -141,4 +141,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default withAuth(ResetPassword);

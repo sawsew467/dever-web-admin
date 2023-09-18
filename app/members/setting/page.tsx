@@ -11,7 +11,7 @@ import ChangePassword from "@/components/SettingElement/ChangePassword";
 import Projects from "@/components/SettingElement/Projects";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
+import withAuth from "@/ultils/hoc";
 function SettingList() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
   const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
@@ -52,4 +52,4 @@ function SettingList() {
   );
 }
 
-export default SettingList;
+export default withAuth(SettingList);

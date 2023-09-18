@@ -15,7 +15,7 @@ import {toast} from "react-toastify"
 import axios from "axios";
 import { ValidationError } from "yup";
 import jwt_decode from "jwt-decode";
-
+import withAuth from '@/ultils/hoc';
 
 type UserLogin = {
   email: string;
@@ -190,4 +190,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default withAuth(SignIn);

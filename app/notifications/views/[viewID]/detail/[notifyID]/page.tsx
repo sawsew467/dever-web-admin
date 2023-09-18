@@ -7,7 +7,7 @@ import clockIcon from "@icon/page/notification/list/clock.svg";
 import Button from "@/components/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
+import withAuth from "@/ultils/hoc";
 interface pageProps {
   params: { notifyID: string };
 }
@@ -88,4 +88,4 @@ function DetailNotification({ params }: pageProps) {
   );
 }
 
-export default DetailNotification;
+export default withAuth(DetailNotification);

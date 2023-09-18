@@ -12,6 +12,7 @@ import youtubeIcon from "@icon/page/member/profile/youtube.svg";
 import ProjectCard from "@/components/ProjectCard";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import withAuth from "@/ultils/hoc";
 
 function Profile() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
@@ -317,4 +318,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default withAuth(Profile);
