@@ -9,8 +9,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { approveUser, rejectUser } from "@/apis/appUser";
 import { deleteMemberInfo } from "@/apis/profile";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery, useTheme } from "@mui/material";
-import {Button as MUIButton} from '@mui/material/';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Button as MUIButton } from "@mui/material/";
 import UnlinkButton from "../UnlinkButton";
 
 interface memberPros {
@@ -29,7 +37,7 @@ interface memberPros {
 interface IPros {
   value: memberPros;
   selecteFunct: (id: string) => void;
-  refreshApi: () => void
+  refreshApi: () => void;
 }
 
 function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
@@ -38,10 +46,11 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   };
 
   const [isClickPending, setIsClickPending] = useState<boolean>(false);
+  const [isClickReject, setIsClickReject] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   const handleClickOpen = () => {
     setOpenDialog(true);
   };
@@ -49,7 +58,6 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   const handleClose = () => {
     setOpenDialog(false);
   };
-
 
   const handleApproveUser = async () => {
     try {
@@ -59,8 +67,8 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       if (access_token) {
         const response = await approveUser(value.id, access_token);
         console.log(response);
-        toast.success(`Approved user successfully!`);
-        refreshApi()
+        toast.success(`Approved user ${value.email} successfully!`);
+        refreshApi();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -92,11 +100,11 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   const handleDeleteUser = async () => {
     try {
       const access_token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
-      if(access_token) {
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      if (access_token) {
         const response = await deleteMemberInfo(value.id, access_token);
         console.log(response);
-        toast.success(`Deleted user successfully!`);
+        toast.success(`Deleted user ${value.email} successfully!`);
         refreshApi();
       }
       setOpenDialog(false);
@@ -107,7 +115,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         toast.error("Deleting failed!");
       }
     }
-  }
+  };
 
   return (
     <div className="flex justify-between border-b-2 h-[78px]">
@@ -162,6 +170,9 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               if (value.status.value === "Pending") {
                 setIsClickPending(!isClickPending);
               }
+              if (value.status.value === "Rejected") {
+                setIsClickReject(!isClickReject);
+              }
             }}
           >
             {value.status.value === "Approved" ? "Active" : value.status.value}
@@ -188,6 +199,19 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               </p>
             </div>
           ) : null}
+          {value.status.value === "Rejected" && isClickReject ? (
+            <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white">
+              <p
+                className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"
+                onClick={() => {
+                  setIsClickReject(false);
+                  handleApproveUser();
+                }}
+              >
+                Approve
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -198,16 +222,21 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          <p className="text-red-600 font-[600] ">Warning about deleting users</p> 
+          <p className="text-red-600 font-[600] ">
+            Warning about deleting users
+          </p>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>{`Warning about deleting users with email: `} <span className="text-green-600">{`${value.email}`}</span></p>
+            <p>
+              {`Warning about deleting users with email: `}{" "}
+              <span className="text-green-600">{`${value.email}`}</span>
+            </p>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <MUIButton autoFocus onClick={handleClose}>
-          <p className="hover:text-green-600">Cancle</p>
+            <p className="hover:text-green-600">Cancle</p>
           </MUIButton>
           <MUIButton onClick={handleDeleteUser} autoFocus>
             <p className="hover:text-red-600">Delete</p>

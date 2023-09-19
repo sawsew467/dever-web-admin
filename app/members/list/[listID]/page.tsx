@@ -12,7 +12,11 @@ import Pagination from "@/components/Pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import { getAllMemberInfo } from "@/apis/profile";
+import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, LinearProgress, useMediaQuery, useTheme } from "@mui/material";
+import { Button as MUIButton } from "@mui/material/";
+import { toast } from "react-toastify";
+
 
 type pageProps = {
   params: { listID: string };
@@ -40,12 +44,24 @@ function MemberList({ params }: pageProps) {
   );
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
-  const increaseIndex = 8;
+  const increaseIndex = 7;
   const [allMemberData, setAllMemberData] = useState([]);
   const [members, setMembers] = useState<memberPros[]>([]);
-  
   const [countListPage, setCountListPage] = useState(0);
   const pages: { param: string; startIndex: number; endIndex: number }[] = [];
+  const [isFetchData, setIsFetchData] = useState(true);
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
 
   const handleGetAllMember = async () => {
     try {
@@ -54,24 +70,28 @@ function MemberList({ params }: pageProps) {
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data;
-        setCountListPage( Math.ceil(data.length / increaseIndex));
-        const dataWithSelect = data.map((value: { id: string;
-          fullname: string;
-          avatarUrl: string;
-          email: string;
-          position: string;
-          department: string;
-          status: {
-            value: string;
-          };}) => {
-            return ({
+
+        setCountListPage(Math.ceil(data.length / increaseIndex));
+        const dataWithSelect = data.map(
+          (value: {
+            id: string;
+            fullname: string;
+            avatarUrl: string;
+            email: string;
+            position: string;
+            department: string;
+            status: {
+              value: string;
+            };
+          }) => {
+            return {
               ...value,
               isSelected: false,
-            })
-        })
-
+            };
+          }
+        );
+        setIsFetchData(false);
         setAllMemberData(dataWithSelect);
-        setMembers(dataWithSelect.slice(0, increaseIndex+1));
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -81,7 +101,7 @@ function MemberList({ params }: pageProps) {
   };
   useEffect(() => {
     handleGetAllMember();
-  },[]);
+  }, []);
 
   const handleSelectAllChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -105,6 +125,38 @@ function MemberList({ params }: pageProps) {
     );
   };
 
+  const [selectedMembers, setSelectedMembers] = useState<memberPros[]>([]);
+  const handleGetAllSelectedMembers = () => {
+    const newMembersSelected:memberPros[] = members.filter((value) => value.isSelected == true);
+    setSelectedMembers(newMembersSelected);
+    if(newMembersSelected.length !== 0) {
+      handleClickOpen();
+    }
+  }
+
+  const handleDeleteUser = async (userId:string, userEmail: string) => {
+    try {
+      const access_token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      if (access_token) {
+        const response = await deleteMemberInfo(userId, access_token);
+        toast.success(`Deleted user ${userEmail} successfully!`);
+      }
+      setOpenDialog(false);
+      handleGetAllMember();
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        setOpenDialog(false);
+        toast.error("Deleting failed!");
+      }
+    }
+  };
+
+  const handleDelectSelectedMembers = () => {
+    selectedMembers.forEach((value) => handleDeleteUser(value.id, value.email));
+  }  
   return (
     <div
       className={`w-[100%] ${
@@ -124,15 +176,18 @@ function MemberList({ params }: pageProps) {
         <div className="flex justify-between px-[16px]">
           <div className="flex gap-[16px]">
             <div className="flex w-fit h-[38px] rounded-[10px] overflow-hidden">
-              <select className="w-[84px] leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 bg-gray-100 select-none ">
+              <select className="w-fit leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 bg-gray-100 select-none ">
                 <option value="All" className="">
                   All
                 </option>
-                <option value="All" className="">
-                  All
+                <option value="Approved" className="">
+                  Active
                 </option>
-                <option value="All" className="">
-                  All
+                <option value="Pending" className="">
+                  Pending
+                </option>
+                <option value="Rejected" className="">
+                  Rejected
                 </option>
               </select>
               <input
@@ -157,9 +212,44 @@ function MemberList({ params }: pageProps) {
                 src={trashIcon}
                 alt="trashIcon"
                 className="w-[24px] h-[38px] cursor-pointer"
+                onClick={() => {
+                  handleGetAllSelectedMembers()
+                }}
               />
             </div>
           </div>
+
+          <Dialog
+            fullScreen={fullScreen}
+            open={openDialog}
+            onClose={handleClickOpen}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <DialogTitle id="responsive-dialog-title">
+              <p className="text-red-600 font-[600] ">
+                Warning about deleting users
+              </p>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                <p>
+                  Make sure you want to delete these users:
+                </p>
+                {selectedMembers.map((value, index) => (
+                  <p key={index} className="text-green-600">{value.email}</p>
+                ))}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <MUIButton autoFocus onClick={handleClose}>
+                <p className="hover:text-green-600">Cancle</p>
+              </MUIButton>
+              <MUIButton onClick={() => {handleDelectSelectedMembers()}} autoFocus>
+                <p className="hover:text-red-600">Delete</p>
+              </MUIButton>
+            </DialogActions>
+          </Dialog>
+
           <div className="flex gap-[12px]">
             <Button
               textContent={"Add member"}
@@ -217,27 +307,36 @@ function MemberList({ params }: pageProps) {
             </div>
           </div>
 
-          <div id="tableBody">
-            {members.map((value, index) => (
-              <MemberItem
-                key={index}
-                value={value}
-                selecteFunct={toggleMemberSelection}
-                refreshApi = {handleGetAllMember}
-              ></MemberItem>
-            ))}
-          </div>
+          {isFetchData ? (
+            <>
+              <div className="w-full">
+                <LinearProgress />
+              </div>
+            </>
+          ) : (
+            <div id="tableBody">
+              {members.map((value, index) => (
+                <MemberItem
+                  key={index}
+                  value={value}
+                  selecteFunct={toggleMemberSelection}
+                  refreshApi={handleGetAllMember}
+                ></MemberItem>
+              ))}
+            </div>
+          )}
         </div>
 
-        <Pagination
-          paramID={params.listID}
-          countNumberOfPage={countListPage}
-          pages={pages}
-          increaseIndex={increaseIndex}
-          sliceSetData={setMembers}
-          data={allMemberData}
-          route={"/members/list/"}
-        ></Pagination>
+        {isFetchData ? null : (
+          <Pagination
+            paramID={params.listID}
+            countNumberOfPage={countListPage}
+            increaseIndex={increaseIndex}
+            sliceSetData={setMembers}
+            data={allMemberData}
+            route={"/members/list/"}
+          ></Pagination>
+        )}
       </div>
     </div>
   );
