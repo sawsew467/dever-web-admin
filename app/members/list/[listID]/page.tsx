@@ -11,7 +11,6 @@ import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import withAuth from "@/ultils/hoc";
 
 interface pageProps {
   params: { listID: string };
@@ -344,4 +343,4 @@ function MemberList({ params }: pageProps) {
   );
 }
 
-export default withAuth(MemberList);
+export default MemberList;

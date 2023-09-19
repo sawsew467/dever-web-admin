@@ -5,7 +5,6 @@ import EditorLarge from "@/components/EditorLarge";
 import BlogTag from "@/components/BlogTag";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import withAuth from "@/ultils/hoc";
 
 function CreateBlog() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
@@ -67,4 +66,4 @@ function CreateBlog() {
   );
 }
 
-export default withAuth(CreateBlog);
+export default CreateBlog;

@@ -12,7 +12,6 @@ import { registerAccount } from "@/apis/auth";
 import { useRouter } from "next/navigation";
 import { ValidationError } from "yup";
 import axios from "axios";
-import withAuth from "@/ultils/hoc";
 type UserRegister = {
   email : string,
   password : string,
@@ -148,4 +147,4 @@ function SignUp() {
   );
 }
 
-export default withAuth(SignUp);
+export default SignUp;

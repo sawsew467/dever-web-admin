@@ -5,8 +5,7 @@ import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import InputForm from "@/components/InputForm";
 import { resetSchema } from "@/app/validation";
-import {toast} from "react-toastify"
-import withAuth from "@/ultils/hoc";
+import {toast} from "react-toastify";
 
 function ForgotPassword() {
   const onSubmit = async (values: object, actions: any) => {
@@ -70,4 +69,4 @@ function ForgotPassword() {
   );
 }
 
-export default withAuth(ForgotPassword);
+export default ForgotPassword;

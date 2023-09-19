@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import withAuth from "@/ultils/hoc";
 
 function BlogList() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
@@ -37,4 +36,4 @@ function BlogList() {
   );
 }
 
-export default withAuth(BlogList);
+export default BlogList;

@@ -7,32 +7,20 @@ export default function withAuth(Component: React.ComponentType<any>) {
     const router = useRouter();
     const path = usePathname();
     const authenticate = getCookie('refreshToken');
-    const isAuthenticated = authenticate !== null && authenticate !== undefined;
-    const isAuthProcess = path.includes("auth");
-    const shouldRedirect = (!isAuthenticated && !isAuthProcess);
-    const [isRedirecting, setIsRedirecting] = React.useState(false);
-
-    React.useEffect(() => {
-      if (shouldRedirect) {
-        toast.error('please login !!');
-        setIsRedirecting(true); // Bắt đầu quá trình chuyển hướng
-        router.push('/auth/sign-in').then(() => {
-          setIsRedirecting(false); // Chuyển hướng hoàn tất
-        });
-      }
-    }, [shouldRedirect]);
-
-    if (isAuthenticated && isAuthProcess) {
-      toast.error("You are already authenticated !")
-      router.back();
-      return null; // Return null to avoid rendering the component
+    const isAuthenticated = authenticate !==null && authenticate !== undefined;
+    const isAuthProcess = path.includes("auth");    
+    if (!isAuthenticated && !isAuthProcess) {
+      toast.error('please login !!');
+      return router.push('/auth/sign-in');
     }
 
-    // Nếu đang trong quá trình chuyển hướng, không hiển thị component
-    if (isRedirecting) {
-      return null;
+    if (isAuthenticated && isAuthProcess) {
+      toast.error("You are already authenticate !")
+      return router.back();
     }
 
     return <Component {...props} />;
   };
 }
+
+

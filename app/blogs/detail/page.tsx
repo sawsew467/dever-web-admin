@@ -3,7 +3,6 @@ import React from 'react'
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import withAuth from '@/ultils/hoc';
 function DetailBlogList() {
     const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
     const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
@@ -23,4 +22,4 @@ function DetailBlogList() {
     )
 }
 
-export default withAuth(DetailBlogList)
+export default DetailBlogList

@@ -2,7 +2,6 @@
 import { RootState } from '@/redux/store';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import withAuth from '../../../../ultils/hoc';
 interface pageProps {
     params: {blogID: string};
 }
@@ -22,4 +21,4 @@ function BlogDetail({params}: pageProps) {
     )
 }
 
-export default withAuth(BlogDetail)
+export default BlogDetail;

@@ -13,7 +13,6 @@ import ProjectCard from "@/components/ProjectCard";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-import withAuth from "@/ultils/hoc";
 function Profile() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
   const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
@@ -315,4 +314,4 @@ function Profile() {
   );
 }
 
-export default withAuth(Profile);
+export default Profile;

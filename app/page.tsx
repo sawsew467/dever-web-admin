@@ -2,7 +2,7 @@
 import { RootState } from '@/redux/store';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import withAuth from '@/ultils/hoc';
+
 
 
 function MemberList() {
@@ -20,4 +20,4 @@ function MemberList() {
     )
 }
 
-export default withAuth(MemberList)
+export default MemberList
