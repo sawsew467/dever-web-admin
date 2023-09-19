@@ -2,7 +2,6 @@
 import { RootState } from '@/redux/store';
 import React from 'react'
 import { useSelector } from 'react-redux';
-
 interface pageProps {
     params: {blogID: string};
 }
@@ -22,4 +21,4 @@ function BlogDetail({params}: pageProps) {
     )
 }
 
-export default BlogDetail
+export default BlogDetail;

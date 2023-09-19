@@ -3,7 +3,6 @@ import React from 'react'
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-
 function DetailBlogList() {
     const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
     const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
