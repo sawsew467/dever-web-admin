@@ -39,11 +39,15 @@ export const counterSlice = createSlice({
           maxAge: 302400,
         });
       }
+      setCookie("userId", action.payload.user.sub, {
+        maxAge:3600,
+      })
     },
     logout: (state) => {
       state.currentUser = initialState.currentUser;
       setCookie("accessToken", "", { maxAge: 0 });
       setCookie("refreshToken", "", { maxAge: 0 });
+      setCookie("userId", "", {maxAge:0})
     },
     refreshUserInfoFromStorage: (state, action: PayloadAction<User>) => {
       state.currentUser = action.payload;

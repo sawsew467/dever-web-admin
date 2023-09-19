@@ -1,12 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Avatar from "@image/page/member/profile/Thang.png";
 import UnlinkButton from "@component/UnlinkButton";
 
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getCookie } from "cookies-next";
+import { updateAvatar } from "@/apis/setting";
 
-function AvatarChanging(): JSX.Element {
+type TProps = {
+  avatarUrl:string;
+  fullName:string;
+  career: string;
+  refreshApi: () => void
+}
+
+function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.Element {
   const fileInputRef = useRef(null);
   const [imageState, setImageState] = useState<File | null>(null);
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
@@ -36,7 +45,26 @@ function AvatarChanging(): JSX.Element {
     ];
     return acceptedTypes.includes(file.type);
   };
-  const handleSubmitImage = async (
+  const handleUpdataProfileImage = async (avatarUrl:string) => {
+    const avatar = {
+      avatarUrl: avatarUrl
+    }
+    try {
+      const access_token = getCookie('accessToken');
+      if(access_token) {
+        const response = await updateAvatar(access_token, avatar);
+        console.log(response);
+        toast.success("Update profile image successfully!");
+        refreshApi();
+      }
+    } catch (error) {
+      if(axios.isAxiosError(error)) {
+        console.log(error);
+        toast.error("Upload profile image failed!")
+      }
+    }
+  }
+  const handleGetImageUrl = async (
     file: File
   ): Promise<string | null | undefined> => {
     const CLOUD_NAME = "dy1uuo6ql";
@@ -50,23 +78,26 @@ function AvatarChanging(): JSX.Element {
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         formData
       );
-      const imageURL = responseData.data.secure_url;
+      const imageURL = responseData.data.secure_url;      
       setImageSource(imageURL);
-      await new Promise((resolve) => setTimeout(resolve,0));
-      toast.info("Save image successfully!");
-      
     } catch (error) {
       console.error("Error uploading image: ", error);
       return null;
     }
-  };
+  };    
+  useEffect(() => {
+    if(imageState) {
+      handleGetImageUrl(imageState);
+    }
+  },[imageState, setImageSource])
+
   return (
     <div className="flex flex-col xl:flex-row gap-[25px] p-[24px] shadow-primary rounded-[10px]">
       <div className="w-[126px] h-[126px] rounded-[10px] overflow-hidden">
         <Image
-          src={imageState ? URL.createObjectURL(imageState) : Avatar}
-          width={100}
-          height={100}
+          src={imageState ? URL.createObjectURL(imageState) : avatarUrl == '' ? Avatar : avatarUrl}
+          width={1200}
+          height={800}
           alt="avt"
           style={{
             width: "100%",
@@ -76,8 +107,8 @@ function AvatarChanging(): JSX.Element {
         ></Image>
       </div>
       <div className="flex flex-col gap-[16px]">
-        <h3 className="font-[700] text-[24px]">Tran Van Bao Thang</h3>
-        <p className="font-[400] text-[16px]">Front-end developer</p>
+        <h3 className="font-[700] text-[24px]">{fullName == '' ? "Haven't set name yet" : fullName}</h3>
+        <p className="font-[400] text-[16px]">{career == '' ? "Not set yet" : career}</p>
         <div>
           <input
             type="file"
@@ -106,7 +137,7 @@ function AvatarChanging(): JSX.Element {
                 icon={""}
                 iconPosition={"left"}
                 backgroundColor={"bg-blue-700"}
-                method={() => handleSubmitImage(imageState)}
+                method={() => {handleUpdataProfileImage(imageSource!)}}
                 tailwind={"text-white"}
               ></UnlinkButton>
             ) : null}

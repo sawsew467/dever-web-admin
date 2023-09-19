@@ -69,7 +69,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await approveUser(value.id, access_token);
-        console.log(response);
+        // console.log(response);
         toast.success(`Approved user ${value.email} successfully!`);
         refreshApi();
       }
@@ -86,7 +86,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await rejectUser(value.id, access_token);
-        console.log(response);
+        // console.log(response);
         toast.success(`Rejected user with email: ${value.email}`);
         refreshApi();
       }
@@ -103,7 +103,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await deleteMemberInfo(value.id, access_token);
-        console.log(response);
+        // console.log(response);
         toast.success(`Deleted user ${value.email} successfully!`);
         refreshApi();
       }

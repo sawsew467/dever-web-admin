@@ -242,16 +242,15 @@ function View({ params }: pageProps) {
             </div>
           ))}
         </div>
-
+{/* 
         <Pagination
           paramID={params.viewID}
           route={"/notifications/views/"}
           countNumberOfPage={countNotificationPage}
-          pages={pages}
           increaseIndex={increaseIndex}
           sliceSetData={setNotitications}
           data={notificationList}
-        ></Pagination>
+        ></Pagination> */}
       </div>
     </div>
   );

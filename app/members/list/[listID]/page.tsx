@@ -27,40 +27,18 @@ import { Button as MUIButton } from "@mui/material/";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { store } from "@/redux/store";
+import { approveUser} from "@/apis/appUser";
+import { memberPros, memberType } from "@/ultils/types";
 
 type pageProps = {
   params: { listID: string };
 };
 
-type memberType = {
-  id: string;
-  fullname: string;
-  avatarUrl: string;
-  email: string;
-  position: string;
-  department: string;
-  status: {
-    value: string;
-  };
-}
-
-type memberPros = {
-  id: string;
-  fullname: string;
-  avatarUrl: string;
-  email: string;
-  position: string;
-  department: string;
-  status: {
-    value: string;
-  };
-  isSelected: boolean;
-};
 
 function MemberList({ params }: pageProps) {
   const userRole = useSelector(
     (state: RootState) => state.userInfor.currentUser.UserRole
-  );  
+  );
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
@@ -78,15 +56,23 @@ function MemberList({ params }: pageProps) {
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const [openDialogToDelete, setOpenDialogToDelete] = React.useState(false);
+  const [openDialogToDelete, setOpenDialogToDelete] = useState<boolean>(false);
+  const [openDialogToApprove, setOpenDialogToApprove] =
+    useState<boolean>(false);
 
-
-  const handleClickOpen = () => {
+  const handleClickOpenDeleteDialog = () => {
     setOpenDialogToDelete(true);
   };
 
-  const handleClose = () => {
+  const handleCloseDeleteDialog = () => {
     setOpenDialogToDelete(false);
+  };
+
+  const handleClickOpenApproveDialog = () => {
+    setOpenDialogToApprove(true);
+  };
+  const handleCloseApproveDialog = () => {
+    setOpenDialogToApprove(false);
   };
 
   const handleGetAllMember = async () => {
@@ -96,21 +82,26 @@ function MemberList({ params }: pageProps) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data;
         const currentUserRole = store.getState().userInfor.currentUser.UserRole;
-        const filteredData = data.map((value:memberType) => {
-          if (currentUserRole === "admin")  {            
-            return {
-              ...value,
-              isSelected: false,
-            };
-          } else if (value.status.value === "Approved") {
-            return {
-              ...value,
-              isSelected: false,
-            };
-          }
-          return null; 
-        }).filter((value:memberPros) => value !== null);
+        console.log("Role: " ,currentUserRole);
         
+        
+        const filteredData = data
+          .map((value: memberType) => {
+            if (currentUserRole === "admin") {
+              return {
+                ...value,
+                isSelected: false,
+              };
+            } else if (value.status.value === "Approved") {
+              return {
+                ...value,
+                isSelected: false,
+              };
+            }
+            return null;
+          })
+          .filter((value: memberPros) => value !== null);
+
         setCountListPage(Math.ceil(filteredData.length / increaseIndex));
         setIsFetchData(false);
         setAllMemberData(filteredData);
@@ -123,7 +114,7 @@ function MemberList({ params }: pageProps) {
   };
   useEffect(() => {
     handleGetAllMember();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectAllChange = (
@@ -155,9 +146,9 @@ function MemberList({ params }: pageProps) {
     );
     setSelectedMembers(newMembersSelected);
     if (newMembersSelected.length !== 0 && purpose == "delete") {
-      handleClickOpen();
-    } else if(newMembersSelected.length !== 0 && purpose == "approve") {
-      alert("OKE ROI NE");
+      handleClickOpenDeleteDialog();
+    } else if (newMembersSelected.length !== 0 && purpose == "approve") {
+      handleClickOpenApproveDialog();
     }
   };
 
@@ -178,10 +169,38 @@ function MemberList({ params }: pageProps) {
       }
     }
   };
+  const handleApproveUser = async (userId:string, userEmail:string) => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const response = await approveUser(userId, access_token);
+        console.log(response);
+        toast.success(`Rejected user with email: ${userEmail}`);
+      }
+      handleGetAllMember();
+      setOpenDialogToApprove(false);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        setOpenDialogToApprove(false);
+        toast.error("Rejecting failed!");
+      }
+    }
+  };
+
 
   const handleDelectSelectedMembers = () => {
     selectedMembers.forEach((value) => handleDeleteUser(value.id, value.email));
   };
+  const handleApproveSelectedMembers = () => {
+    selectedMembers.forEach((item) => {
+      if(item.status.value !== "Approved") {
+        handleApproveUser(item.id, item.email);
+      } else {
+        handleCloseApproveDialog();
+      }
+    })
+  }
   return (
     <div
       className={`w-[100%] ${
@@ -234,7 +253,7 @@ function MemberList({ params }: pageProps) {
                   alt="checkIcon"
                   className="w-[24px] h-[38px] cursor-pointer"
                   onClick={() => {
-                    handleGetAllSelectedMembers("approve")
+                    handleGetAllSelectedMembers("approve");
                   }}
                 />
                 <Image
@@ -249,10 +268,48 @@ function MemberList({ params }: pageProps) {
             ) : null}
           </div>
 
+          {/* Approve Dialog */}
+          <Dialog
+            fullScreen={fullScreen}
+            open={openDialogToApprove}
+            onClose={handleClickOpenDeleteDialog}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <DialogTitle id="responsive-dialog-title">
+              <p className="text-yellow-400 font-[600] ">
+                Warning about approve users
+              </p>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                <p>Make sure you want to approve these users:</p>
+                {selectedMembers.map((item, index) => (
+                  <p key={index} className={`${item.status.value === "Pending" ? "text-yellow-400" : item.status.value === "Rejected" ? "text-red-700" : "text-green-500" }`}>
+                    {item.email} 
+                    <span className={`ml-[10px] font-[500] ${item.status.value == "Approved" ? "text-green-700" : null}`}>{ item.status.value == "Approved" ? "Approved" : null }</span>
+                  </p>
+                ))}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <MUIButton autoFocus onClick={handleCloseApproveDialog}>
+                <p className="hover:text-green-600">Cancel</p>
+              </MUIButton>
+              <MUIButton
+                onClick={() => {
+                  handleApproveSelectedMembers();
+                }}
+                autoFocus
+              >
+                <p className="hover:text-red-600">Approve All</p>
+              </MUIButton>
+            </DialogActions>
+          </Dialog>
+          {/* Delete Diglog */}
           <Dialog
             fullScreen={fullScreen}
             open={openDialogToDelete}
-            onClose={handleClickOpen}
+            onClose={handleClickOpenDeleteDialog}
             aria-labelledby="responsive-dialog-title"
           >
             <DialogTitle id="responsive-dialog-title">
@@ -271,8 +328,8 @@ function MemberList({ params }: pageProps) {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <MUIButton autoFocus onClick={handleClose}>
-                <p className="hover:text-green-600">Cancle</p>
+              <MUIButton autoFocus onClick={handleCloseDeleteDialog}>
+                <p className="hover:text-green-600">Cancel</p>
               </MUIButton>
               <MUIButton
                 onClick={() => {

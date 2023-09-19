@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AvatarChanging from "@component/SettingElement/AvatarChanging";
 import AboutUser from "@component/SettingElement/AboutUser";
 import ContactInfomation from "@/components/SettingElement/ContactInfomation";
@@ -11,9 +11,45 @@ import ChangePassword from "@/components/SettingElement/ChangePassword";
 import Projects from "@/components/SettingElement/Projects";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { userInfo } from "@/ultils/types";
+import { getCookie } from "cookies-next";
+import { getMemberInfo } from "@/apis/profile";
+import axios from "axios";
+import { LinearProgress } from "@mui/material";
 function SettingList() {
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const isMouseVisit = useSelector(
+    (state: RootState) => state.app.isMouseVisit
+  );
+  const [isFetchData, setIsFetchData] = useState<boolean>(true);
+
+  const [userData, setUserData] = useState<userInfo>();
+  console.log(userData);
+  const handleGetUserProfile = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const userId = getCookie("userId");
+        if (userId) {
+          const response = await getMemberInfo(userId, access_token);
+          const data = response.data;
+          setUserData(data);
+          setIsFetchData(false);
+        }
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleGetUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -31,21 +67,30 @@ function SettingList() {
             <span className="text-blue-500">Your&apos;s</span> profile setting
           </h3>
         </div>
-        <div className="flex flex-col lg:flex-row gap-[16px]">
-          <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
-            <AvatarChanging />
-            <ContactInfomation />
-            <SocialAccount/>
-            <Skills/>
-            <Hobbies/>
-            <ChangePassword/>
+        {isFetchData ? (
+          <LinearProgress />
+        ) : (
+          <div className="flex flex-col lg:flex-row gap-[16px]">
+            <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
+              <AvatarChanging
+                avatarUrl={userData?.avatarUrl!}
+                fullName={userData?.fullName!}
+                career={userData?.career!}
+                refreshApi={handleGetUserProfile}
+              />
+              <ContactInfomation />
+              <SocialAccount />
+              <Skills />
+              <Hobbies />
+              <ChangePassword />
+            </div>
+            <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
+              <AboutUser />
+              <GeneralInformation />
+              <Projects />
+            </div>
           </div>
-          <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
-            <AboutUser />
-            <GeneralInformation />
-            <Projects/>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
