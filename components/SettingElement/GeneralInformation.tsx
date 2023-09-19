@@ -14,7 +14,7 @@ type TGeneralFieldValues = {
   birthday: string;
   homeAddress: string;
   position: string;
-  role: string;
+  career: string;
   major: string;
   education: string;
   workHistory: string;
@@ -115,7 +115,7 @@ function GeneralInformation() {
             birthday: fakeData.birthday,
             homeAddress: fakeData.homeAddress,
             position: fakeData.position,
-            role: fakeData.role,
+            career: fakeData.role,
             major: fakeData.major,
             education: fakeData.education,
             workHistory: fakeData.workHistory,
@@ -175,13 +175,13 @@ function GeneralInformation() {
                     options={position_options}
                   />
                   <FormikInput
-                    label={"role"}
-                    id={"role"}
-                    name={"role"}
-                    placeholder={"Enter your role..."}
+                    label={"career"}
+                    id={"career"}
+                    name={"career"}
+                    placeholder={"Enter your career..."}
                     type={"text"}
                     isEdit={isEdit}
-                    title={"roles"}
+                    title={"career"}
                   />
                   <FormikSelect
                     label={"major"}

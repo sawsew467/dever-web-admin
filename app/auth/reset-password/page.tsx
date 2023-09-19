@@ -7,11 +7,12 @@ import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import ResetImg from "@image/page/authentication/reset/resetImage.jpg";
 import { registerAccount } from "@/apis/auth";
+import { registerSchema } from "@/app/validation";
 
 type UserRegister = {
   email : string,
   password : string,
-  userRole : string
+  confirmPassword: string,
 }
 function ResetPassword() {
   const onSubmit = async (values: UserRegister, actions: any) => {
@@ -68,10 +69,9 @@ function ResetPassword() {
               </h2>
               <Formik
                 initialValues={{
-                  email: "",
-                  password: "",
-                  confirmPassword: "",
-                  accepted: false,
+                  email: '',
+                  password: '',
+                  confirmPassword: '',
                 }}
                 validationSchema={registerSchema}
                 onSubmit={onSubmit}

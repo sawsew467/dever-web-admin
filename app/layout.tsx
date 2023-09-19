@@ -10,6 +10,8 @@ const inter = Inter({ subsets: ["latin"] });
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 
+import AuthProvider from "@/app/AuthProvider";
+
 export default function RootLayout({
   children,
 }: {
@@ -28,7 +30,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className} suppressHydrationWarning={true}>
         <Provider store={store}>
-          <Helmet>
+          <AuthProvider>
+             <Helmet>
             <title>Fu-Dever Space</title>
             <meta name="description" content="FU-Dever Admin" />
           </Helmet>
@@ -36,6 +39,7 @@ export default function RootLayout({
           {!isSpecial && <Sidebar />}
           {children}
           <ToastNotificationComp />
+          </AuthProvider>
         </Provider>
       </body>
     </html>

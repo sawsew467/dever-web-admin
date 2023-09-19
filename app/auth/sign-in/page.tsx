@@ -111,7 +111,7 @@ function SignIn() {
                 Sign in to FU-DEVER
               </h2>
               <Formik
-                initialValues={{ email: "", password: "" }}
+                initialValues={{ email: "", password: "", remember }}
                 validationSchema={loginSchema}
                 onSubmit={onSubmit}
               >

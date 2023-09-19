@@ -13,14 +13,36 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import axios from "axios";
 import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, LinearProgress, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  LinearProgress,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { Button as MUIButton } from "@mui/material/";
 import { toast } from "react-toastify";
-
+import { getCookie } from "cookies-next";
+import { store } from "@/redux/store";
 
 type pageProps = {
   params: { listID: string };
 };
+
+type memberType = {
+  id: string;
+  fullname: string;
+  avatarUrl: string;
+  email: string;
+  position: string;
+  department: string;
+  status: {
+    value: string;
+  };
+}
 
 type memberPros = {
   id: string;
@@ -36,6 +58,9 @@ type memberPros = {
 };
 
 function MemberList({ params }: pageProps) {
+  const userRole = useSelector(
+    (state: RootState) => state.userInfor.currentUser.UserRole
+  );  
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
@@ -51,47 +76,44 @@ function MemberList({ params }: pageProps) {
   const pages: { param: string; startIndex: number; endIndex: number }[] = [];
   const [isFetchData, setIsFetchData] = useState(true);
 
-  const [openDialog, setOpenDialog] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [openDialogToDelete, setOpenDialogToDelete] = React.useState(false);
+
 
   const handleClickOpen = () => {
-    setOpenDialog(true);
+    setOpenDialogToDelete(true);
   };
 
   const handleClose = () => {
-    setOpenDialog(false);
+    setOpenDialogToDelete(false);
   };
 
   const handleGetAllMember = async () => {
     try {
-      const access_token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data;
-
-        setCountListPage(Math.ceil(data.length / increaseIndex));
-        const dataWithSelect = data.map(
-          (value: {
-            id: string;
-            fullname: string;
-            avatarUrl: string;
-            email: string;
-            position: string;
-            department: string;
-            status: {
-              value: string;
+        const currentUserRole = store.getState().userInfor.currentUser.UserRole;
+        const filteredData = data.map((value:memberType) => {
+          if (currentUserRole === "admin")  {            
+            return {
+              ...value,
+              isSelected: false,
             };
-          }) => {
+          } else if (value.status.value === "Approved") {
             return {
               ...value,
               isSelected: false,
             };
           }
-        );
+          return null; 
+        }).filter((value:memberPros) => value !== null);
+        
+        setCountListPage(Math.ceil(filteredData.length / increaseIndex));
         setIsFetchData(false);
-        setAllMemberData(dataWithSelect);
+        setAllMemberData(filteredData);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -101,6 +123,7 @@ function MemberList({ params }: pageProps) {
   };
   useEffect(() => {
     handleGetAllMember();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectAllChange = (
@@ -108,7 +131,7 @@ function MemberList({ params }: pageProps) {
   ) => {
     const isChecked = event.target.checked;
     setSelectAll(isChecked);
-    const updatedMembers = members.map((member: any) => ({
+    const updatedMembers = members.map((member: memberPros) => ({
       ...member,
       isSelected: isChecked,
     }));
@@ -116,8 +139,8 @@ function MemberList({ params }: pageProps) {
   };
 
   const toggleMemberSelection = (id: string) => {
-    setMembers((prevMembers: any) =>
-      prevMembers.map((member: any) =>
+    setMembers((prevMembers: memberPros[]) =>
+      prevMembers.map((member: memberPros) =>
         member.id === id
           ? { ...member, isSelected: !member.isSelected }
           : member
@@ -126,29 +149,31 @@ function MemberList({ params }: pageProps) {
   };
 
   const [selectedMembers, setSelectedMembers] = useState<memberPros[]>([]);
-  const handleGetAllSelectedMembers = () => {
-    const newMembersSelected:memberPros[] = members.filter((value) => value.isSelected == true);
+  const handleGetAllSelectedMembers = (purpose: "approve" | "delete") => {
+    const newMembersSelected: memberPros[] = members.filter(
+      (value) => value.isSelected == true
+    );
     setSelectedMembers(newMembersSelected);
-    if(newMembersSelected.length !== 0) {
+    if (newMembersSelected.length !== 0 && purpose == "delete") {
       handleClickOpen();
+    } else if(newMembersSelected.length !== 0 && purpose == "approve") {
+      alert("OKE ROI NE");
     }
-  }
+  };
 
-  const handleDeleteUser = async (userId:string, userEmail: string) => {
+  const handleDeleteUser = async (userId: string, userEmail: string) => {
     try {
-      const access_token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await deleteMemberInfo(userId, access_token);
         toast.success(`Deleted user ${userEmail} successfully!`);
       }
-      setOpenDialog(false);
+      setOpenDialogToDelete(false);
       handleGetAllMember();
-
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
-        setOpenDialog(false);
+        setOpenDialogToDelete(false);
         toast.error("Deleting failed!");
       }
     }
@@ -156,7 +181,7 @@ function MemberList({ params }: pageProps) {
 
   const handleDelectSelectedMembers = () => {
     selectedMembers.forEach((value) => handleDeleteUser(value.id, value.email));
-  }  
+  };
   return (
     <div
       className={`w-[100%] ${
@@ -202,26 +227,31 @@ function MemberList({ params }: pageProps) {
                 />
               </div>
             </div>
-            <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200">
-              <Image
-                src={checkIcon}
-                alt="checkIcon"
-                className="w-[24px] h-[38px] cursor-pointer"
-              />
-              <Image
-                src={trashIcon}
-                alt="trashIcon"
-                className="w-[24px] h-[38px] cursor-pointer"
-                onClick={() => {
-                  handleGetAllSelectedMembers()
-                }}
-              />
-            </div>
+            {userRole === "admin" ? (
+              <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200">
+                <Image
+                  src={checkIcon}
+                  alt="checkIcon"
+                  className="w-[24px] h-[38px] cursor-pointer"
+                  onClick={() => {
+                    handleGetAllSelectedMembers("approve")
+                  }}
+                />
+                <Image
+                  src={trashIcon}
+                  alt="trashIcon"
+                  className="w-[24px] h-[38px] cursor-pointer"
+                  onClick={() => {
+                    handleGetAllSelectedMembers("delete");
+                  }}
+                />
+              </div>
+            ) : null}
           </div>
 
           <Dialog
             fullScreen={fullScreen}
-            open={openDialog}
+            open={openDialogToDelete}
             onClose={handleClickOpen}
             aria-labelledby="responsive-dialog-title"
           >
@@ -232,11 +262,11 @@ function MemberList({ params }: pageProps) {
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-                <p>
-                  Make sure you want to delete these users:
-                </p>
+                <p>Make sure you want to delete these users:</p>
                 {selectedMembers.map((value, index) => (
-                  <p key={index} className="text-green-600">{value.email}</p>
+                  <p key={index} className="text-green-600">
+                    {value.email}
+                  </p>
                 ))}
               </DialogContentText>
             </DialogContent>
@@ -244,32 +274,39 @@ function MemberList({ params }: pageProps) {
               <MUIButton autoFocus onClick={handleClose}>
                 <p className="hover:text-green-600">Cancle</p>
               </MUIButton>
-              <MUIButton onClick={() => {handleDelectSelectedMembers()}} autoFocus>
+              <MUIButton
+                onClick={() => {
+                  handleDelectSelectedMembers();
+                }}
+                autoFocus
+              >
                 <p className="hover:text-red-600">Delete</p>
               </MUIButton>
             </DialogActions>
           </Dialog>
 
-          <div className="flex gap-[12px]">
-            <Button
-              textContent={"Add member"}
-              icon={"add"}
-              iconPosition={"left"}
-              backgroundColor={"bg-green-700"}
-              href={""}
-              method={() => {}}
-              tailwind={"text-white"}
-            ></Button>
-            <Button
-              textContent={"Import"}
-              icon={"import"}
-              iconPosition={"left"}
-              backgroundColor={"bg-white"}
-              href={""}
-              method={() => {}}
-              tailwind={"text-black border-2"}
-            ></Button>
-          </div>
+          {userRole === "admin" ? (
+            <div className="flex gap-[12px]">
+              <Button
+                textContent={"Add member"}
+                icon={"add"}
+                iconPosition={"left"}
+                backgroundColor={"bg-green-700"}
+                href={""}
+                method={() => {}}
+                tailwind={"text-white"}
+              ></Button>
+              <Button
+                textContent={"Import"}
+                icon={"import"}
+                iconPosition={"left"}
+                backgroundColor={"bg-white"}
+                href={""}
+                method={() => {}}
+                tailwind={"text-black border-2"}
+              ></Button>
+            </div>
+          ) : null}
         </div>
 
         <div>

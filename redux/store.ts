@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import app from "./slices/app";
 import userInfor from "./slices/userInfor";
 export const store = configureStore({

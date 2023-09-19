@@ -20,6 +20,9 @@ import {
 } from "@mui/material";
 import { Button as MUIButton } from "@mui/material/";
 import UnlinkButton from "../UnlinkButton";
+import { getCookie } from "cookies-next";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface memberPros {
   id: string;
@@ -44,7 +47,9 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   const handleCheckboxChange = () => {
     selecteFunct(value.id);
   };
-
+  const userRole = useSelector(
+    (state: RootState) => state.userInfor.currentUser.UserRole
+  );
   const [isClickPending, setIsClickPending] = useState<boolean>(false);
   const [isClickReject, setIsClickReject] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -61,9 +66,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
 
   const handleApproveUser = async () => {
     try {
-      const access_token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
-
+      const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await approveUser(value.id, access_token);
         console.log(response);
@@ -80,9 +83,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   };
   const handleRejectUser = async () => {
     try {
-      const access_token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
-
+      const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await rejectUser(value.id, access_token);
         console.log(response);
@@ -99,8 +100,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
 
   const handleDeleteUser = async () => {
     try {
-      const access_token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWQ4N2ZiMC1iNjIzLTRmNTEtYTRmNi1mYzljNjZlM2QxNmEiLCJpYXQiOjE2OTUwMTg4NTIsInN1YiI6IjI5NTc3ODRkLTYxNTktNDY3OC1hZWZmLWUyN2Y5ZjY2MDMwZCIsImVtYWlsIjoidnV2bzA3MDQwM0BnbWFpbC5jb20iLCJVc2VyUm9sZSI6ImFkbWluIiwicmVtZW1iZXItbWUiOiJUcnVlIiwibmJmIjoxNjk1MDE4ODUyLCJleHAiOjE2OTUwMjI0NTIsImlzcyI6Imh0dHBzOi8vZnVkZXZlcmFwaS5ic2l0ZS5uZXQvIiwiYXVkIjoiaHR0cDovL2Z1LWRldmVyLmNvbS8ifQ.Kg75_8lBCopL0ZQcWrqVBZTyXWc5xFmIN5p1pnAtSww";
+      const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await deleteMemberInfo(value.id, access_token);
         console.log(response);
@@ -149,11 +149,11 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         </div>
         {/* position */}
         <div className="w-[200px] flex p-[16px] items-center text-[16px] font-[600]">
-          <p>{value.position}</p>
+          <p>{value.position == '' ? 'empty' : value.position}</p>
         </div>
         {/* department */}
         <div className="w-[180px] flex p-[16px] items-center text-[14px] font-[600]">
-          <p>{value.department}</p>
+          <p>{value.department == '' ? 'empty' : value.department}</p>
         </div>
         {/* status */}
         <div className="w-[100px] flex p-[16px] items-center text-[12px] relative">
@@ -245,25 +245,27 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       </Dialog>
 
       <div className="flex h-[78px]">
-        <div className="flex gap-[16px] justify-center items-center p-[16px]">
-          <Button
-            href={`/members/setting/${value.id}`}
-            method={() => {}}
-            icon="edit"
-            backgroundColor="bg-blue-700"
-            iconPosition="left"
-            textContent="Edit"
-            tailwind="text-white"
-          ></Button>
-          <UnlinkButton
-            method={handleClickOpen}
-            icon="delete"
-            backgroundColor="bg-red-700"
-            iconPosition="left"
-            textContent="Delete"
-            tailwind="text-white"
-          ></UnlinkButton>
-        </div>
+        {userRole === "admin" ? (
+          <div className="flex gap-[16px] justify-center items-center p-[16px]">
+            <Button
+              href={`/members/setting/${value.id}`}
+              method={() => {}}
+              icon="edit"
+              backgroundColor="bg-blue-700"
+              iconPosition="left"
+              textContent="Edit"
+              tailwind="text-white"
+            ></Button>
+            <UnlinkButton
+              method={handleClickOpen}
+              icon="delete"
+              backgroundColor="bg-red-700"
+              iconPosition="left"
+              textContent="Delete"
+              tailwind="text-white"
+            ></UnlinkButton>
+          </div>
+        ) : null}
         <div className="p-[16px] flex justify-center items-center text-primaryBlue text-[14px]">
           <Link href={`/members/profile/${value.id}`}>View Profile</Link>
         </div>

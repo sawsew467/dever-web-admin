@@ -51,7 +51,7 @@ export const registerAccount = (payload: UserRegister) => {
   return axiosClient.post(END_POINT.REGISTER, {
     email: payload.email,
     password: payload.password,
-    UserRole : "admin"
+    UserRole : "member"
   });
 };
 
