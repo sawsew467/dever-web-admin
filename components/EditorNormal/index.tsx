@@ -21,7 +21,7 @@ import CodeHighlightPlugin from "@plugins/CodeHighlightPlugin";
 import YouTubePlugin from "@plugins/YouTubePlugin";
 import TwitterPlugin from "@plugins/TwitterPlugin";
 import FigmaPlugin from "@plugins/FigmaPlugin";
-import CodeActionMenuPlugin from "@plugins/CodeActionMenuPlugin";
+// import CodeActionMenuPlugin from "@plugins/CodeActionMenuPlugin";
 import AutoEmbedPlugin from "@plugins/AutoEmbedPlugin";
 import Placeholder from "@ui/Placeholder";
 import ToolbarPlugin from "@plugins/ToolbarNormalPlugin";
@@ -96,7 +96,7 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
             <ListPlugin />
             <CheckListPlugin />
             <CodeHighlightPlugin />
-            <CodeActionMenuPlugin />
+            {/* <CodeActionMenuPlugin /> */}
             <YouTubePlugin />
             <FigmaPlugin />
             <TwitterPlugin />

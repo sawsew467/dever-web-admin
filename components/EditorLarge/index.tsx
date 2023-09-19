@@ -64,6 +64,7 @@ import HTMLSerializerPlugin from "@plugins/HtmlSerializerPlugin";
 // import AutocompletePlugin from '@plugins/AutocompletePlugin';
 import TextCounterPlugin from "@plugins/TextCounterPlugin";
 import UnlinkButton from "../UnlinkButton";
+import dynamic from "next/dynamic";
 
 interface IPros {
   formTitle: string;
@@ -122,6 +123,9 @@ function EditorLarge({
     else return;
   };
 
+  const NoSSRTableSellResizer:any = dynamic(() => import('@lexicalLib/plugins/TableCellResizer'), {ssr:false});
+  const NoSSRFloatingLinkEditorPlugin:any = dynamic(() => import('@lexicalLib/plugins/FloatingLinkEditorPlugin'), {ssr:false});
+  const NOSSRActionsPlugin:any = dynamic(() => import('@lexicalLib/plugins/ActionsPlugin'), {ssr:false});
   return (
     <div className="flex flex-col gap-[8px]">
       <div>
@@ -134,12 +138,11 @@ function EditorLarge({
             <div className="border-2 rounded-[10px]">
               <div>{<ToolbarPlugin />}</div>
               <div className="relative">
-                <HistoryPlugin />
+                <HistoryPlugin/>
                 <DragDropPaste />
                 <AutoFocusPlugin />
                 <ClearEditorPlugin />
                 <ComponentPickerPlugin />
-                <EmojiPickerPlugin />
                 <AutoEmbedPlugin />
                 <NewMentionsPlugin />
                 <EmojisPlugin />
@@ -171,7 +174,7 @@ function EditorLarge({
                   hasCellMerge={true}
                   hasCellBackgroundColor={true}
                 />
-                <TableCellResizer />
+                <NoSSRTableSellResizer/>
                 <NewTablePlugin cellEditorConfig={cellEditorConfig}>
                   <AutoFocusPlugin />
                   <RichTextPlugin
@@ -181,7 +184,7 @@ function EditorLarge({
                     placeholder={null}
                     ErrorBoundary={LexicalErrorBoundary}
                   />
-                  {/* <MentionsPlugin /> */}
+                  <MentionsPlugin />
                   <HistoryPlugin />
                   <ImagesPlugin captionsEnabled={false} />
                   <LinkPlugin />
@@ -195,7 +198,7 @@ function EditorLarge({
                 <ImagesPlugin />
                 <InlineImagePlugin />
                 <LinkPlugin />
-                <FloatingLinkEditorPlugin />
+                <NoSSRFloatingLinkEditorPlugin/>
                 <PollPlugin />
                 <TwitterPlugin />
                 <YouTubePlugin />
@@ -207,9 +210,9 @@ function EditorLarge({
                 <TabFocusPlugin />
                 <TabIndentationPlugin />
                 <PageBreakPlugin />
-                <CodeActionMenuPlugin/>   
                 <CodeHighlightPlugin />
-                <ActionsPlugin isRichText={true} />
+                {/* <NOSSRActionsPlugin isRichText={true}/> */}
+                {/* <ActionsPlugin isRichText={true}/> */}
 
                 {floatingAnchorElem && (
                   <>
