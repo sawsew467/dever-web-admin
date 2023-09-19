@@ -8,10 +8,6 @@ const axiosServices = axios.create({
 axiosServices.interceptors.request.use(
     function (config) {
         config.headers['Content-Type'] = 'application/json';
-        const access_token = localStorage.getItem('access_token');
-        if (access_token) {
-            config.headers['Authorization'] = `Bearer ${access_token}`;
-        }
         return config;
     },
     function (error) {

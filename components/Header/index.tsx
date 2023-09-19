@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import menu from "@icon/components/header/menu.svg";
 import logo from "@icon/components/header/logo.svg";
@@ -9,21 +10,28 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { toggleIsDarkMode, toggleIsOpenSlidebar } from "@/redux/slices/app";
+import { logout } from "@/redux/slices/userInfor";
 
 function Header() {
   const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleOpenMenu = () => {
-    dispatch(toggleIsOpenSlidebar())
+    dispatch(toggleIsOpenSlidebar());
   };
 
   const handleSetDarkMode = () => {
     dispatch(toggleIsDarkMode());
     const html = document.documentElement;
     html.classList.toggle("dark");
+  };
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/auth/sign-in");
   };
   return (
     <div className="left-0 right-0 top-0 fixed z-[1] bg-[#ffffff] backdrop-blur-sm">
@@ -59,7 +67,10 @@ function Header() {
             className="ml-[20px] mr-[-4px] cursor-pointer w-[50px] h-[50px] p-[10px] rounded-md hover:bg-gray-100 transition duration-200"
           />
           <div className="border-l-[1px] ml-[20px] border-[#E5E7EB] cursor-pointer select-none ">
-            <p className=" ml-[16px] mr-[-4px] px-2 py-2 hover:bg-gray-100 transition duration-200 rounded-md  text-[#1C64F2]">
+            <p
+              onClick={handleLogout}
+              className=" ml-[16px] mr-[-4px] px-2 py-2 hover:bg-gray-100 transition duration-200 rounded-md  text-[#1C64F2]"
+            >
               Log out
             </p>
           </div>
