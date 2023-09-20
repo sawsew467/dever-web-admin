@@ -26,7 +26,7 @@ function SettingList() {
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
 
   const [userData, setUserData] = useState<userInfo>();
-  console.log(userData);
+
   const handleGetUserProfile = async () => {
     try {
       const access_token = getCookie("accessToken");
@@ -85,7 +85,9 @@ function SettingList() {
               <ChangePassword />
             </div>
             <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
-              <AboutUser />
+              <AboutUser 
+                about = {userData?.aboutMe!}
+              />
               <GeneralInformation />
               <Projects />
             </div>

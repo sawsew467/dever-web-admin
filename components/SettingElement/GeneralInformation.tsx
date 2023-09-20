@@ -232,6 +232,7 @@ function GeneralInformation() {
                   <div>
                     <button
                       type="submit"
+                      
                       className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
                     >
                       Save
