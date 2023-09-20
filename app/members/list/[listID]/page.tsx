@@ -200,7 +200,7 @@ function MemberList({ params }: pageProps) {
         handleCloseApproveDialog();
       }
     })
-  }
+  }    
   return (
     <div
       className={`w-[100%] ${

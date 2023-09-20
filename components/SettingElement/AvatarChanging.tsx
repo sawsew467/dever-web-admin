@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Avatar from "@image/page/member/profile/Thang.png";
+import Avatar from "@image/page/member/list/Fu-dever.png";
 import UnlinkButton from "@component/UnlinkButton";
 
 import axios from "axios";

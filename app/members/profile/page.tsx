@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 
-import avatar from "@image/page/member/profile/Thang.png";
+import avatar from "@image/page/member/list/Fu-dever.png";
 import briefcaseIcon from "@icon/page/member/profile/briefcase.svg";
 import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
 import facebookIcon from "@icon/page/member/profile/facebook.svg";
@@ -81,7 +81,7 @@ function Profile() {
             <div className="w-full lg:w-[32%] flex flex-col gap-[16px]">
               <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[16px]">
                 <div className="flex flex-col gap-[8px]">
-                  <div className="w-[120px] h-[120px] object-cover overflow-hidden rounded-[16px]">
+                  <div className="w-[180px] h-[180px] object-cover overflow-hidden rounded-[16px]">
                     <Image
                       src={
                         userData?.avatarUrl === ""
@@ -91,6 +91,7 @@ function Profile() {
                       alt="avatar"
                       width={1200}
                       height={800}
+                      className="object-cover w-full h-full"
                     />
                   </div>
                   <h1 className="text-[24px] font-[700]">

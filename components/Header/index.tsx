@@ -96,15 +96,15 @@ function Header() {
             width={1200}
             height={600}
           />
-          <div className="ml-[20px] mr-[-4px] cursor-pointer w-[60px] h-[60px] rounded-[50%] overflow-hidden p-[10px] hover:bg-slate-100">
+          <div className="ml-[20px] mr-[-4px] flex items-center justify-center transition duration-300 cursor-pointer w-[60px] h-[60px] rounded-[50%] hover:bg-slate-100 object-fill">
             {
               isFetchData ? <Skeleton variant="circular" width={40} height={40}/> :
               <Image
               src={userData?.avatarUrl == "" ? avatar : userData?.avatarUrl}
               alt="Picture of the author"
-              className="object-cover rounded-[50%]"
+              className="object-cover rounded-[50%] w-[48px] h-[48px]"
               width={1200}
-              height={600}
+              height={1200}
             />
             }
           </div>

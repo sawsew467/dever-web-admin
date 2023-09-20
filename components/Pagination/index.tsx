@@ -52,9 +52,11 @@ function Pagination({
       sliceSetData(slicedData);
     }
   }, [paramID, countNumberOfPage, data, sliceSetData, increaseIndex]);
-
+  
   return (
-    <div className="w-full flex justify-center items-center pb-4">
+    <>
+      {countNumberOfPage == 1 ? null : 
+      <div className="w-full flex justify-center items-center pb-4">
       <div className="border rounded-md text-sm">
         <button
           className={`px-2 py-1 border-r ${
@@ -86,7 +88,8 @@ function Pagination({
           Next
         </button>
       </div>
-    </div>
+    </div>}
+    </>
   );
 }
 

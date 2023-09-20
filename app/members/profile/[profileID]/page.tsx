@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 
-import avatar from "@image/page/member/profile/Thang.png";
+import avatar from "@image/page/member/list/Fu-dever.png";
 import briefcaseIcon from "@icon/page/member/profile/briefcase.svg";
 import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
 import facebookIcon from "@icon/page/member/profile/facebook.svg";

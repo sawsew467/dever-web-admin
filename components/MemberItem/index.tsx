@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import avatar from "@image/page/member/list/Thang.png";
+import avatar from "@image/page/member/list/Fu-dever.png";
 import Link from "next/link";
 
 import Button from "@component/Button";
@@ -132,12 +132,13 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         </div>
         {/*Name*/}
         <div className="w-[68px] flex items-center justify-center text-[12px] uppercase">
-          <div className="w-[32px] h-[32px] rounded-[50%] overflow-hidden object-fill">
+          <div className="w-[40px] h-[40px] rounded-[50%] overflow-hidden object-cover">
             <Image
               src={value.avatarUrl === "" ? avatar : value.avatarUrl}
               alt="avatar"
               width={1200}
-              height={600}
+              height={1200}
+              className="object-cover w-full h-full"
             />
           </div>
         </div>
