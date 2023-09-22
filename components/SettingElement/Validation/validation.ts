@@ -42,7 +42,7 @@ export const generalInformationSchema =yup.object().shape({
   birthday: yup.string().required("Birthday is required"),
   homeAddress: yup.string(),
   position: yup.string().required("Position is required"),
-  role: yup.string().required("Role is required"),
+  career: yup.string().required("Role is required"),
   major: yup.string().required("Major is required"),
   education: yup.string().required("Education is required"),
   workHistory: yup.string(),

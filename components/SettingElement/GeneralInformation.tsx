@@ -30,7 +30,7 @@ function GeneralInformation() {
     birthday: "2002-02-19",
     homeAddress: "Trieu Son, Trieu Phong, Quang Tri",
     position: "Club President",
-    role: "Front-End developer",
+    career: "Front-End developer",
     major: "Software Engineering",
     education: "FPT University",
     workHistory: "NAPA Global, Google , Facebook",
@@ -115,7 +115,7 @@ function GeneralInformation() {
             birthday: fakeData.birthday,
             homeAddress: fakeData.homeAddress,
             position: fakeData.position,
-            career: fakeData.role,
+            career: fakeData.career,
             major: fakeData.major,
             education: fakeData.education,
             workHistory: fakeData.workHistory,
@@ -232,7 +232,7 @@ function GeneralInformation() {
                   <div>
                     <button
                       type="submit"
-                      
+        
                       className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
                     >
                       Save

@@ -81,9 +81,7 @@ function MemberList({ params }: pageProps) {
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data;
-        const currentUserRole = store.getState().userInfor.currentUser.UserRole;
-        console.log("Role: " ,currentUserRole);
-        
+        const currentUserRole = store.getState().userInfor.currentUser.UserRole;        
         
         const filteredData = data
           .map((value: memberType) => {

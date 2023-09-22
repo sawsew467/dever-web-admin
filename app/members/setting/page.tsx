@@ -16,6 +16,7 @@ import { getCookie } from "cookies-next";
 import { getMemberInfo } from "@/apis/profile";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
+
 function SettingList() {
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
@@ -26,7 +27,8 @@ function SettingList() {
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
 
   const [userData, setUserData] = useState<userInfo>();
-
+    console.log(userData);
+    
   const handleGetUserProfile = async () => {
     try {
       const access_token = getCookie("accessToken");
