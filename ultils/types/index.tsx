@@ -38,8 +38,8 @@ export type userInfo = {
   id: string;
   joinDate: string;
   majorName: string;
-  memberHobbies: objectItemOne[];
-  memberSkills: objectItemOne[];
+  memberHobbies: [];
+  memberSkills: [];
   memberSoicalLinks: string[];
   memberWorkHistories: string[];
   phoneNumber: string;

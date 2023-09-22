@@ -16,6 +16,15 @@ import { getCookie } from "cookies-next";
 import { getMemberInfo } from "@/apis/profile";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
+import { getAllAccountsByUserId } from "@/apis/setting";
+
+type TSocialData = {
+  id: string;
+  memberId: string;
+  platform: string;
+  platformId: string;
+  value: string;
+};
 
 function SettingList() {
   const isOpenSlidebar = useSelector(
@@ -25,6 +34,7 @@ function SettingList() {
     (state: RootState) => state.app.isMouseVisit
   );
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
+  const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
 
   const [userData, setUserData] = useState<userInfo>();
     console.log(userData);
@@ -48,8 +58,25 @@ function SettingList() {
     }
   };
 
+  const handleGetAllSocialAccounts = async () => {
+    try {
+      const userId = getCookie("userId");
+      const access_token = getCookie("accessToken");
+      if (userId && access_token) {
+        const response = await getAllAccountsByUserId(access_token, userId);
+        const data = response.data;
+        setSocialMediaState(data);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     handleGetUserProfile();
+    handleGetAllSocialAccounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -66,7 +93,7 @@ function SettingList() {
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div className="">
           <h3 className="font-[700] text-[24px] ">
-            <span className="text-blue-500">Your&apos;s</span> profile setting
+            <span className="text-blue-500">Your</span> profile setting
           </h3>
         </div>
         {isFetchData ? (
@@ -81,7 +108,10 @@ function SettingList() {
                 refreshApi={handleGetUserProfile}
               />
               <ContactInfomation />
-              <SocialAccount />
+              <SocialAccount 
+                socialMediaState={socialMediaState}
+                refreshApi = {handleGetAllSocialAccounts}
+              />
               <Skills />
               <Hobbies />
               <ChangePassword />
@@ -90,7 +120,10 @@ function SettingList() {
               <AboutUser 
                 about = {userData?.aboutMe!}
               />
-              <GeneralInformation />
+              <GeneralInformation
+                userData={userData!}
+                refreshApi={handleGetUserProfile}
+              />
               <Projects />
             </div>
           </div>

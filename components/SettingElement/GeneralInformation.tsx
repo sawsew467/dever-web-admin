@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
 import { generalInformationSchema } from "@component/SettingElement/Validation/validation";
@@ -7,68 +7,45 @@ import FormikInput from "./FormikInput";
 import Image from "next/image";
 import EditIconAnimate from "@icon/components/Button/edit.gif";
 import EditIconPause from "@icon/components/Button/edit_pause.png";
+import { userInfo } from "@/ultils/types";
+import {
+  formatDateToMMDDYYYY,
+  formatDateToYYYYMMDD,
+} from "@/ultils/dateFormat";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+import { getAllDepartment, getAllMajor, getAllPosition } from "@/apis/dataOrganizer";
 
 type TGeneralFieldValues = {
   firstName: string;
   lastName: string;
   birthday: string;
   homeAddress: string;
-  position: string;
+  position:string;
   career: string;
-  major: string;
-  education: string;
+  majorID: string;
+  educationPlaceID: string;
   workHistory: string;
-  department: string;
+  departmentID: string;
   joinDate: string;
 };
 
-function GeneralInformation() {
-  const fakeData = {
-    id: 0,
-    firstName: "Tran Van",
-    lastName: "Bao Thang",
-    birthday: "2002-02-19",
-    homeAddress: "Trieu Son, Trieu Phong, Quang Tri",
-    position: "Club President",
-    career: "Front-End developer",
-    major: "Software Engineering",
-    education: "FPT University",
-    workHistory: "NAPA Global, Google , Facebook",
-    department: "Board of Directors",
-    email: "thangtvbde170145@fpt.edu.vn",
-    phone: "0828 828 497",
-    joinDate: "2021-09-12",
-  };
+type TOptionsList = {
+  id: string;
+  value: string;
+};
 
-  const position_options = [
-    "Member",
-    "Secretary",
-    "Club President",
-    "Vice Club President",
-    "Academic Department Head",
-    "Vice Academic Department Head",
-    "Events Department Head",
-    "Vice Events Department Head",
-    "Media Department Head",
-    "Vice Media Department Head",
-    "Administrative Department Head",
-    "Vice Administrative Department Head",
-  ];
+type TProps = {
+  userData: userInfo;
+  refreshApi: () => void;
+};
 
-  const major_options = [
-    "Artificial Intelligence",
-    "Software Engineering",
-    "Information Security",
-    "Information System",
-    "Digital Art Design",
-  ];
-  const department_options = [
-    "Board of Directors",
-    "Academic Board",
-    "Events Board",
-    "Media Board",
-    "Administrative Board",
-  ];
+function GeneralInformation({ userData, refreshApi }: TProps) {
+
+  const [postionOptions, setPositionOptions] = useState<TOptionsList[]>([]);
+  const [majorOptions, setMajorOptions] = useState<TOptionsList[]>([]);
+  const [departmentOptions, setDeparmentOptions] = useState<TOptionsList[]>([]);
+  const [educationOptions, setEducationOptions] = useState<TOptionsList[]>([]);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TGeneralFieldValues> | null>(null);
@@ -90,6 +67,94 @@ function GeneralInformation() {
     setIsEdit(!isEdit);
   };
 
+  const handleGetAllPosition = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const res = await getAllPosition(access_token);
+        const data = res.data;
+        const filtedData = data.map((item:TOptionsList) => {
+          return {
+            id: item.id,
+            value: item.value
+          }
+        }).filter((item:TOptionsList) => item.value!=="default");
+        setPositionOptions(filtedData);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+  const handleGetAllDeparment = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const res = await getAllDepartment(access_token);
+        const data = res.data;
+        const filtedData = data.map((item:TOptionsList) => {
+          return {
+            id: item.id,
+            value: item.value
+          }
+        }).filter((item:TOptionsList) => item.value!=="default");
+        setDeparmentOptions(filtedData);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+  const handleGetAllMajor = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const res = await getAllMajor(access_token);
+        const data = res.data;
+        const filtedData = data.map((item:TOptionsList) => {
+          return {
+            id: item.id,
+            value: item.value
+          }
+        }).filter((item:TOptionsList) => item.value!=="default");
+        setMajorOptions(filtedData);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+  const handleGetAllEducation = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const res = await getAllPosition(access_token);
+        const data = res.data;
+        const filtedData = data.map((item:TOptionsList) => {
+          return {
+            id: item.id,
+            value: item.value
+          }
+        }).filter((item:TOptionsList) => item.value!=="default");
+        setEducationOptions(filtedData);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllPosition();
+    handleGetAllDeparment();
+    handleGetAllMajor();
+    handleGetAllEducation();
+  }, []);
+
   return (
     <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
       <div className="flex flex-row justify-between">
@@ -110,17 +175,17 @@ function GeneralInformation() {
       <div>
         <Formik
           initialValues={{
-            firstName: fakeData.firstName,
-            lastName: fakeData.lastName,
-            birthday: fakeData.birthday,
-            homeAddress: fakeData.homeAddress,
-            position: fakeData.position,
-            career: fakeData.career,
-            major: fakeData.major,
-            education: fakeData.education,
-            workHistory: fakeData.workHistory,
-            department: fakeData.department,
-            joinDate: fakeData.joinDate,
+            firstName: "",
+            lastName: "",
+            birthday: formatDateToYYYYMMDD(userData.birthday),
+            homeAddress: userData.homeAddress,
+            position: userData.positionName,
+            career: userData.career,
+            majorID: userData.majorName,
+            educationPlaceID: userData.educationPlaceName,
+            workHistory: userData.memberWorkHistories[0],
+            departmentID: userData.departmentName,
+            joinDate: formatDateToYYYYMMDD(userData.joinDate),
           }}
           validationSchema={generalInformationSchema}
           onSubmit={onSubmit}
@@ -172,7 +237,7 @@ function GeneralInformation() {
                     name={"position"}
                     isEdit={isEdit}
                     title={"position"}
-                    options={position_options}
+                    options={postionOptions}
                   />
                   <FormikInput
                     label={"career"}
@@ -184,21 +249,20 @@ function GeneralInformation() {
                     title={"career"}
                   />
                   <FormikSelect
-                    label={"major"}
-                    id={"major"}
-                    name={"major"}
+                    label={"majorID"}
+                    id={"majorID"}
+                    name={"majorID"}
                     isEdit={isEdit}
                     title={"major"}
-                    options={major_options}
+                    options={majorOptions}
                   />
-                  <FormikInput
-                    label={"education"}
-                    id={"education"}
-                    name={"education"}
-                    placeholder={"Enter your educations..."}
-                    type={"text"}
+                  <FormikSelect
+                    label={"educationPlaceID"}
+                    id={"educationPlaceID"}
+                    name={"educationPlaceID"}
                     isEdit={isEdit}
-                    title={"education"}
+                    title={"education place"}
+                    options={educationOptions}
                   />
                   <FormikInput
                     label={"workHistory"}
@@ -210,12 +274,12 @@ function GeneralInformation() {
                     title={"work history"}
                   />
                   <FormikSelect
-                    label={"department"}
-                    id={"department"}
-                    name={"department"}
+                    label={"departmentID"}
+                    id={"departmentID"}
+                    name={"departmentID"}
                     isEdit={isEdit}
                     title={"department"}
-                    options={department_options}
+                    options={departmentOptions}
                   />
                   <FormikInput
                     label={"joinDate"}
@@ -232,7 +296,6 @@ function GeneralInformation() {
                   <div>
                     <button
                       type="submit"
-        
                       className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
                     >
                       Save

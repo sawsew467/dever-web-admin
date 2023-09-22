@@ -3,6 +3,10 @@ import Tags from "@yaireo/tagify/dist/react.tagify";
 import UnlinkButton from "@/components/UnlinkButton";
 import { TagifySettings } from "@yaireo/tagify";
 import "./styling.scss";
+import { getCookie } from "cookies-next";
+import { postMemberHobby, postMemberSkill } from "@/apis/setting";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface TagFieldProps {
   suggestions: string[];
@@ -25,15 +29,14 @@ const baseTagifySettings = {
 };
 
 function TagField({
-  suggestions = [],
+  suggestions,
   setState,
   state,
   isEdit,
   useTagFor,
 }: TagFieldProps) {
   const [data, setData] = useState<string[]>(state);
-  // console.log("DATA", data);
-
+  
   const handleChange = (e: CustomEvent) => {
     setData(e.detail.tagify.value.map((item: { value: string }) => item.value));
   };
@@ -55,13 +58,43 @@ function TagField({
       "edit:input": handleChange,
     },
   };
+  const handlePostMemberSkills = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const value = data;
+        const response = await postMemberSkill(access_token, value);
+        toast.success(`Post skills successfully!`)
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        toast.error(`Post skills failed!`)
+      }
+    }
+  };
+  const handlePostMemberHobbies = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const value = data;
+        const response = await postMemberHobby(access_token, value);
+        toast.success(`Post hobbies successfully!`)
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        toast.error(`Post hobbies failed!`)
+      }
+    }
+  };
 
-  const handleSubmitTags = () => {
+  const handleSubmitTags =  () => {
     if (useTagFor === "skills") {
-      console.log("POST SKILL TAGS", data);
+      handlePostMemberSkills();
     }
     if (useTagFor === "hobbies") {
-      console.log("POST HOBBIES TAGS", data);
+      handlePostMemberHobbies();
     }
   };
 

@@ -71,7 +71,7 @@ function Profile() {
       <div className=" py-[20px] px-[16px] flex gap-[20px] flex-col select-none">
         <div>
           <h2 className="text-[24px] font-[700]">
-            <span className="text-blue-500">Your&apos;s</span> Profile
+            <span className="text-blue-500">Your</span> Profile
           </h2>
         </div>
         {isFetchData ? (
@@ -180,7 +180,7 @@ function Profile() {
                       key={index}
                       className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
                     >
-                      {item?.value}
+                      {item}
                     </p>
                   ))}
                 </div>
@@ -195,7 +195,7 @@ function Profile() {
                       key={index}
                       className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
                     >
-                      {item.value}
+                      {item}
                     </p>
                   ))}
                 </div>
