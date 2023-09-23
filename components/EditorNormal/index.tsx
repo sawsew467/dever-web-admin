@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import PlaygroundEditorTheme from "@/lexical_Lib/theme/EditorTheme";
 import TableCellNodes from "@nodes/TableCellNodes";
@@ -20,14 +21,14 @@ import CodeHighlightPlugin from "@plugins/CodeHighlightPlugin";
 import YouTubePlugin from "@plugins/YouTubePlugin";
 import TwitterPlugin from "@plugins/TwitterPlugin";
 import FigmaPlugin from "@plugins/FigmaPlugin";
-import CodeActionMenuPlugin from "@plugins/CodeActionMenuPlugin";
+// import CodeActionMenuPlugin from "@plugins/CodeActionMenuPlugin";
 import AutoEmbedPlugin from "@plugins/AutoEmbedPlugin";
 import Placeholder from "@ui/Placeholder";
 import ToolbarPlugin from "@plugins/ToolbarNormalPlugin";
 
 import { $generateNodesFromDOM } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import DomToLexicalPlugin from "@plugins/DomToLexicalPlugin.tsx";
+import DomToLexicalPlugin from "@/lexical_Lib/plugins/DomToLexicalPlugin";
 import TreeViewPlugin from "@plugins/TreeViewPlugin";
 import EditorSaveButtonPlugin from "@plugins/EditorSaveButtonPlugin";
 import FloatingTextFormatToolbarPlugin from "@/lexical_Lib/plugins/FloatingTextFormatToolbarPlugin";
@@ -95,7 +96,7 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
             <ListPlugin />
             <CheckListPlugin />
             <CodeHighlightPlugin />
-            <CodeActionMenuPlugin />
+            {/* <CodeActionMenuPlugin /> */}
             <YouTubePlugin />
             <FigmaPlugin />
             <TwitterPlugin />

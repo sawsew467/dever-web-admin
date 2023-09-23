@@ -4,7 +4,7 @@ import {
   MenuOption,
   MenuTextMatch,
   useBasicTypeaheadTriggerMatch,
-} from '@lexical/react/LexicalTypeaheadMenuPlugin';
+} from '../../react/LexicalTypeaheadMenuPlugin';
 import {TextNode} from 'lexical';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import * as React from 'react';

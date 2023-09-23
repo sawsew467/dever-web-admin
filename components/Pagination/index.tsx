@@ -1,34 +1,34 @@
-import React, { SetStateAction, useEffect } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-interface Ipros {
+interface IProps {
   paramID: string;
   countNumberOfPage: number;
-  pages: { param: string; startIndex: number; endIndex: number }[];
-  increaseIndex: number;
-  sliceSetData: React.Dispatch<SetStateAction<any>>;
-  data: any;
   route: string;
+  data: any;
+  increaseIndex: number;
+  sliceSetData: (data: any) => void;
 }
 
 function Pagination({
   paramID,
-  route,
   countNumberOfPage,
-  pages,
+  route,
+  data,
   increaseIndex,
   sliceSetData,
-  data,
-}: Ipros) {
+}: IProps) {
+  const router = useRouter();
+
   const renderPagination = () => {
     const buttons = [];
-    let startIndex = 0;
-    let endIndex = 0;
+
     for (let i = 1; i <= countNumberOfPage; i++) {
       buttons.push(
         <Link href={`${route}/${i}`} key={i}>
           <button
-            className={`px-[12px] py-[4px] border-r-[1px] ${
+            className={`px-2 py-1 border-r ${
               paramID === i.toString() ? "bg-blue-200 text-blue-600" : ""
             }`}
           >
@@ -36,62 +36,60 @@ function Pagination({
           </button>
         </Link>
       );
-      pages.push({
-        param: i.toString(),
-        startIndex: startIndex,
-        endIndex: startIndex + increaseIndex,
-      });
-      endIndex = startIndex + increaseIndex;
-      startIndex = endIndex + 1;
-      endIndex = startIndex + increaseIndex;
     }
+
     return buttons;
   };
 
   useEffect(() => {
-    const handleNextPage = () => {
-      const page = pages[parseInt(paramID) - 1];
-      if (page) {
-        sliceSetData(data.slice(page.startIndex, page.endIndex + 1));
-      }
-    };
-    handleNextPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+    // When the component mounts or the paramID changes, update the sliced data    
+    const page = parseInt(paramID);    
+    if (!isNaN(page) && page >= 1 && page <= countNumberOfPage) {
+      const itemsPerPage = increaseIndex+1; // Set the number of items per page
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const slicedData = data.slice(startIndex, endIndex);
+      sliceSetData(slicedData);
+    }
+  }, [paramID, countNumberOfPage, data, sliceSetData, increaseIndex]);
+  
   return (
-    <div
-      className={`w-[100%] flex justify-center items-center pb-[40px]`}
-      style={{
-        display: countNumberOfPage <= 1 ? "none" : "",
-      }}
-    >
-      <div className="border-[1px] rounded-md font-[14px]">
+    <>
+      {countNumberOfPage == 1 ? null : 
+      <div className="w-full flex justify-center items-center pb-4">
+      <div className="border rounded-md text-sm">
         <button
-          className={`px-[12px] py-[4px] border-r-[1px] ${
-            paramID === "1" ? "text-slate-300 pointer-events-none" : ""
+          className={`px-2 py-1 border-r ${
+            paramID === "1" ? "text-gray-400 cursor-not-allowed" : ""
           }`}
+          onClick={() => {
+            if (paramID !== "1") {
+              router.push(`${route}/${parseInt(paramID) - 1}`);
+            }
+          }}
         >
-          <Link
-            href={`${route}/${paramID === "1" ? "1" : parseInt(paramID) - 1}`}
-          >
-            Previous
-          </Link>
+          Previous
         </button>
 
         {renderPagination()}
 
         <button
-          className={`px-[12px] py-[4px] ${
+          className={`px-2 py-1 ${
             paramID === countNumberOfPage.toString()
-              ? "pointer-events-none text-slate-300"
+              ? "text-gray-400 cursor-not-allowed"
               : ""
           }`}
+          onClick={() => {
+            if (paramID !== countNumberOfPage.toString()) {
+              router.push(`${route}/${parseInt(paramID) + 1}`);
+            }
+          }}
         >
-          <Link href={`${route}/${parseInt(paramID) + 1}`}>Next</Link>
+          Next
         </button>
       </div>
-    </div>
+    </div>}
+    </>
   );
 }
 

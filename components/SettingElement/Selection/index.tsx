@@ -1,8 +1,9 @@
 import React from "react";
 
+
 type TPros = {
   title: string;
-  options: string[];
+  options: {id:string, value:string}[];
   value: string;
   isEdit: boolean;
   onChange(event: React.ChangeEvent<HTMLSelectElement>): void;
@@ -15,12 +16,13 @@ function Selection({
   isEdit,
   onChange,
 }: TPros): JSX.Element {
+
   const renderSelectOption = () => {
     const options_list = [];
     for (let option of options) {
       options_list.push(
-        <option value={option} key={option}>
-          {option}
+        <option value={option.id} key={option.id}>
+          {option.value}
         </option>
       );
     }
@@ -51,6 +53,7 @@ function Selection({
           onChange(e);
         }}
       >
+        <option value={""}>Default...</option>
         {renderSelectOption()}
       </select>
     </div>

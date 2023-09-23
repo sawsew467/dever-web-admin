@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 
 import FacebookIcon from "@assets/icon/page/member/profile/facebook.png";
@@ -20,23 +20,25 @@ import Selection from "./Selection";
 import Input from "./Input";
 import Alert from "@mui/material/Alert";
 import { Collapse } from "@mui/material";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+import {
+  deleteSocialAccount,
+  getAllAccountsByUserId,
+  getAllPlatform,
+  postSocialAccount,
+} from "@/apis/setting";
+import { toast } from "react-toastify";
 
-type TSocical = {
+type TSocialData = {
+  id: string;
+  memberId: string;
   platform: string;
-  link: string;
+  platformId: string;
+  value: string;
 };
 
-function SocialAccount() {
-  const fakeData = [
-    {
-      platform: "Facebook",
-      link: "www.facebook.com/SawSew467",
-    },
-    {
-      platform: "Github",
-      link: "github.com/sawsew467",
-    },
-  ];
+function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocialData[], refreshApi: () => void}) {
   const platforms = [
     "Facebook",
     "Github",
@@ -47,24 +49,33 @@ function SocialAccount() {
     "Tiktok",
     "Twitter",
   ];
-
-  const [socialMediaState, setSocialMediaState] =
-    useState<TSocical[]>(fakeData);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isDelete, setIsDelete] = useState<boolean>(false);
-  const [selectPlatformm, setSelectPlatform] = useState<string>(platforms[0]);
+  const [platformList, setPlatformList] = useState<
+    { id: string; value: string }[]
+  >([]);
+
+  const [selectPlatform, setSelectPlatform] = useState<string>(
+    platformList[0]?.id
+  );
   const [linkState, setLinkState] = useState<string>("");
 
   const [isAlert, setIsAlert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [isWarning, setIsWarning] = useState<boolean>(false);
   const [warningMessage, setWarningMessage] = useState<string>("");
+  const [selectedPlatformName, setSelectedPlatformName] = useState<string>("");
 
   const handleOnChangePlatform = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectPlatform(event.target.value);
+    platformList.forEach((item) => {
+      if (item.id == event.target.value) {
+        setSelectedPlatformName(item.value);
+      }
+    });
   };
   const handleOnChangeInputLink = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -72,16 +83,7 @@ function SocialAccount() {
     setLinkState(event.target.value);
   };
 
-  const handleDeleteAccount = (itemIndex: number) => {
-    const deleted = socialMediaState.filter(
-      (value: TSocical, index: number) => index !== itemIndex
-    );
-    setSocialMediaState([...deleted]);
-    setIsDelete(true);
-    console.log("DELECT" + " /api");
-  };
-
-  const returnSocialIcon = (item: TSocical): StaticImageData => {
+  const returnSocialIcon = (item: TSocialData): StaticImageData => {
     switch (item.platform) {
       case "Facebook":
         return FacebookIcon;
@@ -93,7 +95,7 @@ function SocialAccount() {
         return InstagramIcon;
       case "Discord":
         return DiscordIcon;
-      case "Linkedin":
+      case "LinkedIn":
         return LinkedinIcon;
       case "Tiktok":
         return TiktokIcon;
@@ -118,14 +120,30 @@ function SocialAccount() {
     return link;
   };
 
-  const checkExistAccounts = (inputLink: string): boolean => {
-    const linkExists = socialMediaState.some((item) => item.link === inputLink);
+  const checkExistAccounts = (
+    inputLink: string,
+    selectPlatform: string
+  ): boolean => {
+    const linkExists = socialMediaState.some(
+      (item: TSocialData) => item.value === addHttpsIfMissing(inputLink)
+    );
+    const platformExist = socialMediaState.some(
+      (item: TSocialData) => item.platformId === selectPlatform
+    );
     if (linkExists) {
       setIsAlert(true);
       setTimeout(() => {
         setIsAlert(false);
       }, 4000);
       setAlertMessage("This account already exists!");
+      return true;
+    }
+    if (platformExist) {
+      setIsAlert(true);
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 4000);
+      setAlertMessage("This account with the platform already exists!");
       return true;
     }
     if (inputLink.length == 0) {
@@ -149,28 +167,75 @@ function SocialAccount() {
       }, 4000);
       setWarningMessage("The input is not a link! ");
       return true;
-    } else console.log(linkRegex.test(inputLink));
+    }
 
     return false;
   };
 
   const handleSubmit = async () => {
-    if (checkExistAccounts(removeHttps(linkState))) {
+    if (checkExistAccounts(removeHttps(linkState), selectPlatform)) {
       return;
     } else if (checkIsValidLink(linkState)) return;
     else {
-      const getState = {
-        platform: selectPlatformm,
-        link: removeHttps(linkState),
-      };
-      setSocialMediaState((prevSocialMediaState) => [
-        ...prevSocialMediaState,
-        getState,
-      ]);
-      console.log("POST: " + getState.link + " \n" + getState.platform);
+      handlePostSocialAccount();
     }
   };
 
+  const handleGetPlatforms = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const response = await getAllPlatform(access_token);
+        const data = response.data.body;
+        const platFormFilted = data.filter(
+          (item: { id: string; value: string }) => item.value !== "default"
+        );
+        setPlatformList(platFormFilted);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    handleGetPlatforms();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handlePostSocialAccount = async () => {
+    try {
+      const userId = getCookie("userId");
+      const access_token = getCookie("accessToken");
+      if (access_token && userId) {
+        const postValue = {
+          platformId: selectPlatform,
+          value: linkState,
+        };
+        const response = await postSocialAccount(access_token, postValue);
+        toast.success(`Post ${selectedPlatformName} account successfully!`);
+        refreshApi();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(`Post ${selectedPlatformName} account failed`);
+      }
+    }
+  };
+  const handleDeleteAccount = async (platformId: string) => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const res = await deleteSocialAccount(access_token, platformId);
+        toast.success(`Deleting successfully!`);
+        refreshApi();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(`Deleting failed!`);
+      }
+    }
+  };
   return (
     <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
       <div className="flex flex-row justify-between">
@@ -203,13 +268,13 @@ function SocialAccount() {
               You haven&apos;t added any social accounts yet!
             </p>
           ) : (
-            socialMediaState.map((item: TSocical, index: number) => (
+            socialMediaState.map((item: TSocialData, index: number) => (
               <li
                 className="flex flex-row border-b-2 pb-[10px] justify-between"
                 key={index}
               >
                 <div className="flex flex-row gap-[10px]">
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center w-[45px]">
                     <Image
                       src={returnSocialIcon(item)}
                       alt={item.platform}
@@ -217,14 +282,14 @@ function SocialAccount() {
                       height={26}
                     ></Image>
                   </div>
-                  <div>
+                  <div className="max-w-[200px]">
                     <p className="font-[600] text-[14px]">{item.platform}</p>
                     <a
-                      href={addHttpsIfMissing(item.link)}
+                      href={addHttpsIfMissing(item.value)}
                       target="_blank"
-                      className="font-[300] text-[14px] text-blue-500"
+                      className="font-[300] text-[14px] text-blue-500 whitespace-nowrap truncate"
                     >
-                      {item.link}
+                      <p className="truncate">{removeHttps(item.value)}</p>
                     </a>
                   </div>
                 </div>
@@ -236,7 +301,7 @@ function SocialAccount() {
                       iconPosition={"left"}
                       backgroundColor={"hover:bg-blue-700"}
                       method={() => {
-                        handleDeleteAccount(index);
+                        handleDeleteAccount(item.platformId);
                       }}
                       tailwind={
                         "text-blue-700 border-[1px] font-[500] border-blue-500 hover:text-white transition"
@@ -263,13 +328,13 @@ function SocialAccount() {
           <div className="flex flex-col gap-[20px]">
             <Selection
               title={"Select platform"}
-              options={platforms}
-              value={selectPlatformm}
+              options={platformList}
+              value={selectPlatform}
               isEdit={isAdd}
               onChange={(e) => handleOnChangePlatform(e)}
             />
             <Input
-              title={`${selectPlatformm} profile link`}
+              title={`${selectedPlatformName} profile link`}
               value={linkState}
               onChange={(e) => handleOnChangeInputLink(e)}
               isValidDataType={true}

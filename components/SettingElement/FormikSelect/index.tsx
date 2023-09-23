@@ -1,13 +1,18 @@
 import { useField } from "formik";
 import React from "react";
 
+type TOptionsList = {
+  id: string;
+  value: string;
+};
+
 type TPros = {
   label: string;
   id: string;
   name: string;
   isEdit: boolean;
   title: string;
-  options: string[];
+  options: TOptionsList[];
 };
 
 function FormikSelect({
@@ -23,8 +28,8 @@ function FormikSelect({
     const options_list = [];
     for (let option of options) {
       options_list.push(
-        <option value={option} key={option}>
-          {option}
+        <option value={option.id} key={option.id}>
+          {option.value}
         </option>
       );
     }

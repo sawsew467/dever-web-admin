@@ -36,7 +36,7 @@ function MemberSetting({ params }: pageProps) {
           </h3>
         </div>
         <div className="flex flex-col lg:flex-row gap-[16px]">
-          <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
+          {/* <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
             <AvatarChanging />
             <ContactInfomation />
             <SocialAccount/>
@@ -48,7 +48,7 @@ function MemberSetting({ params }: pageProps) {
             <AboutUser />
             <GeneralInformation />
             <Projects/>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

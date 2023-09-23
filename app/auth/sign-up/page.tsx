@@ -25,7 +25,7 @@ function SignUp() {
       await registerAccount(values);
 
       toast.success("Register success ! Check your email to validated");
-      setTimeout(() => {  router.push('/sign-in');
+      setTimeout(() => {  router.push('/auth/sign-in');
       }, 500);
     } catch (error: unknown) {
       if (error instanceof ValidationError) {

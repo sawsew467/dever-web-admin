@@ -369,11 +369,24 @@ export default function TableCellResizerPlugin(): null | ReactPortal {
   const [editor] = useLexicalComposerContext();
   const isEditable = useLexicalEditable();
 
-  return useMemo(
-    () =>
-      isEditable
-        ? createPortal(<TableCellResizer editor={editor} />, document.body)
-        : null,
-    [editor, isEditable],
-  );
+  if (typeof window !== 'undefined' && isEditable) {
+    // Create the portal when on the client side and isEditable is true
+    const portalElement = document.createElement('div');
+    document.body.appendChild(portalElement);
+
+    const cleanup = () => {
+      // Cleanup: Remove the portal element from the document body when unmounting
+      document.body.removeChild(portalElement);
+    };
+
+    // Render the TableCellResizer inside the portal
+    const portal = createPortal(
+      <TableCellResizer editor={editor} />,
+      portalElement
+    );
+
+    return portal;
+  }
+
+  return null;
 }
