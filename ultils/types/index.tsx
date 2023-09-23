@@ -41,7 +41,7 @@ export type userInfo = {
   memberHobbies: [];
   memberSkills: [];
   memberSoicalLinks: string[];
-  memberWorkHistories: string[];
+  workHistory: string;
   phoneNumber: string;
   positionName: string;
 };

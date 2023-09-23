@@ -290,7 +290,9 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {/* {userData.workHistory} */}
+                        {userData?.workHistory == ""
+                            ? "Not set yet"
+                            : userData?.workHistory}
                         </span>
                       </div>
                     </div>
@@ -302,6 +304,7 @@ function Profile() {
                   <h3 className="font-[700] text-[24px] ">My projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
+                  <h3>Haven&apos;t no implement yet!</h3>
                   {/* {userData?.project.map((item, index) => {
                 return (
                   <ProjectCard

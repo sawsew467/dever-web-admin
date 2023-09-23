@@ -17,6 +17,7 @@ import { getMemberInfo } from "@/apis/profile";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
 import { formatDateToMMDDYYYY } from "@/ultils/dateFormat";
+import { userInfo } from "@/ultils/types";
 
 type pageProps = {
   params: { profileID: string };
@@ -26,26 +27,6 @@ type objectItemOne = {
   value: string;
 };
 
-type userInfo = {
-  aboutMe: string;
-  avatarUrl: string;
-  birthday: string;
-  career: string;
-  departmentName: string;
-  educationPlaceName: string;
-  email: string;
-  fullName: string;
-  homeAddress: string;
-  id: string;
-  joinDate: string;
-  majorName: string;
-  memberHobbies: objectItemOne[];
-  memberSkills: objectItemOne[];
-  memberSoicalLinks: string[];
-  memberWorkHistories: string[];
-  phoneNumber: string;
-  positionName: string;
-};
 
 function Profile({ params }: pageProps) {
   const isOpenSlidebar = useSelector(
@@ -209,7 +190,7 @@ function Profile({ params }: pageProps) {
                       key={index}
                       className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
                     >
-                      {item?.value}
+                      {item}
                     </p>
                   ))}
                 </div>
@@ -224,7 +205,7 @@ function Profile({ params }: pageProps) {
                       key={index}
                       className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
                     >
-                      {item.value}
+                      {item}
                     </p>
                   ))}
                 </div>
@@ -319,7 +300,9 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {/* {userData.workHistory} */}
+                        {userData?.workHistory == ""
+                            ? "Not set yet"
+                            : userData?.workHistory}
                         </span>
                       </div>
                     </div>
@@ -328,9 +311,11 @@ function Profile({ params }: pageProps) {
               </div>
               <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
-                  <h3 className="font-[700] text-[24px] ">My projects</h3>
+                  <h3 className="font-[700] text-[24px] ">Projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
+                <h3>Haven&apos;t no implement yet!</h3>
+
                   {/* {userData?.project.map((item, index) => {
               return (
                 <ProjectCard
