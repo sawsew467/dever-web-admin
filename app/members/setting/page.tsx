@@ -37,7 +37,6 @@ function SettingList() {
   const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
 
   const [userData, setUserData] = useState<userInfo>();
-    console.log(userData);
     
   const handleGetUserProfile = async () => {
     try {
@@ -47,6 +46,7 @@ function SettingList() {
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
           const data = response.data;
+          console.log(data);
           setUserData(data);
           setIsFetchData(false);
         }

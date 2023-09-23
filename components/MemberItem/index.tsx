@@ -26,7 +26,7 @@ import { RootState } from "@/redux/store";
 
 interface memberPros {
   id: string;
-  fullname: string;
+  fullName: string;
   avatarUrl: string;
   email: string;
   position: string;
@@ -43,7 +43,7 @@ interface IPros {
   refreshApi: () => void;
 }
 
-function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
+function MemberItem({ value, selecteFunct, refreshApi }: IPros) {  
   const handleCheckboxChange = () => {
     selecteFunct(value.id);
   };
@@ -115,7 +115,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         toast.error("Deleting failed!");
       }
     }
-  };
+  };  
 
   return (
     <div className="flex justify-between border-b-2 h-[78px]">
@@ -144,7 +144,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         </div>
         <div className="flex flex-col w-[276px] pt-[16px] px-[16px] text-[12px]">
           <h3 className="text-[16px] font-[600]">
-            {value.fullname == null ? value.email : value.fullname}
+            {value.fullName == '' ? value.email : value.fullName}
           </h3>
           <p className="text-[14px]">{value.email}</p>
         </div>

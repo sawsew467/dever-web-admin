@@ -53,7 +53,7 @@ function MemberList({ params }: pageProps) {
   const [countListPage, setCountListPage] = useState(0);
   const pages: { param: string; startIndex: number; endIndex: number }[] = [];
   const [isFetchData, setIsFetchData] = useState(true);
-
+  console.log(members);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [openDialogToDelete, setOpenDialogToDelete] = useState<boolean>(false);
@@ -405,7 +405,8 @@ function MemberList({ params }: pageProps) {
                 <LinearProgress />
               </div>
             </>
-          ) : (
+          ) : members.length === 0 ? null : 
+          (
             <div id="tableBody">
               {members.map((value, index) => (
                 <MemberItem

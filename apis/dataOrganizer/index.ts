@@ -103,6 +103,11 @@ export const getAllDepartment = (access_token: string | null) => {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };
+export const getDepartment = (access_token: string | null, departmentId:string) => {
+  return axiosClient.get(`${END_POINT.DEPARTMENT}/${departmentId}`, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
 
 export const postDepartment = (
   access_token: string | null,
@@ -152,6 +157,38 @@ export const patchPosition = (
 
 export const deletePosition = (access_token: string | null, itemId: string) => {
   return axiosClient.delete(`${END_POINT.POSITION}/${itemId}`, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+//Education
+export const getAllEducation = (access_token: string | null) => {
+  return axiosClient.get(`${END_POINT.EDUCATION}`, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+
+export const postEducation = (
+  access_token: string | null,
+  value: postValue
+) => {
+  return axiosClient.post(`${END_POINT.EDUCATION}`, value, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+export const patchEducation = (
+  access_token: string | null,
+  value: patchValue
+) => {
+  return axiosClient.patch(`${END_POINT.EDUCATION}`, value, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+
+export const deleteEducation = (
+  access_token: string | null,
+  itemId: string
+) => {
+  return axiosClient.delete(`${END_POINT.EDUCATION}/${itemId}`, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };

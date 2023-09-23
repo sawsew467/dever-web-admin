@@ -12,7 +12,7 @@ export type memberType = {
 
 export type memberPros = {
   id: string;
-  fullname: string;
+  fullName: string;
   avatarUrl: string;
   email: string;
   position: string;
