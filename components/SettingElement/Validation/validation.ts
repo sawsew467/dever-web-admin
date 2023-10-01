@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const passwordRule = /^(?=.*[a-z])(?=.*[!@#?])[A-Za-z!@#?0-9]{8,100}$/;
+const passwordRule = /^(?=.*[a-z])(?=.*[.!@#?])[A-Za-z!@#?0-9]{8,100}$/;
 const phoneRule = /^(?:\+84|0)(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\s?\d{2,3}\s?\d{2,3}\s?\d{3}$/;
 
 //API return account's password

@@ -31,14 +31,14 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <Provider store={store}>
           <AuthProvider>
-             <Helmet>
-            <title>Fu-Dever Space</title>
-            <meta name="description" content="FU-Dever Admin" />
-          </Helmet>
-          {!isSpecial && <Header />}
-          {!isSpecial && <Sidebar />}
-          {children}
-          <ToastNotificationComp />
+            <Helmet>
+              <title>Fu-Dever Space</title>
+              <meta name="description" content="FU-Dever Admin" />
+            </Helmet>
+            {!isSpecial && <Header />}
+            {!isSpecial && <Sidebar />}
+            {children}
+            <ToastNotificationComp />
           </AuthProvider>
         </Provider>
       </body>

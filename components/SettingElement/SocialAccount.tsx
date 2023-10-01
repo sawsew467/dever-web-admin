@@ -190,7 +190,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
         const platFormFilted = data.filter(
           (item: { id: string; value: string }) => item.value !== "default"
         );
-        setPlatformList(platFormFilted);
+        setPlatformList(platFormFilted); 
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

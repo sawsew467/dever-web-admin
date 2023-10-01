@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BrowseFile from "@/components/BrowseImage";
 import EditorLarge from "@/components/EditorLarge";
 import BlogTag from "@/components/BlogTag";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { dropdownBlogs, openCreateBlog } from "@/redux/slices/sideBarControl";
 
 function CreateBlog() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
@@ -12,6 +13,12 @@ function CreateBlog() {
   const [importedImage, setImportedImage] = useState<File | null>(null);
   const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownBlogs(true));
+    dispatch(openCreateBlog(true));
+  }, [dispatch]);
 
   return (
     <div

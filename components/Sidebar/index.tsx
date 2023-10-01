@@ -9,120 +9,68 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { changeIsMouseVisit } from "@/redux/slices/app";
+import {
+  openBlogList,
+  openBlogPending,
+  openCreateBlog,
+  openCreateNotification,
+  openMemberList,
+  openMemberProfile,
+  openMemberSetting,
+  openViewNotification,
+  openYourBlog,
+  toggleDropdownBlogs,
+  toggleDropdownMembers,
+  toggleDropdownNotifications,
+} from "@/redux/slices/sideBarControl";
 
 function Slidebar() {
-  const [isDropdownNotifications, setIsDropdownNotifications] =
-    useState<boolean>(false);
-  const [isDropdownMembers, setIsDropdownMembers] = useState<boolean>(false);
-  const [isDropdownBlogs, setIsDropdownBlogs] = useState<boolean>(false);
-
-  const [isViewNotification, setIsViewNotifiCation] = useState<boolean>(false);
-  const [isCreateNotification, setIsCreateNotification] =
-    useState<boolean>(false);
-
-  const [isMemberList, setIsMemberList] = useState<boolean>(false);
-  const [isProfile, setIsProfile] = useState<boolean>(false);
-  const [isSetting, setIsSetting] = useState<boolean>(false);
-
-  const [isBlogList, setIsBlogList] = useState<boolean>(false);
-  const [isYourBlog, setIsYourBlog] = useState<boolean>(false);
-  const [isCreateBlog, setIsCreateBlog] = useState<boolean>(false);
-
-  const handleDropdownNotifications = () => {
-    setIsDropdownNotifications(!isDropdownNotifications);
-  };
-  const handleDropdownMembers = () => {
-    setIsDropdownMembers(!isDropdownMembers);
-  };
-  const handleDropdownBlogs = () => {
-    setIsDropdownBlogs(!isDropdownBlogs);
-  };
-
-  const handleViewNotification = () => {
-    setIsViewNotifiCation(true);
-    setIsCreateNotification(false);
-    setIsMemberList(false);
-    setIsProfile(false);
-    setIsSetting(false);
-    setIsBlogList(false);
-    setIsYourBlog(false);
-    setIsCreateBlog(false);
-  };
-  const handleCreateNotification = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(true);
-    setIsMemberList(false);
-    setIsProfile(false);
-    setIsSetting(false);
-    setIsBlogList(false);
-    setIsYourBlog(false);
-    setIsCreateBlog(false);
-  };
-  const handleMemberList = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(false);
-    setIsMemberList(true);
-    setIsProfile(false);
-    setIsSetting(false);
-    setIsBlogList(false);
-    setIsYourBlog(false);
-    setIsCreateBlog(false);
-  };
-  const handleProfile = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(false);
-    setIsMemberList(false);
-    setIsProfile(true);
-    setIsSetting(false);
-    setIsBlogList(false);
-    setIsYourBlog(false);
-    setIsCreateBlog(false);
-  };
-  const handleSetting = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(false);
-    setIsMemberList(false);
-    setIsProfile(false);
-    setIsSetting(true);
-    setIsBlogList(false);
-    setIsYourBlog(false);
-    setIsCreateBlog(false);
-  };
-  const handleBlogList = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(false);
-    setIsMemberList(false);
-    setIsProfile(false);
-    setIsSetting(false);
-    setIsBlogList(true);
-    setIsYourBlog(false);
-    setIsCreateBlog(false);
-  };
-  const handleYourBlog = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(false);
-    setIsMemberList(false);
-    setIsProfile(false);
-    setIsSetting(false);
-    setIsBlogList(false);
-    setIsYourBlog(true);
-    setIsCreateBlog(false);
-  };
-  const handleCreateBlog = () => {
-    setIsViewNotifiCation(false);
-    setIsCreateNotification(false);
-    setIsMemberList(false);
-    setIsProfile(false);
-    setIsSetting(false);
-    setIsBlogList(false);
-    setIsYourBlog(false);
-    setIsCreateBlog(true);
-  };
-
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const isMouseVisit = useSelector(
+    (state: RootState) => state.app.isMouseVisit
+  );
+  const isDropdownNotifications = useSelector(
+    (state: RootState) =>
+      state.sidebarControl.sidebarDropDown.isDropdownNotifications
+  );
+  const isDropdownMembers = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarDropDown.isDropdownMembers
+  );
+  const isDropdownBlogs = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarDropDown.isDropdownBlogs
+  );
+  const isViewNotification = useSelector(
+    (state: RootState) =>
+      state.sidebarControl.sidebarNavigation.isViewNotification
+  );
+  const isCreateNotification = useSelector(
+    (state: RootState) =>
+      state.sidebarControl.sidebarNavigation.isCreateNotification
+  );
+  const isMemberList = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isMemberList
+  );
+  const isMemberProfile = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isMemberProfile
+  );
+  const isMemberSetting = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isMemberSetting
+  );
+  const isBlogsList = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isBlogList
+  );
+  const isYourBlog = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isYourBlog
+  );
+  const isBlogPending = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isBlogPending
+  );
+  const isCreateBlog = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isCreateBlog
+  );
   return (
     <>
       <aside
@@ -152,7 +100,7 @@ function Slidebar() {
             <li className="pt-[16px]">
               <button
                 type="button"
-                onClick={handleDropdownNotifications}
+                onClick={() => dispatch(toggleDropdownNotifications())}
                 className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 rounded-[8px]`}
               >
                 <div className="flex items-center">
@@ -201,7 +149,7 @@ function Slidebar() {
                   className={` hover:bg-gray-100 rounded-md ${
                     isViewNotification ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleViewNotification}
+                  onClick={() => dispatch(openViewNotification(true))}
                 >
                   <Link
                     href="/notifications/views/1"
@@ -239,7 +187,7 @@ function Slidebar() {
                   className={`mt-[6px] hover:bg-gray-100 rounded-md ${
                     isCreateNotification ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleCreateNotification}
+                  onClick={() => dispatch(openCreateNotification(true))}
                 >
                   <Link
                     href="/notifications/create"
@@ -278,7 +226,7 @@ function Slidebar() {
             <li className="pt-[16px]">
               <button
                 type="button"
-                onClick={handleDropdownMembers}
+                onClick={() => dispatch(toggleDropdownMembers())}
                 className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 rounded-[8px]`}
               >
                 <div className="flex items-center">
@@ -327,7 +275,7 @@ function Slidebar() {
                   className={`hover:bg-gray-100 rounded-md ${
                     isMemberList ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleMemberList}
+                  onClick={() => dispatch(openMemberList(true))}
                 >
                   <Link
                     href="/members/list/1"
@@ -363,9 +311,9 @@ function Slidebar() {
                 </li>
                 <li
                   className={`mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isProfile ? "bg-gray-100" : ""
+                    isMemberProfile ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleProfile}
+                  onClick={() => dispatch(openMemberProfile(true))}
                 >
                   <Link
                     href="/members/profile/"
@@ -401,9 +349,9 @@ function Slidebar() {
                 </li>
                 <li
                   className={` mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isSetting ? "bg-gray-100" : ""
+                    isMemberSetting ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleSetting}
+                  onClick={() => dispatch(openMemberSetting(true))}
                 >
                   <Link
                     href="/members/setting/"
@@ -442,7 +390,7 @@ function Slidebar() {
             <li className="pt-[16px]">
               <button
                 type="button"
-                onClick={handleDropdownBlogs}
+                onClick={() => dispatch(toggleDropdownBlogs())}
                 //  className='flex pt-[16px] px-[8px] w-[255px] text-gray-900 items-center justify-between'
                 className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center justify-between hover:bg-gray-100 rounded-[8px] transition`}
               >
@@ -490,12 +438,12 @@ function Slidebar() {
               >
                 <li
                   className={` hover:bg-gray-100 rounded-md ${
-                    isBlogList ? "bg-gray-100" : ""
+                    isBlogsList ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleBlogList}
+                  onClick={() => dispatch(openBlogList(true))}
                 >
                   <Link
-                    href="/blogs/list"
+                    href="/blogs/views/1"
                     className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
@@ -510,45 +458,7 @@ function Slidebar() {
                       }}
                       className="whitespace-nowrap"
                     >
-                      View Blogs
-                    </span>
-                    <span
-                      className="px-[14px]"
-                      style={{
-                        display: isOpenSlidebar
-                          ? isMouseVisit
-                            ? "none"
-                            : ""
-                          : "none",
-                      }}
-                    >
-                      V
-                    </span>
-                  </Link>
-                </li>
-                <li
-                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isYourBlog ? "bg-gray-100" : ""
-                  }`}
-                  onClick={handleYourBlog}
-                >
-                  <Link
-                    href="/blogs/detail/"
-                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
-                      isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
-                    } group `}
-                  >
-                    <span
-                      style={{
-                        display: isOpenSlidebar
-                          ? isMouseVisit
-                            ? ""
-                            : "none"
-                          : "",
-                      }}
-                      className="whitespace-nowrap"
-                    >
-                      Blog list
+                      Blogs list
                     </span>
                     <span
                       className="px-[14px]"
@@ -565,10 +475,86 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
+                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
+                    isYourBlog ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => dispatch(openYourBlog(true))}
+                >
+                  <Link
+                    href="/blogs/your_blogs/1"
+                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                      isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
+                    } group `}
+                  >
+                    <span
+                      style={{
+                        display: isOpenSlidebar
+                          ? isMouseVisit
+                            ? ""
+                            : "none"
+                          : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >
+                      Your blogs
+                    </span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar
+                          ? isMouseVisit
+                            ? "none"
+                            : ""
+                          : "none",
+                      }}
+                    >
+                      Y
+                    </span>
+                  </Link>
+                </li>
+                <li
+                  className={` mt-[6px] hover:bg-gray-100 rounded-md ${
+                    isBlogPending ? "bg-gray-100" : ""
+                  }`}
+                  onClick={() => dispatch(openBlogPending(true))}
+                >
+                  <Link
+                    href="/blogs/blogs_pending/1"
+                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                      isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
+                    } group`}
+                  >
+                    <span
+                      style={{
+                        display: isOpenSlidebar
+                          ? isMouseVisit
+                            ? ""
+                            : "none"
+                          : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >
+                      Pending Blog
+                    </span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar
+                          ? isMouseVisit
+                            ? "none"
+                            : ""
+                          : "none",
+                      }}
+                    >
+                      P
+                    </span>
+                  </Link>
+                </li>
+                <li
                   className={` mt-[6px] hover:bg-gray-100 rounded-md ${
                     isCreateBlog ? "bg-gray-100" : ""
                   }`}
-                  onClick={handleCreateBlog}
+                  onClick={() => dispatch(openCreateBlog(true))}
                 >
                   <Link
                     href="/blogs/create"

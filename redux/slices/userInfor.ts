@@ -25,23 +25,29 @@ export const counterSlice = createSlice({
   name: "userInfor",
   initialState,
   reducers: {
-    login: (state, action) => {
+    login: (state, action) => {      
       state.currentUser = action.payload.user;
-      setCookie("accessToken", action.payload.token.accessToken, {
-        maxAge: 3600,
-      });
       if (!action.payload.user.remember) {
-        setCookie("refreshToken", action.payload.token.refreshToken, {
-          maxAge: 7200,
+        setCookie("accessToken", action.payload.token.accessToken, {
+          maxAge: 86400,
         });
+        setCookie("refreshToken", action.payload.token.refreshToken, {
+          maxAge: 86400,
+        });
+        setCookie("userId", action.payload.user.sub, {
+          maxAge:86400,
+        })
       } else {
-        setCookie("refreshToken", action.payload.token.refreshToken, {
-          maxAge: 302400,
+        setCookie("accessToken", action.payload.token.accessToken, {
+          maxAge: 604800,
         });
+        setCookie("refreshToken", action.payload.token.refreshToken, {
+          maxAge: 604800,
+        });
+        setCookie("userId", action.payload.user.sub, {
+          maxAge:604800,
+        })
       }
-      setCookie("userId", action.payload.user.sub, {
-        maxAge:3600,
-      })
     },
     logout: (state) => {
       state.currentUser = initialState.currentUser;

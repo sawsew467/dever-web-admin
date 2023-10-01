@@ -10,152 +10,92 @@ import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { dropdownNotifications, openViewNotification } from "@/redux/slices/sideBarControl";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import UnlinkButton from "@/components/UnlinkButton";
+import { dropdownBlogs, openYourBlog } from "@/redux/slices/sideBarControl";
 
-interface pageProps {
-  params: { viewID: string };
-}
-function View({ params }: pageProps) {
+type pageProps = {
+  params: { yourBlogsPageId: string };
+};
+
+function YourBlog({ params }: pageProps) {
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
   const isMouseVisit = useSelector(
     (state: RootState) => state.app.isMouseVisit
   );
-
-  const notificationList = [
+  const blogsList = [
     {
       id: 0,
       img: thumbnail,
       title: "Noteworthy technology acquisitions 2021",
-      second_title:
+      cutContent:
         "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
+      createAt: "August 7th 2023, 6:25:59 am",
+      authorName: "Tran Van Bao Thang",
+      status: "Pending"
     },
     {
       id: 1,
       img: thumbnail,
       title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
+      cutContent:
+        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      createAt: "August 7th 2023, 6:25:59 am",
+      authorName: "Tran Van Bao Thang",
+      status: "Active",
     },
     {
       id: 2,
       img: thumbnail,
       title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
+      cutContent:
+        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      createAt: "August 7th 2023, 6:25:59 am",
+      authorName: "Tran Van Bao Thang",
+      status: "Pending",
     },
     {
       id: 3,
       img: thumbnail,
       title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
+      cutContent:
+        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      createAt: "August 7th 2023, 6:25:59 am",
+      authorName: "Tran Van Bao Thang",
+      status: "Active",
     },
     {
       id: 4,
       img: thumbnail,
       title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
+      cutContent:
+        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      createAt: "August 7th 2023, 6:25:59 am",
+      authorName: "Tran Van Bao Thang",
+      status: "Reject",
     },
     {
       id: 5,
       img: thumbnail,
       title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 7,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 8,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 9,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 10,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 11,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 12,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 13,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
-    },
-    {
-      id: 14,
-      img: thumbnail,
-      title: "Noteworthy technology acquisitions 2021",
-      second_title:
-        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
-      time: "August 7th 2023, 6:25:59 am",
+      cutContent:
+        "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.",
+      createAt: "August 7th 2023, 6:25:59 am",
+      authorName: "Tran Van Bao Thang",
+      status: "Expired",
     },
   ];
-
-  const increaseIndex = 5;
-  const [notifications, setNotitications] = useState(
-    notificationList.slice(0, increaseIndex + 1)
-  );
-  const [countNotificationPage, setCountNotificationPage] = useState(
-    Math.ceil(notificationList.length / increaseIndex)
-  );
-  const pages: { param: string; startIndex: number; endIndex: number }[] = [];
-
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(dropdownNotifications(true));
-    dispatch(openViewNotification(true));
+    dispatch(dropdownBlogs(true));
+    dispatch(openYourBlog(true));
   }, [dispatch]);
 
   return (
     <div
-      className={`w-[100%] text-black ${
+      className={`w-[100%] ${
         isOpenSlidebar
           ? isMouseVisit
             ? "sm:w-[calc(100%-250px)]"
@@ -165,9 +105,7 @@ function View({ params }: pageProps) {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px] select-none">
         <div>
-          <h1 className="font-bold text-[24px] select-none">
-            All notifications
-          </h1>
+          <h1 className="font-bold text-[24px] select-none">Your blogs</h1>
         </div>
 
         <div className="flex justify-between">
@@ -199,19 +137,19 @@ function View({ params }: pageProps) {
           </div>
           <div className="flex gap-[12px]">
             <Button
-              textContent={"Create notification"}
+              textContent={"Create blog"}
               icon={"edit"}
               iconPosition={"left"}
               backgroundColor={"bg-green-700"}
-              href={"/notifications/create"}
+              href={"/blogs/create"}
               method={() => {}}
               tailwind={"text-white"}
             ></Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px]">
-          {notifications.map((item, index) => (
+        <div className="grid grid-cols-3 gap-x-[20px] gap-y-[20px]">
+          {blogsList.map((item, index) => (
             <div
               key={index}
               className="rounded-[16px] overflow-hidden shadow-primary"
@@ -227,29 +165,41 @@ function View({ params }: pageProps) {
                 <div className="flex flex-col gap-[8px]">
                   <h3 className="font-[700] text-[24px]">{item.title}</h3>
                   <p className="font-[400] text-[16px] h-[48px] overflow-hidden">
-                    {item.second_title}
+                    {item.cutContent}
                   </p>
                   <p className="flex gap-[8px]">
                     <Image src={clockIcon} alt="clockIcon"></Image>
-                    {item.time}
+                    {item.createAt}
+                  </p>
+                  <p className="flex gap-[8px]">
+                    <IoPersonCircleSharp className="text-[24px] text-[#1f2a37]" />
+                    You
                   </p>
                 </div>
-                <div>
+                <div className="flex justify-between">
                   <Button
-                    textContent={"Read more"}
+                    textContent={"Preview"}
                     icon={"arrowRight"}
                     iconPosition={"right"}
                     backgroundColor={"bg-blue-700"}
-                    href={`/notifications/views/${params.viewID}/detail/${item.id}`}
+                    href={`/blogs/views/detail/${item.id}`}
                     method={() => {}}
                     tailwind={"text-white"}
                   ></Button>
+                  <UnlinkButton
+                    textContent={`${item.status}`}
+                    icon={""}
+                    iconPosition={"left"}
+                    backgroundColor={`${item.status === "Active" ? "bg-primaryGreenBland" : item.status === "Pending" ? "bg-primaryYellowBland" : "bg-primaryRedBland"}`}
+                    method={() => {}}
+                    tailwind={`${item.status === "Active" ? "text-primaryGreen" : item.status === "Pending" ? "text-primaryYellow" : "text-primaryRed"} font-[500]`}
+                  />
                 </div>
               </div>
             </div>
           ))}
         </div>
-{/* 
+        {/* 
         <Pagination
           paramID={params.viewID}
           route={"/notifications/views/"}
@@ -263,4 +213,4 @@ function View({ params }: pageProps) {
   );
 }
 
-export default View;
+export default YourBlog;

@@ -10,7 +10,7 @@ import facebookIcon from "@icon/page/member/profile/facebook.svg";
 import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
 import ProjectCard from "@/components/ProjectCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { getCookie } from "cookies-next";
 import { getMemberInfo } from "@/apis/profile";
@@ -18,6 +18,7 @@ import axios from "axios";
 import { LinearProgress } from "@mui/material";
 import { formatDateToMMDDYYYY } from "@/ultils/dateFormat";
 import { userInfo } from "@/ultils/types";
+import { dropdownMembers, openMemberProfile } from "@/redux/slices/sideBarControl";
 
 type pageProps = {
   params: { profileID: string };
@@ -64,6 +65,11 @@ function Profile({ params }: pageProps) {
     handleGetUserProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownMembers(true));
+    dispatch(openMemberProfile(true));
+  }, [dispatch]);
 
   return (
     <div

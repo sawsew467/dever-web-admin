@@ -38,7 +38,7 @@ function SignIn() {
   }
   const router = useRouter();
   const onSubmit = async (values: UserLogin, actions: any) => {
-  
+    
     try {
       values.remember = remember;
       const loginResponse = await loginAccount(values);
@@ -50,9 +50,9 @@ function SignIn() {
         email: decoded!.email,
         sub: decoded!.sub,
         UserRole: decoded!.UserRole,
-        remember: decoded!['remember-me']
+        remember: values.remember
       };
-     
+           
       dispatch(
         login({
           token,

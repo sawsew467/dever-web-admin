@@ -9,7 +9,7 @@ import trashIcon from "@icon/page/member/list/trash.svg";
 import MemberItem from "@/components/MemberItem/";
 import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import axios from "axios";
 import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
@@ -29,6 +29,7 @@ import { getCookie } from "cookies-next";
 import { store } from "@/redux/store";
 import { approveUser} from "@/apis/appUser";
 import { memberPros, memberType } from "@/ultils/types";
+import { dropdownMembers, openMemberList } from "@/redux/slices/sideBarControl";
 
 type pageProps = {
   params: { listID: string };
@@ -199,6 +200,12 @@ function MemberList({ params }: pageProps) {
       }
     })
   }    
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownMembers(true));
+    dispatch(openMemberList(true));
+  }, [dispatch]);
   return (
     <div
       className={`w-[100%] ${

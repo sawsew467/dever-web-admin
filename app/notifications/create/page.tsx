@@ -1,18 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import BrowseFile from "@/components/BrowseImage";
 import EditorLarge from "@/components/EditorLarge";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { dropdownNotifications, openCreateNotification } from "@/redux/slices/sideBarControl";
 function CreateNotification() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
   const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
   const [importedImage, setImportedImage] = useState<File | null>(null);
   const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");
-  console.log(imageURL);
   
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownNotifications(true));
+    dispatch(openCreateNotification(true));
+  }, [dispatch]);
 
   return (
     <div

@@ -7,15 +7,20 @@ import clockIcon from "@icon/page/notification/list/clock.svg";
 import Button from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { dropdownNotifications, openViewNotification } from "@/redux/slices/sideBarControl";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { dropdownBlogs, openBlogList } from "@/redux/slices/sideBarControl";
 
 interface pageProps {
-  params: { notifyID: string };
+  params: { blogDetailId: string };
 }
 
-function DetailNotification({ params }: pageProps) {
-  const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
-  const isMouseVisit = useSelector((state: RootState) => state.app.isMouseVisit);
+function DetailBlog({ params }: pageProps) {
+  const isOpenSlidebar = useSelector(
+    (state: RootState) => state.app.isOpenSlidebar
+  );
+  const isMouseVisit = useSelector(
+    (state: RootState) => state.app.isMouseVisit
+  );
   const data = {
     id: 0,
     title: "Noteworthy technology acquisitions 2021",
@@ -29,11 +34,6 @@ function DetailNotification({ params }: pageProps) {
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
   };
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(dropdownNotifications(true));
-    dispatch(openViewNotification(true));
-  }, [dispatch])
   return (
     <div
       className={`w-[100%] ${
@@ -47,24 +47,15 @@ function DetailNotification({ params }: pageProps) {
       <div className="py-[20px] px-[16px] flex flex-col gap-[30px]">
         <div className="flex justify-between">
           <div>
-            <h1 className="font-[700] text-[24px]">Notifications Details</h1>
+            <h1 className="font-[700] text-[24px]">Blog details</h1>
           </div>
           <div className="flex flex-row gap-[20px]">
             <Button
-              textContent={"Create notification"}
+              textContent={"Create blog"}
               icon={"edit"}
               iconPosition={"left"}
               backgroundColor={"bg-green-700"}
               href={"/notifications/create"}
-              method={() => {}}
-              tailwind={"text-white"}
-            ></Button>
-            <Button
-              textContent={"Notification"}
-              icon={"arrowLeft"}
-              iconPosition={"left"}
-              backgroundColor={"bg-blue-700"}
-              href={"/notifications/views/1"}
               method={() => {}}
               tailwind={"text-white"}
             ></Button>
@@ -78,6 +69,10 @@ function DetailNotification({ params }: pageProps) {
             <p className="flex gap-[8px]">
               <Image src={clockIcon} alt="clockIcon"></Image>
               {data.time}
+            </p>
+            <p className="flex gap-[8px]">
+              <IoPersonCircleSharp className="text-[24px] text-[#1f2a37]" />
+              Tran Van Bao Thang
             </p>
           </div>
           <div className="h-[480px] overflow-hidden rounded-[10px]">
@@ -94,4 +89,5 @@ function DetailNotification({ params }: pageProps) {
   );
 }
 
-export default DetailNotification;
+export default DetailBlog;
+

@@ -9,7 +9,7 @@ import Skills from "@/components/SettingElement/Skills";
 import Hobbies from "@/components/SettingElement/Hobbies";
 import ChangePassword from "@/components/SettingElement/ChangePassword";
 import Projects from "@/components/SettingElement/Projects";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { userInfo } from "@/ultils/types";
 import { getCookie } from "cookies-next";
@@ -17,6 +17,7 @@ import { getMemberInfo } from "@/apis/profile";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
 import { getAllAccountsByUserId } from "@/apis/setting";
+import { dropdownMembers, openMemberSetting,  } from "@/redux/slices/sideBarControl";
 
 type TSocialData = {
   id: string;
@@ -79,6 +80,11 @@ function SettingList() {
     handleGetAllSocialAccounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownMembers(true));
+    dispatch(openMemberSetting(true));
+  }, [dispatch]);
 
   return (
     <div
