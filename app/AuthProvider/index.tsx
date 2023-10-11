@@ -5,11 +5,9 @@ import jwtDecode from 'jwt-decode';
 import { refreshUserInfoFromStorage } from '@/redux/slices/userInfor';
 
 type EncodeType = {
-    email : string;
-    sub : string;
-    UserRole : string;
-    "remember-me" : boolean
-  }
+    sub:string,
+    role: string,
+};
 
 function AppProvider({children}:{children:React.ReactNode}) {
     const dispatch = useDispatch();
@@ -20,13 +18,15 @@ function AppProvider({children}:{children:React.ReactNode}) {
 
         if(access_token && refresh_token) {
             const decoded:EncodeType = jwtDecode(access_token);
-            const user = {
-                email: decoded!.email,
-                sub: decoded!.sub,
-                UserRole: decoded!.UserRole,
-                remember: decoded!['remember-me']
-            };
-            return user;
+            const currentUser = {
+                id: decoded!.sub,
+                email: '',
+                avatarUrl: '',
+                role: decoded!.role,
+                remember: null,
+            }
+
+            return currentUser;
         }
         return null;
     }    

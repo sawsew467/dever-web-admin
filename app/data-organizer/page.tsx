@@ -35,7 +35,7 @@ function SettingList() {
             Data Organizer
           </h3>
         </div>
-        {userInfo.UserRole !== "admin" ? (
+        {userInfo.role !== "admin" ? (
           <div className="font-[600] text-[20px]">
             You do not have permission to view information on this page...
           </div>

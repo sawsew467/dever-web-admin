@@ -44,9 +44,10 @@ function SettingList() {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const userId = getCookie("userId");
+
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
-          const data = response.data;
+          const data = response.data.body;
           console.log(data);
           setUserData(data);
           setIsFetchData(false);
@@ -66,7 +67,7 @@ function SettingList() {
       if (userId && access_token) {
         const response = await getAllAccountsByUserId(access_token, userId);
         const data = response.data;
-        setSocialMediaState(data);
+        setSocialMediaState(data.body);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

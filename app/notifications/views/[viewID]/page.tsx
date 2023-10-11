@@ -10,7 +10,10 @@ import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { dropdownNotifications, openViewNotification } from "@/redux/slices/sideBarControl";
+import {
+  dropdownNotifications,
+  openViewNotification,
+} from "@/redux/slices/sideBarControl";
 
 interface pageProps {
   params: { viewID: string };
@@ -186,7 +189,7 @@ function View({ params }: pageProps) {
               </select>
               <input
                 type="search"
-                className="w-[392px] border-y-2 border-r   border-l-none border-slate-200 select-none outline-none"
+                className="w-[392px] border-y-2 border-r border-l-none border-slate-200 select-none outline-none"
               />
               <div className="w-[42px] h-[38px] bg-primaryBlue flex items-cent    justify-center cursor-pointer">
                 <Image
@@ -249,7 +252,7 @@ function View({ params }: pageProps) {
             </div>
           ))}
         </div>
-{/* 
+        {/* 
         <Pagination
           paramID={params.viewID}
           route={"/notifications/views/"}

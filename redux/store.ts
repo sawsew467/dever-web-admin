@@ -9,8 +9,8 @@ export const store = configureStore({
     userInfor : userInfor,
     sidebarControl: sidebarControl
   },
-  middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware().concat(authMiddleware), 
+  // middleware: (getDefaultMiddleware) =>
+  // getDefaultMiddleware().concat(authMiddleware), 
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

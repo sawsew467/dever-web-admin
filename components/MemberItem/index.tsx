@@ -31,9 +31,7 @@ interface memberPros {
   email: string;
   position: string;
   department: string;
-  status: {
-    value: string;
-  };
+  status: string;
   isSelected: boolean;
 }
 
@@ -48,7 +46,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
     selecteFunct(value.id);
   };
   const userRole = useSelector(
-    (state: RootState) => state.userInfor.currentUser.UserRole
+    (state: RootState) => state.userInfor.currentUser.role
   );
   const [isClickPending, setIsClickPending] = useState<boolean>(false);
   const [isClickReject, setIsClickReject] = useState<boolean>(false);
@@ -144,7 +142,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         </div>
         <div className="flex flex-col w-[276px] pt-[16px] px-[16px] text-[12px]">
           <h3 className="text-[16px] font-[600]">
-            {value.fullName == '' ? value.email : value.fullName}
+            {value.fullName.trim() == '' ? value.email : value.fullName}
           </h3>
           <p className="text-[14px]">{value.email}</p>
         </div>
@@ -161,24 +159,24 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
           <p
             className={`py-[2px] px-[10px]  rounded-[6px] font-[500] 
                 ${
-                  value.status.value === "Approved"
+                  value.status === "Approved"
                     ? "bg-primaryGreenBland text-green-800"
-                    : value.status.value === "Pending"
+                    : value.status === "Pending"
                     ? "bg-primaryYellowBland text-primaryBrown cursor-pointer"
                     : "bg-primaryRedBland text-primaryRed"
                 }`}
             onClick={() => {
-              if (value.status.value === "Pending") {
+              if (value.status === "Pending") {
                 setIsClickPending(!isClickPending);
               }
-              if (value.status.value === "Rejected") {
+              if (value.status === "Rejected") {
                 setIsClickReject(!isClickReject);
               }
             }}
           >
-            {value.status.value === "Approved" ? "Active" : value.status.value}
+            {value.status === "Approved" ? "Active" : value.status}
           </p>
-          {value.status.value === "Pending" && isClickPending ? (
+          {value.status === "Pending" && isClickPending ? (
             <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white">
               <p
                 className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"
@@ -200,7 +198,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               </p>
             </div>
           ) : null}
-          {value.status.value === "Rejected" && isClickReject ? (
+          {value.status === "Rejected" && isClickReject ? (
             <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white">
               <p
                 className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"

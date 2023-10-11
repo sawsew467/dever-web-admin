@@ -7,7 +7,7 @@ export const END_POINT = {
   LOGIN: "/Auth/login",
   REGISTER: "/Auth/register",
   ME: "Auth/me",
-  TOKEN: "/Auth/refresh-token",
+  TOKEN: "/Auth/refresh-access-token",
   RESET : "/Auth/change-password"
 };
 
@@ -28,11 +28,17 @@ type Token = {
 };
 
 type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  responseStatus: boolean;
-  authErrors: [];
-  returnTime: string;
+  body: {
+    accessToken: string,
+    refreshToken: string,
+    userCredentials: {
+      email: string,
+      avatarUrl: string,
+    }
+  }
+  responeTime: string,
+  responeStatusCode: number,
+  errorMessage: string[],
 };
 
 type UserRegister = { 

@@ -23,13 +23,13 @@ type generalValueInfo = {
 };
 
 export const END_POINT = {
-  UPDATE_AVATAR: "/MemberInfo/avatar",
-  UPDATE_ABOUT: "/MemberInfo/about",
-  GENERAL_INFO: "/MemberInfo/general-info",
-  SOCIAL: "/social-link",
+  UPDATE_AVATAR: "/AppUser/avatar",
+  UPDATE_ABOUT: "/AppUser/aboutMe",
+  GENERAL_INFO: "/AppUser/general-info",
+  SOCIAL: "/AppUser/social-link",
   PLATFORM: "/Platform",
-  SKILLS: "/member-skill",
-  HOBBIES: "/member-hobby",
+  SKILLS: "/AppUser/skill",
+  HOBBIES: "/AppUser/hobby",
 };
 
 //update avatar

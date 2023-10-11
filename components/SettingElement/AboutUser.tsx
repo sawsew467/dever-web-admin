@@ -15,7 +15,7 @@ function AboutUser({about}:TPros): JSX.Element {
     <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
       <h3 className="font-[700] text-[24px] select-none ">About you</h3>
       {
-        htmlString.length == 0 ? <p className="italic">Haven&apos;t set bio yet!</p> : 
+        // htmlString.length == 0 ? <p className="italic">Haven&apos;t set bio yet!</p> : 
         <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
 
       }

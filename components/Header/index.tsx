@@ -22,6 +22,9 @@ function Header() {
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
+  const userInfo = useSelector((state: RootState) => state.userInfor.currentUser);
+  console.log(userInfo);
+  
   const [userData, setUserData] = useState<userInfo>();
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
 
@@ -49,7 +52,7 @@ function Header() {
         const userId = getCookie("userId");
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
-          const data = response.data;
+          const data = response.data.body;
           setUserData(data);
           setIsFetchData(false);
         }

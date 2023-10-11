@@ -17,9 +17,7 @@ export type memberPros = {
   email: string;
   position: string;
   department: string;
-  status: {
-    value: string;
-  };
+  status: string,
   isSelected: boolean;
 };
 export type objectItemOne = {

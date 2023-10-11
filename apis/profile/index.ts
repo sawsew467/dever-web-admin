@@ -1,23 +1,21 @@
 import axiosClient from '../../ultils/axiosClient/index';
 
 export const END_POINT = {
-        GET_ALL: "/MemberInfo",
-        GET: "/MemberInfo/",
-        DELETE: "/MemberInfo/",
+        APPUSER: "/AppUser",
 }
 
 export const getAllMemberInfo = (access_token:string | null) => {
-    return axiosClient.get(END_POINT.GET_ALL, {
+    return axiosClient.get(END_POINT.APPUSER, {
         headers: {Authorization: `Bearer ${access_token}`},
     });
 }
 export const getMemberInfo = (userId:string, access_token:string | null) => {
-    return axiosClient.get(`${END_POINT.GET}${userId}`, {
+    return axiosClient.get(`${END_POINT.APPUSER}/${userId}`, {
         headers: {Authorization: `Bearer ${access_token}`},
     })
 }
 export const deleteMemberInfo = (userId:string, access_token:string | null) => {
-    return axiosClient.delete(`${END_POINT.DELETE}${userId}`, {
+    return axiosClient.delete(`${END_POINT.APPUSER}/${userId}`, {
         headers: {Authorization: `Bearer ${access_token}`},
     })
 }

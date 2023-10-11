@@ -38,7 +38,7 @@ type pageProps = {
 
 function MemberList({ params }: pageProps) {
   const userRole = useSelector(
-    (state: RootState) => state.userInfor.currentUser.UserRole
+    (state: RootState) => state.userInfor.currentUser.role
   );
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
@@ -81,8 +81,10 @@ function MemberList({ params }: pageProps) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
-        const data = response.data;
-        const currentUserRole = store.getState().userInfor.currentUser.UserRole;        
+        const data = response.data.body;
+        const currentUserRole = store.getState().userInfor.currentUser.role;        
+        console.log(data);
+        
         
         const filteredData = data
           .map((value: memberType) => {
@@ -193,7 +195,7 @@ function MemberList({ params }: pageProps) {
   };
   const handleApproveSelectedMembers = () => {
     selectedMembers.forEach((item) => {
-      if(item.status.value !== "Approved") {
+      if(item.status !== "Approved") {
         handleApproveUser(item.id, item.email);
       } else {
         handleCloseApproveDialog();
@@ -289,9 +291,9 @@ function MemberList({ params }: pageProps) {
               <DialogContentText>
                 <p>Make sure you want to approve these users:</p>
                 {selectedMembers.map((item, index) => (
-                  <p key={index} className={`${item.status.value === "Pending" ? "text-yellow-400" : item.status.value === "Rejected" ? "text-red-700" : "text-green-500" }`}>
+                  <p key={index} className={`${item.status === "Pending" ? "text-yellow-400" : item.status === "Rejected" ? "text-red-700" : "text-green-500" }`}>
                     {item.email} 
-                    <span className={`ml-[10px] font-[500] ${item.status.value == "Approved" ? "text-green-700" : null}`}>{ item.status.value == "Approved" ? "Approved" : null }</span>
+                    <span className={`ml-[10px] font-[500] ${item.status == "Approved" ? "text-green-700" : null}`}>{ item.status == "Approved" ? "Approved" : null }</span>
                   </p>
                 ))}
               </DialogContentText>

@@ -181,14 +181,14 @@ function Profile() {
                   <h3 className="font-[700] text-[24px]">Skills</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {userData?.memberSkills.map((item, index) => (
+                  {/* {userData?.memberSkills.map((item, index) => (
                     <p
                       key={index}
                       className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
                     >
                       {item}
                     </p>
-                  ))}
+                  ))} */}
                 </div>
               </div>
               <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
@@ -196,14 +196,14 @@ function Profile() {
                   <h3 className="font-[700] text-[24px]">Hobbies</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {userData?.memberHobbies.map((item, index) => (
+                  {/* {userData?.memberHobbies.map((item, index) => (
                     <p
                       key={index}
                       className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
                     >
                       {item}
                     </p>
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>

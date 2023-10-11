@@ -1,9 +1,9 @@
 "use client";
-import { useRouter } from 'next/navigation'
-import React,{useState} from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../../redux/slices/userInfor";
-import { loginAccount } from "../../../apis/auth"
+import { loginAccount } from "../../../apis/auth";
 import Image from "next/image";
 import { Form, Formik } from "formik";
 import { loginSchema } from "@/app/validation";
@@ -11,7 +11,7 @@ import InputForm from "@/components/InputForm";
 import Link from "next/link";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import LoginImg from "@image/page/authentication/signin/loginImage.jpg";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 import axios from "axios";
 import { ValidationError } from "yup";
 import jwt_decode from "jwt-decode";
@@ -19,50 +19,54 @@ import jwt_decode from "jwt-decode";
 type UserLogin = {
   email: string;
   password: string;
-  remember : boolean
-}
+  remember: boolean;
+};
 
 type EncodeType = {
-  email : string;
-  sub : string;
-  UserRole : string;
-  "remember-me" : boolean
-}
-
+  sub: string;
+  role: string;
+};
 
 function SignIn() {
   const dispatch = useDispatch();
-  const [remember,setRemember] = useState(false);
-  const onHandleChoiceRemember = (status:boolean)=>{
-    setRemember(status)    
-  }
+  const [remember, setRemember] = useState(false);
+  const onHandleChoiceRemember = (status: boolean) => {
+    setRemember(status);
+  };
   const router = useRouter();
   const onSubmit = async (values: UserLogin, actions: any) => {
-    
     try {
       values.remember = remember;
       const loginResponse = await loginAccount(values);
-      const token = loginResponse.data
+      console.log(loginResponse);
 
-      var decoded:EncodeType = jwt_decode(token.accessToken);
-      
-      const user = {
-        email: decoded!.email,
-        sub: decoded!.sub,
-        UserRole: decoded!.UserRole,
-        remember: values.remember
+      const data = loginResponse.data;
+      const token = {
+        accessToken: data.body.accessToken,
+        refreshToken: data.body.refreshToken,
       };
-           
+
+      var decoded: EncodeType = jwt_decode(token.accessToken);
+
+      const userInfo = {
+        id: decoded.sub,
+        email: data.body.userCredentials.email,
+        avatarUrl: data.body.userCredentials.avatarUrl,
+        role: "admin",
+        remember: values.remember,
+      };
+
       dispatch(
         login({
           token,
-          user
+          userInfo,
         })
       );
-      
       toast.success("Login success !");
-      setTimeout(() => {  router.push('/');
+      setTimeout(() => {
+        router.push("/");
       }, 500);
+
     } catch (error: unknown) {
       if (error instanceof ValidationError) {
         if (error?.name === "ValidationError") {
@@ -70,23 +74,33 @@ function SignIn() {
         }
       }
       if (axios.isAxiosError(error)) {
-        if (
-          error.response?.status === 401 ||
-          error.response?.status === 404 ||
-          error.response?.status === 400
-        ) {
-          toast.error("Wrong password or email");
+        console.log(error);
+        if (error.response?.data.responseStatusCode === 2) {
+          toast.error(error?.response?.data?.errorMessages[0]);
         }
-        if(error.response?.status === 422) 
-        var userError = error.response.data.errors.match(/\[(.*?)\]/);
-        toast.error(userError[1]+" has not confirmed email");
+        if (error.response?.data.responseStatusCode === 3) {
+          toast.error(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 4) {
+          toast.error(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 5) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 6) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 7) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 9) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
       }
-      actions.resetForm();
-    //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
-  }
-};
+      //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
+    }
+  };
 
-  
   return (
     <section>
       <div className="h-screen w-full flex justify-center bg-[#F9FAFB] bg-opacity-50 items-center">
@@ -144,12 +158,12 @@ function SignIn() {
                     <div className="mb-6 flex w-full justify-between items-center">
                       <div className="flex items-center  gap-3">
                         <input
-                        onClick={()=>onHandleChoiceRemember(!remember)}
+                          onClick={() => onHandleChoiceRemember(!remember)}
                           id="remember"
                           type="checkbox"
                           className="h-4 w-4 rounded bg-[#F9FAFB] border-[#D1D5DB] outline-[#0065A9] peer-checked:bg-[#0065A9]  "
                         ></input>
-                        <p  className=" text-sm leading-5 font-medium">
+                        <p className=" text-sm leading-5 font-medium">
                           Remember me
                         </p>
                       </div>
