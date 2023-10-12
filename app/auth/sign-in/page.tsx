@@ -38,15 +38,13 @@ function SignIn() {
     try {
       values.remember = remember;
       const loginResponse = await loginAccount(values);
-      console.log(loginResponse);
-
       const data = loginResponse.data;
       const token = {
         accessToken: data.body.accessToken,
         refreshToken: data.body.refreshToken,
       };
 
-      var decoded: EncodeType = jwt_decode(token.accessToken);
+      const decoded: EncodeType = jwt_decode(token.accessToken);
 
       const userInfo = {
         id: decoded.sub,
@@ -74,7 +72,6 @@ function SignIn() {
         }
       }
       if (axios.isAxiosError(error)) {
-        console.log(error);
         if (error.response?.data.responseStatusCode === 2) {
           toast.error(error?.response?.data?.errorMessages[0]);
         }

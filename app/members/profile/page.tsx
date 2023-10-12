@@ -42,7 +42,7 @@ function Profile() {
         const userId = getCookie("userId");
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
-          const data = response.data;
+          const data = response.data.body;
           setUserData(data);
           setIsFetchData(false);
         }
@@ -101,7 +101,7 @@ function Profile() {
                     />
                   </div>
                   <h1 className="text-[24px] font-[700]">
-                    {userData?.fullName == "" ? "Unnamed" : userData?.fullName}
+                    {userData?.firstName || userData?.lastName == "" ? "Unnamed" : (userData?.firstName?.concat(" ", userData?.lastName))}
                   </h1>
                 </div>
                 <div className="flex flex-col gap-[8px] ">
@@ -116,9 +116,9 @@ function Profile() {
                   <div className="flex flex-row gap-[12px]">
                     <Image src={calendarIcon} alt="calendarIcon" />
                     <span className="font-[400] text-[16px]">
-                      {userData?.birthday == "0001-01-01T00:00:00"
+                      {userData?.birthDay == "0001-01-01T00:00:00"
                         ? "Not set yet"
-                        : formatDateToMMDDYYYY(userData?.birthday!)}
+                        : formatDateToMMDDYYYY(userData?.birthDay!)}
                     </span>
                   </div>
                 </div>
@@ -181,14 +181,14 @@ function Profile() {
                   <h3 className="font-[700] text-[24px]">Skills</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {/* {userData?.memberSkills.map((item, index) => (
+                  {userData?.userSkills.map((item, index) => (
                     <p
                       key={index}
                       className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
                     >
                       {item}
                     </p>
-                  ))} */}
+                  ))}
                 </div>
               </div>
               <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
@@ -196,14 +196,14 @@ function Profile() {
                   <h3 className="font-[700] text-[24px]">Hobbies</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {/* {userData?.memberHobbies.map((item, index) => (
+                  {userData?.userHobbies.map((item, index) => (
                     <p
                       key={index}
                       className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
                     >
                       {item}
                     </p>
-                  ))} */}
+                  ))}
                 </div>
               </div>
             </div>
@@ -270,9 +270,9 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.educationPlaceName == ""
+                          {userData?.educationPlaceNames == ""
                             ? "Not set yet"
-                            : userData?.educationPlaceName}
+                            : userData?.educationPlaceNames}
                         </span>
                       </div>
                     </div>
@@ -296,9 +296,9 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                        {userData?.workHistory == ""
+                        {userData?.workplaces == ""
                             ? "Not set yet"
-                            : userData?.workHistory}
+                            : userData?.workplaces}
                         </span>
                       </div>
                     </div>

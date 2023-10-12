@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const passRule =
-  /^(?=.*[a-z])(?=.*[.!@#?])[A-Za-z!@#?0-9]{8,100}$/;
+/^(?=.*[a-z])(?=.*[!@#?])[A-Za-z!@#?.0-9]{8,100}$/;
 
 export const registerSchema = yup.object().shape({
   email: yup

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
+import jwtDecode from 'jwt-decode';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest } from 'next/dist/server/web/spec-extension/request'
 import { NextResponse } from "next/dist/server/web/spec-extension/response";
@@ -22,14 +23,13 @@ function shouldRefreshAccessToken(verify: {value:string, expired:number} | undef
 
 async function refreshAccessToken(req: NextRequest): Promise<boolean> {
     try {
-        const access_token = req.cookies.get('accessToken');
         const refresh_token = req.cookies.get('refreshToken')
-        if(access_token && refresh_token) {
-            const response = await axios.put("https://fudeverapi.bsite.net/api/Auth/refresh-token", {
-                AccessToken: access_token,
-                RefreshToken: access_token,
+        if(refresh_token) {
+            const response = await axios.put("https://fudeverapi.bsite.net/api/Auth/refresh-access-token", {
+                refreshToken: refresh_token,
             });
-            // req.cookies.set("accessToken")
+            const data = response.data.body;
+            req.cookies.set("accessToken", data.accessToken);
         }
         return true;
     } catch (error:unknown) {
@@ -53,8 +53,9 @@ async function refreshAccessToken(req: NextRequest): Promise<boolean> {
     }
 }
 
-export default function middleware(req: NextRequest): NextResponse<unknown> | undefined {
+export default async function middleware(req: NextRequest): Promise<NextResponse<unknown> | undefined> {
     let verify = req.cookies.get("refreshToken");
+    let accessToken = req.cookies.get("accessToken");
     let url = req.url;
 
     if (shouldRedirectToSignIn(verify, url)) {
@@ -63,6 +64,21 @@ export default function middleware(req: NextRequest): NextResponse<unknown> | un
 
     if (verify && url.includes('/auth')) {
         return NextResponse.redirect("http://localhost:3000/");
+    }
+    
+    if(accessToken) {
+        let decode: {nbf:number,exp:number} = jwtDecode(accessToken.value);
+        let verifyToken = {
+            value: accessToken.value,
+            expired: decode!.exp,
+        }
+        if(shouldRefreshAccessToken(verifyToken)) {
+            const refreshed = await refreshAccessToken(req);
+            if(!refreshed) {
+                return NextResponse.redirect("http://localhost:3000/auth/sign-in")
+            }
+        }
+        accessToken = req.cookies.get("accessToken");
     }
 
     return NextResponse.next();

@@ -19,11 +19,8 @@ type UserRegister = {
 function SignUp() {
   const router = useRouter();
   const onSubmit = async (values: UserRegister, actions: any) => {
-    try {
-      console.log(values);
-      
+    try {      
       await registerAccount(values);
-
       toast.success("Register success ! Check your email to validated");
       setTimeout(() => {  router.push('/auth/sign-in');
       }, 500);
@@ -41,9 +38,14 @@ function SignUp() {
         ) {
           toast.error("Cannot register !");
         }
-        if(error.response?.status === 409) 
-       // var userError = error.response.data.errors.match(/\[(.*?)\]/);
-        toast.error("User has been register !");
+        if(error.response?.status === 500) {
+          toast.error("This email had been denied by sever!")
+        }
+      }
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.responseStatusCode === 7) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
       }
       actions.resetForm();
     //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
