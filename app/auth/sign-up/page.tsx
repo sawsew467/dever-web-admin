@@ -47,7 +47,7 @@ function SignUp() {
           toast.warning(error?.response?.data?.errorMessages[0]);
         }
       }
-      actions.resetForm();
+      // actions.resetForm();
     //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
   }
 };

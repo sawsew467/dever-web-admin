@@ -54,7 +54,6 @@ function MemberList({ params }: pageProps) {
   const [countListPage, setCountListPage] = useState(0);
   const pages: { param: string; startIndex: number; endIndex: number }[] = [];
   const [isFetchData, setIsFetchData] = useState(true);
-  console.log(members);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [openDialogToDelete, setOpenDialogToDelete] = useState<boolean>(false);
@@ -83,8 +82,6 @@ function MemberList({ params }: pageProps) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data.body;
         const currentUserRole = store.getState().userInfor.currentUser.role;        
-        console.log(data);
-        
         
         const filteredData = data
           .map((value: memberType) => {
@@ -93,7 +90,7 @@ function MemberList({ params }: pageProps) {
                 ...value,
                 isSelected: false,
               };
-            } else if (value.status.value === "Approved") {
+            } else if (value.status === "Approved") {
               return {
                 ...value,
                 isSelected: false,

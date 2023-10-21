@@ -17,14 +17,15 @@ import { getMemberInfo } from "@/apis/profile";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
 import { getAllAccountsByUserId } from "@/apis/setting";
-import { dropdownMembers, openMemberSetting,  } from "@/redux/slices/sideBarControl";
+import {
+  dropdownMembers,
+  openMemberSetting,
+} from "@/redux/slices/sideBarControl";
 
 type TSocialData = {
-  id: string;
-  memberId: string;
-  platform: string;
   platformId: string;
-  value: string;
+  platfromName: string;
+  url: string;
 };
 
 function SettingList() {
@@ -38,7 +39,7 @@ function SettingList() {
   const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
 
   const [userData, setUserData] = useState<userInfo>();
-    
+
   const handleGetUserProfile = async () => {
     try {
       const access_token = getCookie("accessToken");
@@ -48,9 +49,9 @@ function SettingList() {
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
           const data = response.data.body;
-          console.log(data);
           setUserData(data);
           setIsFetchData(false);
+          setSocialMediaState(data.userPlatforms);
         }
       }
     } catch (error) {
@@ -60,25 +61,25 @@ function SettingList() {
     }
   };
 
-  const handleGetAllSocialAccounts = async () => {
-    try {
-      const userId = getCookie("userId");
-      const access_token = getCookie("accessToken");
-      if (userId && access_token) {
-        const response = await getAllAccountsByUserId(access_token, userId);
-        const data = response.data;
-        setSocialMediaState(data.body);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-      }
-    }
-  };
+  // const handleGetAllSocialAccounts = async () => {
+  //   try {
+  //     const userId = getCookie("userId");
+  //     const access_token = getCookie("accessToken");
+  //     if (userId && access_token) {
+  //       const response = await getAllAccountsByUserId(access_token, userId);
+  //       const data = response.data.body;
+  //       setSocialMediaState(data);
+  //     }
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     handleGetUserProfile();
-    handleGetAllSocialAccounts();
+    // handleGetAllSocialAccounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const dispatch = useDispatch();
@@ -110,23 +111,24 @@ function SettingList() {
             <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
               <AvatarChanging
                 avatarUrl={userData?.avatarUrl!}
-                fullName={userData?.fullName!}
+                fullName={userData?.lastName.concat(" ", userData?.firstName!)}
                 career={userData?.career!}
                 refreshApi={handleGetUserProfile}
               />
-              <ContactInfomation />
-              <SocialAccount 
-                socialMediaState={socialMediaState}
-                refreshApi = {handleGetAllSocialAccounts}
+              <ContactInfomation
+                phone={userData?.phoneNumber!}
+                email={userData?.email!}
               />
-              <Skills />
-              <Hobbies />
+              <SocialAccount
+                socialMediaState={socialMediaState}
+                refreshApi={handleGetUserProfile}
+              />
+              <Skills userSkills={userData?.userSkills!} />
+              <Hobbies userHobbies={userData?.userHobbies!} />
               <ChangePassword />
             </div>
             <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
-              <AboutUser 
-                about = {userData?.aboutMe!}
-              />
+              <AboutUser about={userData?.aboutMe!} />
               <GeneralInformation
                 userData={userData!}
                 refreshApi={handleGetUserProfile}

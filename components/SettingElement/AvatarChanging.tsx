@@ -10,7 +10,7 @@ import { updateAvatar } from "@/apis/setting";
 
 type TProps = {
   avatarUrl:string;
-  fullName:string;
+  fullName:string | undefined;
   career: string;
   refreshApi: () => void
 }
@@ -46,14 +46,15 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
     return acceptedTypes.includes(file.type);
   };
   const handleUpdataProfileImage = async (avatarUrl:string) => {
+    const userId = getCookie("userId")?.toString();
     const avatar = {
+      userId: userId!,
       avatarUrl: avatarUrl
     }
     try {
       const access_token = getCookie('accessToken');
       if(access_token) {
-        const response = await updateAvatar(access_token, avatar);
-        console.log(response);
+        await updateAvatar(access_token, avatar);
         toast.success("Update profile image successfully!");
         refreshApi();
       }

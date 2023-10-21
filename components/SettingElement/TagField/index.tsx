@@ -61,9 +61,14 @@ function TagField({
   const handlePostMemberSkills = async () => {
     try {
       const access_token = getCookie("accessToken");
+      const userId = getCookie("userId")?.toString();      
       if (access_token) {
-        const value = data;
-        const response = await postMemberSkill(access_token, value);
+        const value = {
+          userId: userId!,
+          skills: data
+        };
+
+        await postMemberSkill(access_token, value);
         toast.success(`Post skills successfully!`)
       }
     } catch (error) {
@@ -76,9 +81,14 @@ function TagField({
   const handlePostMemberHobbies = async () => {
     try {
       const access_token = getCookie("accessToken");
-      if (access_token) {
-        const value = data;
-        const response = await postMemberHobby(access_token, value);
+      const userId = getCookie("userId")?.toString();      
+
+      if (access_token && userId) {
+        const value = {
+          userId: userId,
+          hobbies: data
+        }
+        await postMemberHobby(access_token, value);
         toast.success(`Post hobbies successfully!`)
       }
     } catch (error) {

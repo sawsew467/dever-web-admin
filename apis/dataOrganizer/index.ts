@@ -19,7 +19,7 @@ type patchValue = {
 };
 //Skills
 export const getAllSkills = (access_token: string | null) => {
-  return axiosClient.get(`https://fudeverapi.bsite.net${END_POINT.SKILL}`, {
+  return axiosClient.get(`${END_POINT.SKILL}/all`, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };
@@ -53,7 +53,7 @@ export const deleteSkill = (access_token: string | null, itemId: string) => {
 };
 //Hobbies
 export const getAllHobbies = (access_token: string | null) => {
-  return axiosClient.get(`${END_POINT.HOBBY}`, {
+  return axiosClient.get(`${END_POINT.HOBBY}/all`, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };
@@ -76,7 +76,7 @@ export const deleteHobby = (access_token: string | null, itemId: string) => {
 };
 //Major
 export const getAllMajor = (access_token: string | null) => {
-  return axiosClient.get(`${END_POINT.MAJOR}`, {
+  return axiosClient.get(`${END_POINT.MAJOR}/all`, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };
@@ -99,7 +99,7 @@ export const deleteMajor = (access_token: string | null, itemId: string) => {
 };
 //Department
 export const getAllDepartment = (access_token: string | null) => {
-  return axiosClient.get(`${END_POINT.DEPARTMENT}`, {
+  return axiosClient.get(`${END_POINT.DEPARTMENT}/all`, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };
@@ -136,7 +136,7 @@ export const deleteDepartment = (
 };
 //Position
 export const getAllPosition = (access_token: string | null) => {
-  return axiosClient.get(`${END_POINT.POSITION}`, {
+  return axiosClient.get(`${END_POINT.POSITION}/all`, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };

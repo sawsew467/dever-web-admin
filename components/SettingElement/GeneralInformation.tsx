@@ -1,3 +1,4 @@
+"use-client"
 import React, { useEffect, useRef, useState } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
@@ -30,7 +31,7 @@ type TGeneralFieldValues = {
   position: string;
   career: string;
   majorID: string;
-  educationPlaceID: string;
+  educationPlace: string;
   workHistory: string;
   departmentID: string;
   joinDate: string;
@@ -38,7 +39,7 @@ type TGeneralFieldValues = {
 
 type TOptionsList = {
   id: string;
-  value: string;
+  name: string;
 };
 
 type TProps = {
@@ -46,11 +47,11 @@ type TProps = {
   refreshApi: () => void;
 };
 
-function GeneralInformation({ userData, refreshApi }: TProps) {
+function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
   const [postionOptions, setPositionOptions] = useState<TOptionsList[]>([]);
   const [majorOptions, setMajorOptions] = useState<TOptionsList[]>([]);
   const [departmentOptions, setDeparmentOptions] = useState<TOptionsList[]>([]);
-  const [educationOptions, setEducationOptions] = useState<TOptionsList[]>([]);  
+  const [educationOptions, setEducationOptions] = useState<TOptionsList[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TGeneralFieldValues> | null>(null);
 
@@ -58,25 +59,29 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
     values: TGeneralFieldValues,
     actions: FormikHelpers<TGeneralFieldValues>
   ) => {
-    const filtedValue = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      birthday: values.birthday,
-      homeAddress: values.homeAddress,
-      positionId: values.position,
-      career: values.career,
-      majorID: values.majorID,
-      educationPlaceID: values.educationPlaceID,
-      workHistory: values.workHistory,
-      departmentID: values.departmentID,
-      joinDate: values.joinDate,
-    };    
-    console.log(filtedValue);
-    
+
     try {
       const access_token = getCookie("accessToken");
-      if (access_token) {
-        const res = await patchGeneralInfo(access_token, filtedValue);
+      const userId = getCookie("userId");
+      if (access_token && userId) {
+        console.log(userData);
+        
+        const generalData = {
+          userId: userId,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          birthday: values.birthday,
+          homeAddress: values.homeAddress,
+          positionId: values.position,
+          career: values.career,
+          majorID: values.majorID,
+          educationPlaces: values.educationPlace,
+          workplaces: values.workHistory,
+          departmentID: values.departmentID,
+          joinDate: values.joinDate,
+        };
+        console.log(generalData);
+        const res = await patchGeneralInfo(access_token, generalData);
         toast.success(`Update general information successfully!`);
         actions.resetForm();
         refreshApi();
@@ -86,6 +91,7 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
         toast.error(`Update general information failed!`);
       }
     }
+  
   };
 
   const handleEditClick = () => {
@@ -100,15 +106,19 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const res = await getAllPosition(access_token);
-        const data = res.data;
+        const data = res.data.body;
+
         const filtedData = data
           .map((item: TOptionsList) => {
             return {
               id: item.id,
-              value: item.value,
+              name: item.name,
             };
           })
-          .filter((item: TOptionsList) => item.value !== "default");
+          .filter((item: TOptionsList) => item.name !== "")
+          .filter(
+            (item: TOptionsList) => item.name.toLowerCase() !== "default"
+          );
         setPositionOptions(filtedData);
       }
     } catch (error) {
@@ -122,15 +132,18 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const res = await getAllDepartment(access_token);
-        const data = res.data;
+        const data = res.data.body;
         const filtedData = data
           .map((item: TOptionsList) => {
             return {
               id: item.id,
-              value: item.value,
+              name: item.name,
             };
           })
-          .filter((item: TOptionsList) => item.value !== "default");
+          .filter((item: TOptionsList) => item.name !== "")
+          .filter(
+            (item: TOptionsList) => item.name.toLowerCase() !== "default"
+          );
         setDeparmentOptions(filtedData);
       }
     } catch (error) {
@@ -144,38 +157,19 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const res = await getAllMajor(access_token);
-        const data = res.data;
+        const data = res.data.body;
         const filtedData = data
           .map((item: TOptionsList) => {
             return {
               id: item.id,
-              value: item.value,
+              name: item.name,
             };
           })
-          .filter((item: TOptionsList) => item.value !== "default");
+          .filter((item: TOptionsList) => item.name !== "")
+          .filter(
+            (item: TOptionsList) => item.name.toLowerCase() !== "default"
+          );
         setMajorOptions(filtedData);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-      }
-    }
-  };
-  const handleGetAllEducation = async () => {
-    try {
-      const access_token = getCookie("accessToken");
-      if (access_token) {
-        const res = await getAllEducation(access_token);
-        const data = res.data;
-        const filtedData = data
-          .map((item: TOptionsList) => {
-            return {
-              id: item.id,
-              value: item.value,
-            };
-          })
-          .filter((item: TOptionsList) => item.value !== "default");
-        setEducationOptions(filtedData);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -188,20 +182,8 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
     handleGetAllPosition();
     handleGetAllDeparment();
     handleGetAllMajor();
-    handleGetAllEducation();
   }, []);
-  
-  const parseDataToId = (list:TOptionsList[], data:string):string => {
-    let getValue = list?.filter((item: any) => item.value === data);
 
-    if (getValue.length > 0) {    
-      return getValue[0].id;
-    } else {
-      return "";
-    }
-  }
-
-  
   return (
     <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
       <div className="flex flex-row justify-between">
@@ -222,16 +204,16 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
       <div>
         <Formik
           initialValues={{
-            firstName: "",
-            lastName: "",
-            birthday: formatDateToYYYYMMDD(userData.birthday),
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            birthday: formatDateToYYYYMMDD(userData.birthDay),
             homeAddress: userData.homeAddress,
-            position: "",
+            position: userData.positionId,
             career: userData.career,
-            majorID: parseDataToId(majorOptions!, userData.majorName!),
-            educationPlaceID: parseDataToId(educationOptions!, userData.educationPlaceName!),
-            workHistory: '',
-            departmentID: parseDataToId(departmentOptions!, userData.departmentName!),
+            majorID: userData.majorId,
+            educationPlace: userData.educationPlaceNames,
+            workHistory: userData.workplaces,
+            departmentID: userData.departmentId,
             joinDate: formatDateToYYYYMMDD(userData.joinDate),
           }}
           validationSchema={generalInformationSchema}
@@ -303,13 +285,14 @@ function GeneralInformation({ userData, refreshApi }: TProps) {
                     title={"major"}
                     options={majorOptions!}
                   />
-                  <FormikSelect
-                    label={"educationPlaceID"}
-                    id={"educationPlaceID"}
-                    name={"educationPlaceID"}
+                  <FormikInput
+                    label={"educationPlace"}
+                    id={"educationPlace"}
+                    name={"educationPlace"}
+                    placeholder={"Enter your education place..."}
+                    type={"text"}
                     isEdit={isEdit}
                     title={"education place"}
-                    options={educationOptions!}
                   />
                   <FormikInput
                     label={"workHistory"}

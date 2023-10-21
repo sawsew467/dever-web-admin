@@ -7,51 +7,33 @@ import TagField from "./TagField";
 import { getCookie } from "cookies-next";
 import { getAllHobbies } from "@/apis/dataOrganizer";
 import axios from "axios";
-import { getMemberHobby } from "@/apis/setting";
+// import { getMemberHobby } from "@/apis/setting";
 
 type THobby = {
   id: string;
-  value: string;
-  memberHobbyEntities: any;
-  createdAt: string;
-  updatedAt: string;
-  creator: string;
-  remover: string;
-  deleteFlag: boolean;
+  name: string;
+};
+type TProps = {
+  userHobbies: string[];
 };
 
-function Hobbies() {
+function Hobbies({ userHobbies }: TProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [hobbies, setHobbies] = useState<string[]>(["Calligraphy", "Chess"]);
+  const [hobbies, setHobbies] = useState<string[]>(userHobbies);
 
-  const handleGetAllSkillSuggestions = async () => {
+  const handleGetAllHobbiesSuggestions = async () => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await getAllHobbies(access_token);
-        const data = response.data;
+        const data = response.data.body;
         const filtedData = data
           .map((item: THobby) => {
-            return item.value;
+            return item.name;
           })
-          .filter((item: THobby) => item.value !== "default");
+          .filter((item: THobby) => item.name !== "default");
         setSuggestions(filtedData);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-      }
-    }
-  };
-  const handleGetMemberSkill = async () => {
-    try {
-      const access_token = getCookie("accessToken");
-      const userId = getCookie("userId");
-      if (access_token && userId) {
-        const response = await getMemberHobby(access_token, userId);
-        const data = response.data;
-        setHobbies(data);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -61,8 +43,7 @@ function Hobbies() {
   };
 
   useEffect(() => {
-    handleGetAllSkillSuggestions();
-    handleGetMemberSkill();
+    handleGetAllHobbiesSuggestions();
   }, []);
   return (
     <div className="flex flex-col gap-[20px] p-[24px] rounded-[10px] shadow-primary">

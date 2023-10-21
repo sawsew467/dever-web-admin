@@ -44,7 +44,7 @@ export const generalInformationSchema =yup.object().shape({
   position: yup.string().required("Position is required"),
   career: yup.string().required("Role is required"),
   majorID: yup.string().required("Major is required"),
-  educationPlaceID: yup.string().required("Education is required"),
+  educationPlace: yup.string().required("Education is required"),
   workHistory: yup.string(),
   departmentID: yup.string().required("Department is required"),
   joinDate: yup.string()

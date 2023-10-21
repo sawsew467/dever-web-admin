@@ -15,10 +15,10 @@ type AppState = {
 
 const initialState: AppState = {
   currentUser: {
-    id: '',
-    email: '',
-    avatarUrl: '',
-    role: '',
+    id: "",
+    email: "",
+    avatarUrl: "",
+    role: "",
     remember: null,
   },
 };
@@ -28,17 +28,12 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.currentUser = action.payload.userInfo;      
+      state.currentUser = action.payload.userInfo;
       if (!action.payload.userInfo.remember) {
-        setCookie("accessToken", action.payload.token.accessToken, {
-          maxAge: 86400,
-        });
-        setCookie("refreshToken", action.payload.token.refreshToken, {
-          maxAge: 86400,
-        });
-        setCookie("userId", action.payload.userInfo.id, {
-          maxAge: 86400,
-        });
+        setCookie("accessToken", action.payload.token.accessToken);
+        setCookie("refreshToken", action.payload.token.refreshToken);
+        setCookie("userId", action.payload.userInfo.id);
+        setCookie("rememer? ", action.payload.userInfo.remember);
       } else {
         setCookie("accessToken", action.payload.token.accessToken, {
           maxAge: 604800,
@@ -49,6 +44,12 @@ export const counterSlice = createSlice({
         setCookie("userId", action.payload.userInfo.id, {
           maxAge: 604800,
         });
+        setCookie("rememer? ", action.payload.userInfo.remember, {
+          maxAge: 604800,
+        });
+        setCookie("expiredInTime?", Date.now() + 7 * 24 * 60 * 60 * 1000, {
+          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        });
       }
     },
     logout: (state) => {
@@ -56,6 +57,10 @@ export const counterSlice = createSlice({
       setCookie("accessToken", "", { maxAge: 0 });
       setCookie("refreshToken", "", { maxAge: 0 });
       setCookie("userId", "", { maxAge: 0 });
+      setCookie("rememer?", "", { maxAge: 0 });
+      setCookie("expiredInTime?", "", {
+        expires: new Date(0),
+      });
     },
     refreshUserInfoFromStorage: (state, action: PayloadAction<User>) => {
       state.currentUser = action.payload;

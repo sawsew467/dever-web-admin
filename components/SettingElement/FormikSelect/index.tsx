@@ -3,7 +3,7 @@ import React from "react";
 
 type TOptionsList = {
   id: string;
-  value: string;
+  name: string;
 };
 
 type TPros = {
@@ -29,7 +29,7 @@ function FormikSelect({
     for (let option of options) {
       options_list.push(
         <option value={option.id} key={option.id}>
-          {option.value}
+          {option.name}
         </option>
       );
     }

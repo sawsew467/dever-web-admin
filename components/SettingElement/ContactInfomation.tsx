@@ -7,13 +7,16 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
 import { contactInformationSchema } from "./Validation/validation";
 import FormikInput from "./FormikInput";
+import { getCookie } from "cookies-next";
+import { updateContactInfo } from "@/apis/setting";
+import { isAxiosError } from "axios";
 
 type TContactFieldValue = {
   phone: string;
   email: string;
 };
 
-function ContactInfomation(): JSX.Element {
+function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TContactFieldValue> | null>(null);
 
@@ -27,9 +30,23 @@ function ContactInfomation(): JSX.Element {
     actions: FormikHelpers<TContactFieldValue>
   ) => {
     console.log(values);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.resetForm();
-    toast.info("Changed contact information successfully");
+    try {
+      const userId = getCookie("userId");
+      const access_token = getCookie("accessToken");
+      if (access_token && userId) {
+        const contactInfo = {
+          userId: userId,
+          phoneNumber: values.phone,
+          email: values.email,
+        };
+        await updateContactInfo(access_token, contactInfo);
+        toast.success("Update contact information successfully!");
+      }
+    } catch (error) {
+      if(isAxiosError(error)) {        
+        toast.error(error?.response?.data?.errorMessages[0])
+      }
+    }
   };
 
   const handleEditClick = () => {
@@ -61,8 +78,8 @@ function ContactInfomation(): JSX.Element {
       <div>
         <Formik
           initialValues={{
-            phone: fakeData.phone,
-            email: fakeData.email,
+            phone: phone,
+            email: email,
           }}
           validationSchema={contactInformationSchema}
           onSubmit={onSubmit}

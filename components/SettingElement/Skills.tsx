@@ -8,52 +8,35 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { getAllSkills } from "@/apis/dataOrganizer";
-import { getMemberSkill} from "@/apis/setting";
+// import { getMemberSkill} from "@/apis/setting";
 
 type TSkill = {
-  blogTagEntities: any;
-  createdAt: string;
-  creator: string;
-  deleteFlag: boolean;
   id: string;
-  memberSkillEntities: any;
-  remover: string;
-  updatedAt: string;
-  value: string;
+  name: string;
+};
+type TProps = {
+  userSkills: string[];
 };
 
-function Skills() {
+function Skills({ userSkills }: TProps): JSX.Element {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [skills, setSkills] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>(userSkills);
+  // console.log(suggestions);
 
   const handleGetAllSkillSuggestions = async () => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await getAllSkills(access_token);
-        const data = response.data;
+        const data = response.data.body;
+        // console.log(data);
         const filtedData = data
           .map((item: TSkill) => {
-            return item.value;
+            return item.name;
           })
-          .filter((item: TSkill) => item.value !== "default");
-        setSuggestions(filtedData);        
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-      }
-    }
-  };
-  const handleGetMemberSkill = async () => {
-    try {
-      const access_token = getCookie("accessToken");
-      const userId = getCookie("userId");
-      if (access_token && userId) {
-        const response = await getMemberSkill(access_token, userId);
-        const data = response.data;
-        setSkills(data);
+          .filter((item: TSkill) => item.name !== "default");
+        setSuggestions(filtedData);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -64,7 +47,6 @@ function Skills() {
 
   useEffect(() => {
     handleGetAllSkillSuggestions();
-    handleGetMemberSkill();
   }, []);
 
   return (
@@ -87,16 +69,15 @@ function Skills() {
       </div>
       <div className="flex flex-col gap-[5px]" aria-disabled="true">
         <p className="font-[300] text-[14px]">Add tag</p>
-        {
-          suggestions.length === 0 ? null :
+        {suggestions.length === 0 ? null : (
           <TagField
-          suggestions={suggestions!}
-          isEdit={isEdit}
-          useTagFor="skills"
-          state={skills}
-          setState={setSkills}
-        />
-        }
+            suggestions={suggestions!}
+            isEdit={isEdit}
+            useTagFor="skills"
+            state={skills}
+            setState={setSkills}
+          />
+        )}
       </div>
     </div>
   );

@@ -5,9 +5,7 @@ export type memberType = {
   email: string;
   position: string;
   department: string;
-  status: {
-    value: string;
-  };
+  status: string;
 };
 
 export type memberPros = {

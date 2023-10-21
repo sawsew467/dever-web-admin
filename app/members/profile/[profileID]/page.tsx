@@ -1,14 +1,22 @@
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Button from "@/components/Button";
 
 import avatar from "@image/page/member/list/Fu-dever.png";
 import briefcaseIcon from "@icon/page/member/profile/briefcase.svg";
 import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
+
 import facebookIcon from "@icon/page/member/profile/facebook.svg";
 import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
+import instagramIcon from "@icon/page/member/profile/instagram.svg";
+import discordIcon from "@icon/page/member/profile/discord.svg";
+import twitterIcon from "@icon/page/member/profile/twitter.svg";
+import tiktokIcon from "@icon/page/member/profile/tiktok.svg";
+import linkedinIcon from "@icon/page/member/profile/linkedin.svg";
+import ubuntuIcon from "@icon/page/member/profile/unbuntu.svg";
+
 import ProjectCard from "@/components/ProjectCard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -18,7 +26,10 @@ import axios from "axios";
 import { LinearProgress } from "@mui/material";
 import { formatDateToMMDDYYYY } from "@/ultils/dateFormat";
 import { userInfo } from "@/ultils/types";
-import { dropdownMembers, openMemberProfile } from "@/redux/slices/sideBarControl";
+import {
+  dropdownMembers,
+  openMemberProfile,
+} from "@/redux/slices/sideBarControl";
 
 type pageProps = {
   params: { profileID: string };
@@ -27,7 +38,11 @@ type pageProps = {
 type objectItemOne = {
   value: string;
 };
-
+type TSocialData = {
+  platformId: string;
+  platfromName: string;
+  url: string;
+};
 
 function Profile({ params }: pageProps) {
   const isOpenSlidebar = useSelector(
@@ -50,7 +65,7 @@ function Profile({ params }: pageProps) {
       if (access_token) {
         if (params.profileID) {
           const response = await getMemberInfo(params.profileID, access_token);
-          const data = response.data;
+          const data = response.data.body;
           setUserData(data);
           setIsFetchData(false);
         }
@@ -71,6 +86,29 @@ function Profile({ params }: pageProps) {
     dispatch(openMemberProfile(true));
   }, [dispatch]);
 
+  const returnSocialIcon = (item: TSocialData): StaticImageData => {
+    switch (item.platfromName.toLowerCase()) {
+      case "facebook":
+        return facebookIcon;
+      case "github":
+        return githubIcon;
+      case "youtube":
+        return youtubeIcon;
+      case "instagram":
+        return instagramIcon;
+      case "discord":
+        return discordIcon;
+      case "linkedin":
+        return linkedinIcon;
+      case "tiktok":
+        return tiktokIcon;
+      case "twitter":
+        return twitterIcon;
+      default:
+        return ubuntuIcon;
+    }
+  };
+
   return (
     <div
       className={`w-[100%] ${
@@ -88,7 +126,10 @@ function Profile({ params }: pageProps) {
           <div>
             <h2 className="text-[24px] font-[700]">
               <span className="text-blue-500">
-                {userData?.fullName == "" ? "Unname" : userData?.fullName}
+                {(userData?.firstName?.trim() || userData?.lastName.trim()) ===
+                ""
+                  ? "Unnamed"
+                  : userData?.lastName?.concat(" ", userData?.firstName)}
                 &apos;s
               </span>{" "}
               Profile
@@ -111,7 +152,10 @@ function Profile({ params }: pageProps) {
                     />
                   </div>
                   <h1 className="text-[24px] font-[700]">
-                    {userData?.fullName == "" ? "Unnamed" : userData?.fullName}
+                    {(userData?.firstName?.trim() ||
+                      userData?.lastName.trim()) === ""
+                      ? "Unnamed"
+                      : userData?.lastName?.concat(" ", userData?.firstName)}
                   </h1>
                 </div>
                 <div className="flex flex-col gap-[8px] ">
@@ -119,16 +163,16 @@ function Profile({ params }: pageProps) {
                     <Image src={briefcaseIcon} alt="briefcaseIcon" />
                     <span className="font-[400] text-[16px]">
                       {userData?.career == ""
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : userData?.career}
                     </span>
                   </div>
                   <div className="flex flex-row gap-[12px]">
                     <Image src={calendarIcon} alt="calendarIcon" />
                     <span className="font-[400] text-[16px]">
-                      {userData?.birthday == "0001-01-01T00:00:00"
-                        ? "Not set yet"
-                        : formatDateToMMDDYYYY(userData?.birthday!)}
+                      {userData?.birthDay == "0001-01-01T00:00:00"
+                        ? <p className="italic">Not set yet</p>
+                        : formatDateToMMDDYYYY(userData?.birthDay!)}
                     </span>
                   </div>
                 </div>
@@ -140,7 +184,7 @@ function Profile({ params }: pageProps) {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.email == "" ? "Not set yet" : userData?.email}
+                      {userData?.email == "" ? <p className="italic">Not set yet</p> : userData?.email}
                     </span>
                   </div>
                 </div>
@@ -153,7 +197,7 @@ function Profile({ params }: pageProps) {
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
                       {userData?.homeAddress == ""
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : userData?.homeAddress}
                     </span>
                   </div>
@@ -167,7 +211,7 @@ function Profile({ params }: pageProps) {
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
                       {userData?.phoneNumber == ""
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : userData?.phoneNumber}
                     </span>
                   </div>
@@ -178,10 +222,23 @@ function Profile({ params }: pageProps) {
                       Social media:
                     </span>
                   </div>
-                  <div className="flex flex-row gap-[16px]">
-                    <Image src={facebookIcon} alt="facebookIcon"></Image>
-                    <Image src={githubIcon} alt="githubIcon"></Image>
-                    <Image src={youtubeIcon} alt="youtubeIcon"></Image>
+                  <div className="flex flex-row gap-[8px]">
+                    {userData?.userPlatforms?.length == 0 ? 
+                     (<p className="font-bold italic">Not set yet</p>) :  userData?.userPlatforms.map(
+                      (item: TSocialData, index: number) => {
+                        return (
+                          <a href={item.url} key={index}>
+                            <Image
+                              src={returnSocialIcon(item)}
+                              alt={item.platfromName}
+                              width={24}
+                              height={24}
+                              className="hover:bg-slate-200 rounded-md transition"
+                            ></Image>
+                          </a>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               </div>
@@ -191,14 +248,20 @@ function Profile({ params }: pageProps) {
                   <h3 className="font-[700] text-[24px]">Skills</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {userData?.memberSkills.map((item, index) => (
-                    <p
-                      key={index}
-                      className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
-                    >
-                      {item}
+                {userData!.userSkills.length > 0 ? (
+                    userData?.userSkills.map((item, index) => (
+                      <p
+                        key={index}
+                        className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
+                      >
+                        {item}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="italic">
+                      Haven&apos;t updated any skills yet!
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
               <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
@@ -206,14 +269,20 @@ function Profile({ params }: pageProps) {
                   <h3 className="font-[700] text-[24px]">Hobbies</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {userData?.memberHobbies.map((item, index) => (
-                    <p
-                      key={index}
-                      className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
-                    >
-                      {item}
+                {userData!.userHobbies.length > 0 ? (
+                    userData?.userHobbies.map((item, index) => (
+                      <p
+                        key={index}
+                        className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
+                      >
+                        {item}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="italic">
+                      Haven&apos;t updated any hobbies yet!
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>
@@ -251,7 +320,7 @@ function Profile({ params }: pageProps) {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.positionName == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.positionName}
                         </span>
                       </div>
@@ -265,7 +334,7 @@ function Profile({ params }: pageProps) {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.departmentName == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.departmentName}
                         </span>
                       </div>
@@ -280,9 +349,9 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.educationPlaceName == ""
-                            ? "Not set yet"
-                            : userData?.educationPlaceName}
+                        {userData?.educationPlaceNames == ""
+                            ? <p className="italic">Not set yet</p>
+                            : userData?.educationPlaceNames}
                         </span>
                       </div>
                     </div>
@@ -293,7 +362,7 @@ function Profile({ params }: pageProps) {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.majorName == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.majorName}
                         </span>
                       </div>
@@ -306,9 +375,9 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                        {userData?.workHistory == ""
-                            ? "Not set yet"
-                            : userData?.workHistory}
+                        {userData?.workplaces == ""
+                            ? <p className="italic">Not set yet</p>
+                            : userData?.workplaces}
                         </span>
                       </div>
                     </div>
@@ -320,7 +389,7 @@ function Profile({ params }: pageProps) {
                   <h3 className="font-[700] text-[24px] ">Projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
-                <h3>Haven&apos;t no implement yet!</h3>
+                  <h3>Haven&apos;t no implement yet!</h3>
 
                   {/* {userData?.project.map((item, index) => {
               return (

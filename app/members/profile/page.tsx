@@ -1,14 +1,23 @@
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import Button from "@/components/Button";
 
 import avatar from "@image/page/member/list/Fu-dever.png";
 import briefcaseIcon from "@icon/page/member/profile/briefcase.svg";
 import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
+
 import facebookIcon from "@icon/page/member/profile/facebook.svg";
 import githubIcon from "@icon/page/member/profile/github.svg";
 import youtubeIcon from "@icon/page/member/profile/youtube.svg";
+import instagramIcon from "@icon/page/member/profile/instagram.svg";
+import discordIcon from "@icon/page/member/profile/discord.svg";
+import twitterIcon from "@icon/page/member/profile/twitter.svg";
+import tiktokIcon from "@icon/page/member/profile/tiktok.svg";
+import linkedinIcon from "@icon/page/member/profile/linkedin.svg";
+import ubuntuIcon from "@icon/page/member/profile/unbuntu.svg";
+
 import ProjectCard from "@/components/ProjectCard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -18,8 +27,16 @@ import { getCookie } from "cookies-next";
 import { LinearProgress } from "@mui/material";
 import { formatDateToMMDDYYYY } from "@/ultils/dateFormat";
 import { userInfo } from "@/ultils/types";
-import { dropdownMembers, openMemberProfile } from "@/redux/slices/sideBarControl";
+import {
+  dropdownMembers,
+  openMemberProfile,
+} from "@/redux/slices/sideBarControl";
 
+type TSocialData = {
+  platformId: string;
+  platfromName: string;
+  url: string;
+};
 
 function Profile() {
   const isOpenSlidebar = useSelector(
@@ -34,7 +51,7 @@ function Profile() {
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
   };
   const [userData, setUserData] = useState<userInfo>();
-  console.log(userData);
+
   const handleGetUserProfile = async () => {
     try {
       const access_token = getCookie("accessToken");
@@ -63,6 +80,29 @@ function Profile() {
     dispatch(dropdownMembers(true));
     dispatch(openMemberProfile(true));
   }, [dispatch]);
+
+  const returnSocialIcon = (item: TSocialData): StaticImageData => {
+    switch (item.platfromName.toLowerCase()) {
+      case "facebook":
+        return facebookIcon;
+      case "github":
+        return githubIcon;
+      case "youtube":
+        return youtubeIcon;
+      case "instagram":
+        return instagramIcon;
+      case "discord":
+        return discordIcon;
+      case "linkedin":
+        return linkedinIcon;
+      case "tiktok":
+        return tiktokIcon;
+      case "twitter":
+        return twitterIcon;
+      default:
+        return ubuntuIcon;
+    }
+  };
 
   return (
     <div
@@ -101,7 +141,10 @@ function Profile() {
                     />
                   </div>
                   <h1 className="text-[24px] font-[700]">
-                    {userData?.firstName || userData?.lastName == "" ? "Unnamed" : (userData?.firstName?.concat(" ", userData?.lastName))}
+                    {(userData?.firstName?.trim() ||
+                      userData?.lastName.trim()) === ""
+                      ? "Unnamed"
+                      : userData?.lastName?.concat(" ", userData?.firstName)}
                   </h1>
                 </div>
                 <div className="flex flex-col gap-[8px] ">
@@ -109,7 +152,7 @@ function Profile() {
                     <Image src={briefcaseIcon} alt="briefcaseIcon" />
                     <span className="font-[400] text-[16px]">
                       {userData?.career == ""
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : userData?.career}
                     </span>
                   </div>
@@ -117,7 +160,7 @@ function Profile() {
                     <Image src={calendarIcon} alt="calendarIcon" />
                     <span className="font-[400] text-[16px]">
                       {userData?.birthDay == "0001-01-01T00:00:00"
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : formatDateToMMDDYYYY(userData?.birthDay!)}
                     </span>
                   </div>
@@ -130,7 +173,7 @@ function Profile() {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.email == "" ? "Not set yet" : userData?.email}
+                      {userData?.email == "" ? <p className="italic">Not set yet</p> : userData?.email}
                     </span>
                   </div>
                 </div>
@@ -143,7 +186,7 @@ function Profile() {
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
                       {userData?.homeAddress == ""
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : userData?.homeAddress}
                     </span>
                   </div>
@@ -157,7 +200,7 @@ function Profile() {
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
                       {userData?.phoneNumber == ""
-                        ? "Not set yet"
+                        ? <p className="italic">Not set yet</p>
                         : userData?.phoneNumber}
                     </span>
                   </div>
@@ -168,10 +211,23 @@ function Profile() {
                       Social media:
                     </span>
                   </div>
-                  <div className="flex flex-row gap-[16px]">
-                    <Image src={facebookIcon} alt="facebookIcon"></Image>
-                    <Image src={githubIcon} alt="githubIcon"></Image>
-                    <Image src={youtubeIcon} alt="youtubeIcon"></Image>
+                  <div className="flex flex-row gap-[8px]">
+                    {userData?.userPlatforms?.length == 0 ? 
+                     (<p className="font-bold italic">Not set yet</p>) :  userData?.userPlatforms.map(
+                      (item: TSocialData, index: number) => {
+                        return (
+                          <a href={item.url} key={index}>
+                            <Image
+                              src={returnSocialIcon(item)}
+                              alt={item.platfromName}
+                              width={24}
+                              height={24}
+                              className="hover:bg-slate-200 rounded-md transition"
+                            ></Image>
+                          </a>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               </div>
@@ -181,14 +237,20 @@ function Profile() {
                   <h3 className="font-[700] text-[24px]">Skills</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {userData?.userSkills.map((item, index) => (
-                    <p
-                      key={index}
-                      className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
-                    >
-                      {item}
+                  {userData!.userSkills.length > 0 ? (
+                    userData?.userSkills.map((item, index) => (
+                      <p
+                        key={index}
+                        className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
+                      >
+                        {item}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="italic">
+                      Haven&apos;t updated any skills yet!
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
               <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
@@ -196,14 +258,20 @@ function Profile() {
                   <h3 className="font-[700] text-[24px]">Hobbies</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                  {userData?.userHobbies.map((item, index) => (
-                    <p
-                      key={index}
-                      className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
-                    >
-                      {item}
+                  {userData!.userHobbies.length > 0 ? (
+                    userData?.userHobbies.map((item, index) => (
+                      <p
+                        key={index}
+                        className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
+                      >
+                        {item}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="italic">
+                      Haven&apos;t updated any hobbies yet!
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>
@@ -241,7 +309,7 @@ function Profile() {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.positionName == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.positionName}
                         </span>
                       </div>
@@ -255,7 +323,7 @@ function Profile() {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.departmentName == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.departmentName}
                         </span>
                       </div>
@@ -271,7 +339,7 @@ function Profile() {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.educationPlaceNames == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.educationPlaceNames}
                         </span>
                       </div>
@@ -283,7 +351,7 @@ function Profile() {
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
                           {userData?.majorName == ""
-                            ? "Not set yet"
+                            ? <p className="italic">Not set yet</p>
                             : userData?.majorName}
                         </span>
                       </div>
@@ -296,8 +364,8 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                        {userData?.workplaces == ""
-                            ? "Not set yet"
+                          {userData?.workplaces == ""
+                            ? <p className="italic">Not set yet</p>
                             : userData?.workplaces}
                         </span>
                       </div>
@@ -310,7 +378,7 @@ function Profile() {
                   <h3 className="font-[700] text-[24px] ">My projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
-                  <h3>Haven&apos;t no implement yet!</h3>
+                  <p className="italic">Haven&apos;t no implement yet!</p>
                   {/* {userData?.project.map((item, index) => {
                 return (
                   <ProjectCard

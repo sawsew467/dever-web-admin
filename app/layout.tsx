@@ -6,12 +6,13 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { usePathname } from "next/navigation";
 import ToastNotificationComp from "@/components/ToastNotificationComp";
-const inter = Inter({ subsets: ["latin"] });
+
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 
 import AuthProvider from "@/app/AuthProvider";
-
+import RefreshToken from "./RefreshToken";
+const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
 }: {
@@ -39,6 +40,7 @@ export default function RootLayout({
             {!isSpecial && <Sidebar />}
             {children}
             <ToastNotificationComp />
+            <RefreshToken />
           </AuthProvider>
         </Provider>
       </body>

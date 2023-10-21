@@ -1,3 +1,4 @@
+"use-client";
 import React, { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 
@@ -31,14 +32,19 @@ import {
 import { toast } from "react-toastify";
 
 type TSocialData = {
-  id: string;
-  memberId: string;
-  platform: string;
   platformId: string;
-  value: string;
+  platfromName: string;
+  url: string;
 };
 
-function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocialData[], refreshApi: () => void}) {
+function SocialAccount({
+  socialMediaState,
+  refreshApi,
+}: {
+  socialMediaState: TSocialData[];
+  refreshApi: () => void;
+}): JSX.Element {
+
   const platforms = [
     "Facebook",
     "Github",
@@ -53,7 +59,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [platformList, setPlatformList] = useState<
-    { id: string; value: string }[]
+    { id: string; name: string }[]
   >([]);
 
   const [selectPlatform, setSelectPlatform] = useState<string>(
@@ -73,7 +79,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
     setSelectPlatform(event.target.value);
     platformList.forEach((item) => {
       if (item.id == event.target.value) {
-        setSelectedPlatformName(item.value);
+        setSelectedPlatformName(item.name);
       }
     });
   };
@@ -84,68 +90,60 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   };
 
   const returnSocialIcon = (item: TSocialData): StaticImageData => {
-    switch (item.platform) {
-      case "Facebook":
+    switch (item.platfromName.toLowerCase()) {
+      case "facebook":
         return FacebookIcon;
-      case "Github":
+      case "github":
         return GithubIcon;
-      case "Youtube":
+      case "youtube":
         return YoutubeIcon;
-      case "Instagram":
+      case "instagram":
         return InstagramIcon;
-      case "Discord":
+      case "discord":
         return DiscordIcon;
-      case "LinkedIn":
+      case "linkedin":
         return LinkedinIcon;
-      case "Tiktok":
+      case "tiktok":
         return TiktokIcon;
-      case "Twitter":
+      case "twitter":
         return TwitterIcon;
       default:
         return UndefineIcon;
     }
   };
   const addHttpsIfMissing = (link: string): string => {
-    if (!link.startsWith("http://") && !link.startsWith("https://")) {
-      return "https://" + link;
+    if (link && typeof link === "string") {
+      if (!link.startsWith("http://") && !link.startsWith("https://")) {
+        return "https://" + link;
+      }
     }
     return link;
   };
   const removeHttps = (link: string): string => {
-    if (link.startsWith("http://")) {
-      return link.slice(7);
-    } else if (link.startsWith("https://")) {
-      return link.slice(8);
+    if (link && typeof link === "string") {
+      if (link.startsWith("http://")) {
+        return link.slice(7);
+      } else if (link.startsWith("https://")) {
+        return link.slice(8);
+      }
     }
     return link;
   };
 
-  const checkExistAccounts = (
-    inputLink: string,
-    selectPlatform: string
-  ): boolean => {
+  const checkExist = (inputLink: string, selectPlatform: string): boolean => {
     const linkExists = socialMediaState.some(
-      (item: TSocialData) => item.value === addHttpsIfMissing(inputLink)
+      (item: TSocialData) => item.url === addHttpsIfMissing(inputLink)
     );
-    const platformExist = socialMediaState.some(
-      (item: TSocialData) => item.platformId === selectPlatform
-    );
+
     if (linkExists) {
       setIsAlert(true);
       setTimeout(() => {
         setIsAlert(false);
       }, 4000);
-      setAlertMessage("This account already exists!");
+      setAlertMessage("This url already exists!");
       return true;
     }
-    if (platformExist) {
-      setIsAlert(true);
-      setTimeout(() => {
-        setIsAlert(false);
-      }, 4000);
-      setAlertMessage("This account with the platform already exists!");
-      return true;
-    }
+
     if (inputLink.length == 0) {
       setIsAlert(true);
       setTimeout(() => {
@@ -173,7 +171,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   };
 
   const handleSubmit = async () => {
-    if (checkExistAccounts(removeHttps(linkState), selectPlatform)) {
+    if (checkExist(removeHttps(linkState), selectPlatform)) {
       return;
     } else if (checkIsValidLink(linkState)) return;
     else {
@@ -187,10 +185,12 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
       if (access_token) {
         const response = await getAllPlatform(access_token);
         const data = response.data.body;
-        const platFormFilted = data.filter(
-          (item: { id: string; value: string }) => item.value !== "default"
-        );
-        setPlatformList(platFormFilted); 
+        const platFormFilted = data
+          .filter(
+            (item: { id: string; name: string }) => item.name !== "default"
+          )
+          .filter((item: { id: string; name: string }) => item.name !== "");
+        setPlatformList(platFormFilted);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -200,7 +200,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   };
   useEffect(() => {
     handleGetPlatforms();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePostSocialAccount = async () => {
@@ -209,11 +209,15 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
       const access_token = getCookie("accessToken");
       if (access_token && userId) {
         const postValue = {
+          userId: userId,
           platformId: selectPlatform,
-          value: linkState,
+          url: linkState,
         };
-        const response = await postSocialAccount(access_token, postValue);
+        await postSocialAccount(access_token, postValue);
         toast.success(`Post ${selectedPlatformName} account successfully!`);
+        setIsEdit(false);
+        setLinkState('');
+        setSelectPlatform('');
         refreshApi();
       }
     } catch (error) {
@@ -225,8 +229,14 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   const handleDeleteAccount = async (platformId: string) => {
     try {
       const access_token = getCookie("accessToken");
-      if (access_token) {
-        const res = await deleteSocialAccount(access_token, platformId);
+      const userId = getCookie("userId");
+      if (access_token && userId) {
+        const req = {
+          userId: userId,
+          platformId: platformId,
+        };
+        await deleteSocialAccount(access_token, req);
+        
         toast.success(`Deleting successfully!`);
         refreshApi();
       }
@@ -277,19 +287,21 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
                   <div className="flex items-center justify-center w-[45px]">
                     <Image
                       src={returnSocialIcon(item)}
-                      alt={item.platform}
+                      alt={item.platfromName}
                       width={26}
                       height={26}
                     ></Image>
                   </div>
-                  <div className="max-w-[200px]">
-                    <p className="font-[600] text-[14px]">{item.platform}</p>
+                  <div className="max-w-[300px]">
+                    <p className="font-[600] text-[14px]">
+                      {item.platfromName}
+                    </p>
                     <a
-                      href={addHttpsIfMissing(item.value)}
+                      href={addHttpsIfMissing(item.url)}
                       target="_blank"
                       className="font-[300] text-[14px] text-blue-500 whitespace-nowrap truncate"
                     >
-                      <p className="truncate">{removeHttps(item.value)}</p>
+                      <p className="truncate">{removeHttps(item.url)}</p>
                     </a>
                   </div>
                 </div>

@@ -47,10 +47,10 @@ function SignIn() {
       const decoded: EncodeType = jwt_decode(token.accessToken);
 
       const userInfo = {
-        id: decoded.sub,
+        id: decoded!.sub,
         email: data.body.userCredentials.email,
         avatarUrl: data.body.userCredentials.avatarUrl,
-        role: "admin",
+        role: decoded!.role,
         remember: values.remember,
       };
 

@@ -24,7 +24,7 @@ type TProjectState = {
   link: string;
 };
 
-function Projects() {
+function Projects(): JSX.Element {
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [hmtlString, setHtmlString] = useState<string>("");
   const [importedImage, setImportedImage] = useState<File | null>(null);
@@ -116,12 +116,15 @@ function Projects() {
       </div>
       <div className="flex flex-col gap-[20px]">
         {projectState.length == 0 ? (
-          <p className="font-[500] text-[14px] text-blue-700 cursor-pointer "
-          onClick={() => {
-            setIsEdit(true);
-            setIsAdd(true);
-          }}
-          >You haven&apos;t posted any projects yet</p>
+          <p
+            className="font-[500] text-[14px] text-blue-700 cursor-pointer "
+            onClick={() => {
+              setIsEdit(true);
+              setIsAdd(true);
+            }}
+          >
+            You haven&apos;t posted any projects yet
+          </p>
         ) : (
           <>
             {projectState.map((item, index) => {
