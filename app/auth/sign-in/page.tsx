@@ -35,6 +35,8 @@ function SignIn() {
   };
   const router = useRouter();
   const onSubmit = async (values: UserLogin, actions: any) => {
+    console.log(values);
+
     try {
       values.remember = remember;
       const loginResponse = await loginAccount(values);
@@ -72,6 +74,8 @@ function SignIn() {
         }
       }
       if (axios.isAxiosError(error)) {
+        console.log(error);
+        
         if (error.response?.data.responseStatusCode === 2) {
           toast.error(error?.response?.data?.errorMessages[0]);
         }
@@ -90,7 +94,19 @@ function SignIn() {
         if (error.response?.data.responseStatusCode === 7) {
           toast.warning(error?.response?.data?.errorMessages[0]);
         }
+        if (error.response?.data.responseStatusCode === 8) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
         if (error.response?.data.responseStatusCode === 9) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 18) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 17) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 15) {
           toast.warning(error?.response?.data?.errorMessages[0]);
         }
       }

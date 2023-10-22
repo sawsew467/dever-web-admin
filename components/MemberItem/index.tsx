@@ -92,6 +92,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         toast.error("Rejecting failed!");
+      
       }
     }
   };
@@ -198,7 +199,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               </p>
             </div>
           ) : null}
-          {value.status === "Rejected" && isClickReject ? (
+          {/* {value.status === "Rejected" && isClickReject ? (
             <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white">
               <p
                 className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"
@@ -210,7 +211,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
                 Approve
               </p>
             </div>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
 

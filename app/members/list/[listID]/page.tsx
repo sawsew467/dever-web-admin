@@ -154,7 +154,7 @@ function MemberList({ params }: pageProps) {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await deleteMemberInfo(userId, access_token);
+        await deleteMemberInfo(userId, access_token);
         toast.success(`Deleted user ${userEmail} successfully!`);
       }
       setOpenDialogToDelete(false);
@@ -171,9 +171,8 @@ function MemberList({ params }: pageProps) {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await approveUser(userId, access_token);
-        console.log(response);
-        toast.success(`Rejected user with email: ${userEmail}`);
+        await approveUser(userId, access_token);
+        toast.success(`Approved user with email: ${userEmail}`);
       }
       handleGetAllMember();
       setOpenDialogToApprove(false);
@@ -181,7 +180,9 @@ function MemberList({ params }: pageProps) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setOpenDialogToApprove(false);
-        toast.error("Rejecting failed!");
+        if (error.response?.data.responseStatusCode === 4) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
       }
     }
   };

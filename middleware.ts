@@ -4,14 +4,15 @@ import { NextResponse } from "next/dist/server/web/spec-extension/response";
 
 function shouldRedirectToSignIn(
   verify: RequestCookie | undefined,
-  url: string | string[]
+  url: string
 ) {
+  const host = new URL(url);
   return (
     !verify &&
     (url.includes("/blogs") ||
       url.includes("/members") ||
       url.includes("/notifications") ||
-      url === "http://localhost:3000/")
+      url === `${host.origin}/`)
   );
 }
 
@@ -19,15 +20,16 @@ export default async function middleware(
   req: NextRequest
 ): Promise<NextResponse<unknown> | undefined> {
   let verify = req.cookies.get("refreshToken");
-  // let accessToken = req.cookies.get("accessToken");
+  
   let url = req.url;
+  const host = new URL(url);
 
   if (shouldRedirectToSignIn(verify, url)) {
-    return NextResponse.redirect("http://localhost:3000/auth/sign-in");
+    return NextResponse.redirect(`${host.origin}/auth/sign-in`);
   }
 
   if (verify && url.includes("/auth")) {
-    return NextResponse.redirect("http://localhost:3000/");
+    return NextResponse.redirect(`${host.origin}/`);
   }
 
   return NextResponse.next();

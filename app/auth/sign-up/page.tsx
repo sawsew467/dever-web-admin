@@ -19,6 +19,7 @@ type UserRegister = {
 function SignUp() {
   const router = useRouter();
   const onSubmit = async (values: UserRegister, actions: any) => {
+    
     try {      
       await registerAccount(values);
       toast.success("Register success ! Check your email to validated");
@@ -31,6 +32,8 @@ function SignUp() {
         }
       }
       if (axios.isAxiosError(error)) {
+        console.log(error);
+        
         if (
           error.response?.status === 401 ||
           error.response?.status === 404 ||
@@ -44,6 +47,9 @@ function SignUp() {
       }
       if (axios.isAxiosError(error)) {
         if (error.response?.data.responseStatusCode === 7) {
+          toast.warning(error?.response?.data?.errorMessages[0]);
+        }
+        if (error.response?.data.responseStatusCode === 6) {
           toast.warning(error?.response?.data?.errorMessages[0]);
         }
       }

@@ -45,7 +45,6 @@ function RefreshToken() {
           }
         );
         const data = res.data.body;
-        console.log(data);
         if (remember === 'true' && expiredInTime) {
           setCookie("refreshToken", data.refreshToken, {
             expires: new Date(parseInt(expiredInTime)) 
@@ -84,19 +83,14 @@ function RefreshToken() {
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      console.log("route: " + url);
       if (access_token) {
         let decode: { nbf: number; exp: number } = jwtDecode(access_token);
         let verifyToken = {
           value: access_token,
           expired: decode!.exp,
-        };
-        console.log("should: " + shouldRefreshAccessToken(verifyToken));
-        console.log(expiredInTime)
-        console.log(new Date(parseInt(expiredInTime!)));
-        
+        };      
         if (shouldRefreshAccessToken(verifyToken)) {
-          console.log("refreshing token...");
+          console.log("refreshing ...");
           const refreshed = refreshAccessToken();
           if (!refreshed) {
             router.push("/auth/sign-in");

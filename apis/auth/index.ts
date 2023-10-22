@@ -48,14 +48,14 @@ type UserRegister = {
 
 export const loginAccount = (payload: UserLogin) => {
   return axiosClient.post<LoginResponse>(END_POINT.LOGIN, {
-    email: payload.email,
+    username: payload.email,
     password: payload.password,
     RememberMe : payload.remember
   });
 };
 export const registerAccount = (payload: UserRegister) => {
   return axiosClient.post(END_POINT.REGISTER, {
-    email: payload.email,
+    username: payload.email,
     password: payload.password,
     role : "user"
   });
@@ -63,7 +63,7 @@ export const registerAccount = (payload: UserRegister) => {
 
 export const resetAccount = (payload: UserChange) => {
   return axiosClient.patch(END_POINT.RESET, {
-    email : payload.email,
+    username : payload.email,
     oldPassword: payload.oldPassword,
     newPassword: payload.newPassword
   });
