@@ -23,8 +23,8 @@ import {
 } from "@/redux/slices/sideBarControl";
 
 type TSocialData = {
-  platformId: string;
-  platfromName: string;
+  id: string;
+  name: string;
   url: string;
 };
 

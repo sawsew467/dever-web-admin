@@ -39,8 +39,8 @@ type objectItemOne = {
   value: string;
 };
 type TSocialData = {
-  platformId: string;
-  platfromName: string;
+  id: string;
+  name: string;
   url: string;
 };
 
@@ -87,7 +87,7 @@ function Profile({ params }: pageProps) {
   }, [dispatch]);
 
   const returnSocialIcon = (item: TSocialData): StaticImageData => {
-    switch (item.platfromName.toLowerCase()) {
+    switch (item.name.toLowerCase()) {
       case "facebook":
         return facebookIcon;
       case "github":
@@ -230,7 +230,7 @@ function Profile({ params }: pageProps) {
                           <a href={item.url} key={index}>
                             <Image
                               src={returnSocialIcon(item)}
-                              alt={item.platfromName}
+                              alt={item.name}
                               width={24}
                               height={24}
                               className="hover:bg-slate-200 rounded-md transition"

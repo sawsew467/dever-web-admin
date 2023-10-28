@@ -35,8 +35,6 @@ function SignIn() {
   };
   const router = useRouter();
   const onSubmit = async (values: UserLogin, actions: any) => {
-    console.log(values);
-
     try {
       values.remember = remember;
       const loginResponse = await loginAccount(values);

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 import { refreshUserInfoFromStorage } from '@/redux/slices/userInfor';
+import { setIsDarkMode } from '@/redux/slices/app';
 
 type EncodeType = {
     sub:string,
@@ -34,6 +35,10 @@ function AppProvider({children}:{children:React.ReactNode}) {
         const userFromCookies = getUserFromCookies();
         if(userFromCookies) {
             dispatch(refreshUserInfoFromStorage(userFromCookies));
+        }
+        if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.toggle('dark');
+            dispatch(setIsDarkMode(true))
         }
     },[dispatch])
 

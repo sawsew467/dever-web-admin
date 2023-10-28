@@ -32,8 +32,8 @@ import {
 import { toast } from "react-toastify";
 
 type TSocialData = {
-  platformId: string;
-  platfromName: string;
+  id: string;
+  name: string;
   url: string;
 };
 
@@ -90,7 +90,7 @@ function SocialAccount({
   };
 
   const returnSocialIcon = (item: TSocialData): StaticImageData => {
-    switch (item.platfromName.toLowerCase()) {
+    switch (item.name.toLowerCase()) {
       case "facebook":
         return FacebookIcon;
       case "github":
@@ -287,14 +287,14 @@ function SocialAccount({
                   <div className="flex items-center justify-center w-[45px]">
                     <Image
                       src={returnSocialIcon(item)}
-                      alt={item.platfromName}
+                      alt={item.name}
                       width={26}
                       height={26}
                     ></Image>
                   </div>
                   <div className="max-w-[300px]">
                     <p className="font-[600] text-[14px]">
-                      {item.platfromName}
+                      {item.name}
                     </p>
                     <a
                       href={addHttpsIfMissing(item.url)}
@@ -313,7 +313,7 @@ function SocialAccount({
                       iconPosition={"left"}
                       backgroundColor={"hover:bg-blue-700"}
                       method={() => {
-                        handleDeleteAccount(item.platformId);
+                        handleDeleteAccount(item.id);
                       }}
                       tailwind={
                         "text-blue-700 border-[1px] font-[500] border-blue-500 hover:text-white transition"

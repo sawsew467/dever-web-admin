@@ -12,6 +12,7 @@ import { store } from "../redux/store";
 
 import AuthProvider from "@/app/AuthProvider";
 import RefreshToken from "./RefreshToken";
+import { getCookie } from "cookies-next";
 const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
@@ -26,7 +27,7 @@ export default function RootLayout({
   ];
   const pathname = usePathname();
   const isSpecial = specialPaths.includes(pathname);
-
+  
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className} suppressHydrationWarning={true}>

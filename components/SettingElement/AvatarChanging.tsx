@@ -16,6 +16,7 @@ type TProps = {
 }
 
 function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.Element {
+  
   const fileInputRef = useRef(null);
   const [imageState, setImageState] = useState<File | null>(null);
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
@@ -108,7 +109,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
         ></Image>
       </div>
       <div className="flex flex-col gap-[16px]">
-        <h3 className="font-[700] text-[24px]">{fullName == '' ? "Haven't set name yet" : fullName}</h3>
+        <h3 className="font-[700] text-[24px]">{fullName == ' ' ? "Haven't set name yet" : fullName}</h3>
         <p className="font-[400] text-[16px]">{career == '' ? "Not set yet" : career}</p>
         <div>
           <input
@@ -123,7 +124,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
               console.log("Submit");
             }}
           />
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-[20px]">
             <UnlinkButton
               textContent={"Change Image"}
               icon={"upload"}

@@ -1,13 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import bell from "@icon/components/sidebar/bell.svg";
-import chevrondown from "@icon/components/sidebar/chevron-down.svg";
-import usersgroup from "@icon/components/sidebar/users-group.svg";
-import gridplus from "@icon/components/sidebar/grid-plus.svg";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
 import { changeIsMouseVisit } from "@/redux/slices/app";
 import {
   openBlogList,
@@ -23,6 +14,14 @@ import {
   toggleDropdownMembers,
   toggleDropdownNotifications,
 } from "@/redux/slices/sideBarControl";
+import { RootState } from "@/redux/store";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+
+import { BiChevronUp } from "react-icons/bi";
+import { HiViewGridAdd } from "react-icons/hi";
+import { HiMiniUserGroup } from "react-icons/hi2";
+import { IoNotifications } from "react-icons/io5";
 
 function Slidebar() {
   const dispatch = useDispatch();
@@ -75,13 +74,13 @@ function Slidebar() {
     <>
       <aside
         id="default-sidebar"
-        className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 border-r-2 select-none "
+        className="fixed top-[72px] left-0 z-40  h-screen transition-transform -translate-x-full sm:translate-x-0 border-r-2 dark:border-r-darkSemi select-none "
         aria-label="Sidebar"
       >
         {" "}
         <h1></h1>
         <div
-          className="h-full bg-[#ffffff]"
+          className="h-full bg-[#ffffff] dark:bg-dark"
           onMouseEnter={() => dispatch(changeIsMouseVisit(true))}
           onMouseLeave={() => dispatch(changeIsMouseVisit(false))}
         >
@@ -101,18 +100,14 @@ function Slidebar() {
               <button
                 type="button"
                 onClick={() => dispatch(toggleDropdownNotifications())}
-                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 rounded-[8px]`}
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 dark:hover:bg-darkHover rounded-[8px]`}
               >
                 <div className="flex items-center">
-                  <Image
-                    src={bell}
-                    alt="Picture of the author"
-                    width={100}
-                    height={100}
-                    className="w-[24px] h-[24px]"
+                  <IoNotifications
+                    className={"text-[24px] text-slate-500 dark:text-slate-300"}
                   />
                   <span
-                    className="pl-[12px] text-[16px]"
+                    className="pl-[12px] text-[16px] dark:text-white"
                     style={{
                       display: isOpenSlidebar
                         ? isMouseVisit
@@ -125,12 +120,10 @@ function Slidebar() {
                   </span>
                 </div>
                 <div className={isDropdownNotifications ? "rotate-180" : ""}>
-                  <Image
-                    src={chevrondown}
-                    alt="Picture of the author"
-                    className="r-0"
-                    width={20}
-                    height={20}
+                  <BiChevronUp
+                    className={
+                      "text-[24px] text-slate-500 dark:text-slate-300 rotate-180"
+                    }
                     style={{
                       display: isOpenSlidebar
                         ? isMouseVisit
@@ -146,14 +139,14 @@ function Slidebar() {
                 className={isDropdownNotifications ? "pt-[6px]" : "hidden"}
               >
                 <li
-                  className={` hover:bg-gray-100 rounded-md ${
-                    isViewNotification ? "bg-gray-100" : ""
+                  className={` hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isViewNotification ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openViewNotification(true))}
                 >
                   <Link
                     href="/notifications/views/1"
-                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900 dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -184,14 +177,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isCreateNotification ? "bg-gray-100" : ""
+                  className={`mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isCreateNotification ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openCreateNotification(true))}
                 >
                   <Link
                     href="/notifications/create"
-                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >
@@ -227,15 +220,11 @@ function Slidebar() {
               <button
                 type="button"
                 onClick={() => dispatch(toggleDropdownMembers())}
-                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center transition justify-between hover:bg-gray-100 rounded-[8px]`}
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900  dark:text-slate-100 items-center transition justify-between hover:bg-gray-100 dark:hover:bg-darkHover rounded-[8px]`}
               >
                 <div className="flex items-center">
-                  <Image
-                    src={usersgroup}
-                    alt="Picture of the author"
-                    width={100}
-                    height={100}
-                    className="w-[24px] h-[24px]"
+                  <HiMiniUserGroup
+                    className={"text-[24px] text-slate-500 dark:text-slate-300"}
                   />
                   <span
                     className="pl-[12px] text-[16px] "
@@ -251,12 +240,10 @@ function Slidebar() {
                   </span>
                 </div>
                 <div className={isDropdownMembers ? "rotate-180" : ""}>
-                  <Image
-                    src={chevrondown}
-                    alt="Picture of the author"
-                    className="r-0"
-                    width={20}
-                    height={20}
+                  <BiChevronUp
+                    className={
+                      "text-[24px] text-slate-500 dark:text-slate-300 rotate-180"
+                    }
                     style={{
                       display: isOpenSlidebar
                         ? isMouseVisit
@@ -272,14 +259,14 @@ function Slidebar() {
                 className={isDropdownMembers ? "pt-[6px]" : "hidden"}
               >
                 <li
-                  className={`hover:bg-gray-100 rounded-md ${
-                    isMemberList ? "bg-gray-100" : ""
+                  className={`hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isMemberList ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openMemberList(true))}
                 >
                   <Link
                     href="/members/list/1"
-                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full  text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -310,14 +297,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isMemberProfile ? "bg-gray-100" : ""
+                  className={`mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isMemberProfile ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openMemberProfile(true))}
                 >
                   <Link
                     href="/members/profile/"
-                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >
@@ -348,14 +335,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={` mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isMemberSetting ? "bg-gray-100" : ""
+                  className={` mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isMemberSetting ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openMemberSetting(true))}
                 >
                   <Link
                     href="/members/setting/"
-                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -392,15 +379,11 @@ function Slidebar() {
                 type="button"
                 onClick={() => dispatch(toggleDropdownBlogs())}
                 //  className='flex pt-[16px] px-[8px] w-[255px] text-gray-900 items-center justify-between'
-                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900 items-center justify-between hover:bg-gray-100 rounded-[8px] transition`}
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900  dark:text-slate-100 items-center justify-between hover:bg-gray-100 dark:hover:bg-darkHover rounded-[8px] transition`}
               >
                 <div className="flex items-center">
-                  <Image
-                    src={gridplus}
-                    alt="Picture of the author"
-                    className="w-[24px] h-[24px] "
-                    width={100}
-                    height={100}
+                  <HiViewGridAdd
+                    className={"text-[26px] text-slate-500 dark:text-slate-300"}
                   />
                   <span
                     className="pl-[12px] text-[16px] "
@@ -416,12 +399,10 @@ function Slidebar() {
                   </span>
                 </div>
                 <div className={isDropdownBlogs ? "rotate-180" : ""}>
-                  <Image
-                    src={chevrondown}
-                    alt="Picture of the author"
-                    className="r-0"
-                    width={20}
-                    height={20}
+                  <BiChevronUp
+                    className={
+                      "text-[24px] text-slate-500 dark:text-slate-300 rotate-180"
+                    }
                     style={{
                       display: isOpenSlidebar
                         ? isMouseVisit
@@ -437,14 +418,14 @@ function Slidebar() {
                 className={isDropdownBlogs ? "pt-[6px]" : "hidden"}
               >
                 <li
-                  className={` hover:bg-gray-100 rounded-md ${
-                    isBlogsList ? "bg-gray-100" : ""
+                  className={` hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isBlogsList ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openBlogList(true))}
                 >
                   <Link
                     href="/blogs/views/1"
-                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full  text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -475,14 +456,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={`mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isYourBlog ? "bg-gray-100" : ""
+                  className={`mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isYourBlog ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openYourBlog(true))}
                 >
                   <Link
                     href="/blogs/your_blogs/1"
-                    className={`py-[6px] flex items-center w-full  text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full  text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group `}
                   >
@@ -513,14 +494,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={` mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isBlogPending ? "bg-gray-100" : ""
+                  className={` mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isBlogPending ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openBlogPending(true))}
                 >
                   <Link
                     href="/blogs/blogs_pending/1"
-                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >
@@ -551,14 +532,14 @@ function Slidebar() {
                   </Link>
                 </li>
                 <li
-                  className={` mt-[6px] hover:bg-gray-100 rounded-md ${
-                    isCreateBlog ? "bg-gray-100" : ""
+                  className={` mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isCreateBlog ? "bg-gray-100 dark:bg-darkHover" : ""
                   }`}
                   onClick={() => dispatch(openCreateBlog(true))}
                 >
                   <Link
                     href="/blogs/create"
-                    className={`py-[6px] flex items-center w-full text-gray-900 transition duration-75 rounded-lg ${
+                    className={`py-[6px] flex items-center w-full text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
                       isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
                     } group`}
                   >

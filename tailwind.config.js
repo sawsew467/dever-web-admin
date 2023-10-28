@@ -22,7 +22,10 @@ module.exports = {
         primaryYellowBland: "#FDF6B2",
         primaryBrown: "#723B13",
         primaryRed: "#9B1C1C",
-        primaryRedBland: "#FDE8E8"
+        primaryRedBland: "#FDE8E8",
+        dark: "#282828",
+        darkHover: "#3f3f3f",
+        darkSemi: "#575757"
       },
       boxShadow: {
         primary: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -36,6 +39,7 @@ module.exports = {
     }
     },
   },
+  darkMode: 'class',
   plugins: [
     require("flowbite/plugin"),
     require('tailwindcss-animated'),

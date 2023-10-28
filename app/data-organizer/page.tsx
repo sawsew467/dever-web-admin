@@ -41,7 +41,7 @@ function SettingList() {
           </div>
         ) : (
           <div className="flex flex-col lg:flex-row gap-[16px]">
-            <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
+            {/* <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
               <Skills />
               <Majors />
               <Position/>
@@ -49,7 +49,7 @@ function SettingList() {
             <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
               <Hobbies />
               <Department/>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

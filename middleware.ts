@@ -20,7 +20,7 @@ export default async function middleware(
   req: NextRequest
 ): Promise<NextResponse<unknown> | undefined> {
   let verify = req.cookies.get("refreshToken");
-  
+  let darkMode = req.cookies.get("darkMode?");
   let url = req.url;
   const host = new URL(url);
 
@@ -31,6 +31,5 @@ export default async function middleware(
   if (verify && url.includes("/auth")) {
     return NextResponse.redirect(`${host.origin}/`);
   }
-
   return NextResponse.next();
 }
