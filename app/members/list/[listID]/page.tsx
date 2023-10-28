@@ -163,7 +163,7 @@ function MemberList({ params }: pageProps) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setOpenDialogToDelete(false);
-        toast.error("Deleting failed!");
+        toast.error(error?.response?.data?.errorMessages[0]);
       }
     }
   };
@@ -181,7 +181,7 @@ function MemberList({ params }: pageProps) {
         console.log(error);
         setOpenDialogToApprove(false);
         if (error.response?.data.responseStatusCode === 4) {
-          toast.warning(error?.response?.data?.errorMessages[0]);
+          toast.error(error?.response?.data?.errorMessages[0]);
         }
       }
     }
@@ -191,6 +191,7 @@ function MemberList({ params }: pageProps) {
   const handleDelectSelectedMembers = () => {
     selectedMembers.forEach((value) => handleDeleteUser(value.id, value.email));
   };
+  
   const handleApproveSelectedMembers = () => {
     selectedMembers.forEach((item) => {
       if(item.status !== "Approved") {

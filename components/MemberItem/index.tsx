@@ -75,7 +75,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       if (axios.isAxiosError(error)) {
         console.log(error);
 
-        toast.error("Approval failed!");
+        toast.error(error?.response?.data?.errorMessages[0]);
       }
     }
   };
@@ -91,8 +91,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
-        toast.error("Rejecting failed!");
-      
+        toast.error(error?.response?.data?.errorMessages[0]);
       }
     }
   };
@@ -111,7 +110,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setOpenDialog(false);
-        toast.error("Deleting failed!");
+        toast.error(error?.response?.data?.errorMessages[0]);
       }
     }
   };  
@@ -247,15 +246,14 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       <div className="flex h-[78px]">
         {userRole === "admin" ? (
           <div className="flex gap-[16px] justify-center items-center p-[16px]">
-            <Button
-              href={`/members/setting/${value.id}`}
+            <UnlinkButton
               method={() => {}}
               icon="edit"
               backgroundColor="bg-blue-700"
               iconPosition="left"
               textContent="Edit"
               tailwind="text-white"
-            ></Button>
+            ></UnlinkButton>
             <UnlinkButton
               method={handleClickOpen}
               icon="delete"

@@ -24,18 +24,18 @@ export const getAllSkills = (access_token: string | null) => {
   });
 };
 
-export const postSkill = (access_token: string | null, value: postValue) => {
+export const postSkill = (access_token: string | null, value: {skillName:string}) => {
   return axiosClient.post(
-    `https://fudeverapi.bsite.net${END_POINT.SKILL}`,
+    `${END_POINT.SKILL}`,
     value,
     {
       headers: { Authorization: `Bearer ${access_token}` },
     }
   );
 };
-export const patchSkill = (access_token: string | null, value: patchValue) => {
+export const patchSkill = (access_token: string | null, value: {newName:string}, skillId: string) => {
   return axiosClient.patch(
-    `https://fudeverapi.bsite.net${END_POINT.SKILL}`,
+    `${END_POINT.SKILL}/${skillId}`,
     value,
     {
       headers: { Authorization: `Bearer ${access_token}` },
@@ -43,14 +43,41 @@ export const patchSkill = (access_token: string | null, value: patchValue) => {
   );
 };
 
-export const deleteSkill = (access_token: string | null, itemId: string) => {
+export const deleteSkill = (access_token: string | null, skillId: string) => {
   return axiosClient.delete(
-    `https://fudeverapi.bsite.net${END_POINT.SKILL}/${itemId}`,
+    `${END_POINT.SKILL}/${skillId}`,
     {
       headers: { Authorization: `Bearer ${access_token}` },
     }
   );
 };
+export const getALlSoftDeleteSkills = (access_token: string | null) => {
+  return axiosClient.get(
+    `${END_POINT.SKILL}/${"deleted/all"}`,
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }
+  );
+};
+export const deleteSkillOutOfDB = (access_token: string | null, skillId:string) => {
+  return axiosClient.delete(
+    `${END_POINT.SKILL}/deleted/${skillId}`,
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }
+  );
+};
+export const restoreSkill = (access_token: string | null, skillId:string) => {
+  return axiosClient.patch(
+    `${END_POINT.SKILL}/deleted/restore/${skillId}`, null,
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }
+  );
+};
+
+
+
 //Hobbies
 export const getAllHobbies = (access_token: string | null) => {
   return axiosClient.get(`${END_POINT.HOBBY}/all`, {

@@ -30,6 +30,9 @@ function Header(): JSX.Element {
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
+  const userRole = useSelector(
+    (state: RootState) => state.userInfor.currentUser.role
+  );
   const [userData, setUserData] = useState<userInfo>();
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
 
@@ -142,8 +145,10 @@ function Header(): JSX.Element {
                   }}
                 >
                   <div>
-                    <h2 className="font-bold">{userData?.lastName.concat(" ", userData.firstName)}</h2>
-                    <h3 className="font-bold">{userData?.email}</h3>
+                    <h2 className="font-bold">
+                      {userData?.lastName.concat(" ", userData.firstName)}
+                    </h2>
+                    <h3 className="font-[400]">{userData?.email}</h3>
                   </div>
                   <div className="w-[48px]">
                     <Image
@@ -161,20 +166,22 @@ function Header(): JSX.Element {
                   <div className="bg-gray-300 w-full h-[1px]"></div>
                 </div>
                 <div>
-                  <div
-                    className="flex flex-row items-center gap-[20px] hover:bg-gray-100 dark:hover:bg-darkHover p-[8px] rounded-[10px]"
-                    onClick={() => {
-                      router.push("/data-organizer");
-                      dispatch(closeSidebar());
-                    }}
-                  >
-                    <div className="p-[8px] bg-gray-200 dark:bg-darkSemi rounded-[50%]">
-                      <BsDatabaseFillGear
-                        className={"text-[24px] text-gray-60"}
-                      />
+                  {userRole === "admin" ? (
+                    <div
+                      className="flex flex-row items-center gap-[20px] hover:bg-gray-100 dark:hover:bg-darkHover p-[8px] rounded-[10px]"
+                      onClick={() => {
+                        router.push("/data-organizer");
+                        dispatch(closeSidebar());
+                      }}
+                    >
+                      <div className="p-[8px] bg-gray-200 dark:bg-darkSemi rounded-[50%]">
+                        <BsDatabaseFillGear
+                          className={"text-[24px] text-gray-60"}
+                        />
+                      </div>
+                      <h3 className="font-semibold">Data management</h3>
                     </div>
-                    <h3 className="font-semibold">Data management</h3>
-                  </div>
+                  ) : null}
                   <div
                     className="flex flex-row items-center gap-[20px] hover:bg-gray-100 dark:hover:bg-darkHover p-[8px] rounded-[10px]"
                     onClick={() => {

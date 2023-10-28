@@ -31,7 +31,7 @@ function SettingList() {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div>
-          <h3 className="text-blue-600 font-[700] text-[24px]">
+          <h3 className="text-blue-600 dark:text-[#0198ff] font-[700] text-[24px]">
             Data Organizer
           </h3>
         </div>
@@ -41,15 +41,15 @@ function SettingList() {
           </div>
         ) : (
           <div className="flex flex-col lg:flex-row gap-[16px]">
-            {/* <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
+            <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
               <Skills />
-              <Majors />
-              <Position/>
+              {/* <Majors />
+              <Position/> */}
             </div>
             <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
-              <Hobbies />
-              <Department/>
-            </div> */}
+              {/* <Hobbies />
+              <Department/> */}
+            </div>
           </div>
         )}
       </div>

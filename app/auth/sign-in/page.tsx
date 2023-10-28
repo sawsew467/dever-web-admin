@@ -114,7 +114,7 @@ function SignIn() {
 
   return (
     <section>
-      <div className="h-screen w-full flex justify-center bg-[#F9FAFB] bg-opacity-50 items-center">
+      <div className="h-screen w-full flex justify-center bg-[#F9FAFB] dark:bg-[#F9FAFB] bg-opacity-50 items-center">
         <div className="flex flex-col max-w-[1440px] mt-6  justify-center items-center w-full ">
           <a href="#">
             <Image
