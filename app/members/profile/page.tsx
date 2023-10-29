@@ -211,7 +211,7 @@ function Profile() {
                      (<p className="font-bold italic">Not set yet</p>) :  userData?.userPlatforms.map(
                       (item: TSocialData, index: number) => {
                         return (
-                          <a href={item.url} key={index}>
+                          <a href={item.url} key={index} target="_blank">
                             {returnSocialIcon(item)}
                           </a>
                         );
