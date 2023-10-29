@@ -164,6 +164,20 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = action.payload;
     },
+    closeAllRoute: (state) => {
+      state.sidebarNavigation.isViewNotification = false;
+      state.sidebarNavigation.isCreateNotification = false;
+      state.sidebarNavigation.isMemberList = false;
+      state.sidebarNavigation.isMemberProfile = false;
+      state.sidebarNavigation.isMemberSetting = false;
+      state.sidebarNavigation.isBlogList = false;
+      state.sidebarNavigation.isYourBlog = false;
+      state.sidebarNavigation.isBlogPending = false;
+      state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarDropDown.isDropdownBlogs = false;
+      state.sidebarDropDown.isDropdownMembers = false;
+      state.sidebarDropDown.isDropdownNotifications = false;
+    },
   },
 });
 
@@ -183,5 +197,6 @@ export const {
   openMemberSetting,
   openViewNotification,
   openYourBlog,
+  closeAllRoute
 } = sidebarSlice.actions;
 export default sidebarSlice.reducer;

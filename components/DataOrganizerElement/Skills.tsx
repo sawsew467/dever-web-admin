@@ -7,28 +7,29 @@ import {
   postSkill,
   restoreSkill,
 } from "@/apis/dataOrganizer";
-import { DialogContentText, LinearProgress, useMediaQuery } from "@mui/material";
+import {
+  DialogContentText,
+  LinearProgress,
+  useMediaQuery,
+} from "@mui/material";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import { MdRecycling } from "react-icons/md";
-import { TransitionProps } from "@mui/material/transitions";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
 import { BsDatabaseFillDash } from "react-icons/bs";
+import { MdRecycling } from "react-icons/md";
 
+import { RootState } from "@/redux/store";
 import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
 
 type TSkill = {
   id: string;
@@ -160,6 +161,7 @@ function Skills() {
         toast.success(`Removed skill with value: "${item.name}"successfully!`);
         handleGetAllSkill();
         handleGetAllSoftDeleted();
+        setOpen(false);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -167,13 +169,18 @@ function Skills() {
       }
     }
   };
-  const handleDeleteSkillOutOfDB = async (item: TSkillRecycle, all:boolean) => {
+  const handleDeleteSkillOutOfDB = async (
+    item: TSkillRecycle,
+    all: boolean
+  ) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         await deleteSkillOutOfDB(access_token, item.id!);
-        if(!all) {
-          toast.success(`Deleted skill with value: "${item.name}"successfully!`);
+        if (!all) {
+          toast.success(
+            `Deleted skill with value: "${item.name}"successfully!`
+          );
         }
         handleGetAllSkill();
         handleGetAllSoftDeleted();
@@ -184,13 +191,15 @@ function Skills() {
       }
     }
   };
-  const handleRestoreSkill = async (item: TSkillRecycle, all:boolean) => {
+  const handleRestoreSkill = async (item: TSkillRecycle, all: boolean) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         await restoreSkill(access_token, item.id!);
-        if(!all) {
-          toast.success(`Restore skill with value: "${item.name}"successfully!`);
+        if (!all) {
+          toast.success(
+            `Restore skill with value: "${item.name}"successfully!`
+          );
         }
         handleGetAllSkill();
         handleGetAllSoftDeleted();
@@ -205,11 +214,11 @@ function Skills() {
   const handleRestoreAll = () => {
     recycleData?.forEach((item) => handleRestoreSkill(item, true));
     setOpen(false);
-  }
+  };
   const handleDeleteAll = () => {
     recycleData.forEach((item) => handleDeleteSkillOutOfDB(item, true));
     setOpenAlert(false);
-  }
+  };
 
   return (
     <div className="dark:shadow-darkPrimary shadow-primary rounded-[10px] p-[20px] flex flex-col gap-[10px] dark:text-white">
@@ -230,7 +239,10 @@ function Skills() {
       </div>
 
       <div className="flex flex-col gap-[10px]">
-        <h3 className="font-bold">All skills in database:</h3>
+        <div className="flex flex-row justify-between">
+          <h3 className="font-bold">All skills in database:</h3>
+          <h3>Total: {skillsData.length}</h3>
+        </div>
 
         <ul className="flex flex-col gap-[10px] max-h-[420px] overflow-y-scroll scrollbar-hide p-[4px]">
           {skillsData?.length == 0 ? (
@@ -308,7 +320,7 @@ function Skills() {
             borderRadius: "8px",
             maxWidth: "1200px",
             userSelect: "none",
-          }
+          },
         }}
         onClose={() => setOpen(false)}
         aria-labelledby="customized-dialog-title"
@@ -318,8 +330,7 @@ function Skills() {
         style={{
           display: recycleData?.length == 0 ? "none" : "",
         }}
-
-      > 
+      >
         <DialogTitle
           sx={{ m: 0, p: 2 }}
           id="customized-dialog-title"
@@ -349,21 +360,21 @@ function Skills() {
                     <p className="font-semibold"> {item.name}</p>
                     <div className="flex flex-row gap-[10px] items-center">
                       <p className="italic text-[12px] dark:text-slate-300 hidden lg:block">
-                        Delete at: {new Date(item.deletedAt).toUTCString()}{" "}
+                        Deleted at: {new Date(item.deletedAt).toUTCString()}{" "}
                       </p>
                       <button
-                        className="border-[1px] dark:border-dark px-[4px] rounded-[5px] text-[12px] bg-blue-400 dark:bg-blue-600 text-white hover:scale-105 transition flex flex-row items-center gap-[4px]"
+                        className="border-[1px] dark:border-dark px-[4px] py-[5px] rounded-[5px] text-[12px] bg-blue-400 dark:bg-blue-600 text-white hover:scale-105 transition flex flex-row items-center gap-[4px]"
                         onClick={() => handleRestoreSkill(item, false)}
                       >
                         <MdRecycling />
-                        Restore
+                        <p>Restore</p>
                       </button>
                       <button
-                        className="border-[1px] dark:border-dark px-[4px] rounded-[5px] text-[12px] bg-red-500 dark:bg-red-700 text-white hover:scale-105 transition flex flex-row gap-[4px] items-center"
-                        onClick={() => handleDeleteSkillOutOfDB(item, true)}
+                        className="border-[1px] dark:border-dark px-[4px] py-[5px] rounded-[5px] text-[12px] bg-red-500 dark:bg-red-700 text-white hover:scale-105 transition flex flex-row gap-[4px] items-center"
+                        onClick={() => handleDeleteSkillOutOfDB(item, false)}
                       >
                         <BsDatabaseFillDash />
-                        Delete
+                        <p>Delete</p>
                       </button>
                     </div>
                   </div>
@@ -373,10 +384,22 @@ function Skills() {
           </div>
         </DialogContent>
         <DialogActions className="dark:bg-darkSemi">
-          <Button autoFocus onClick={() => {handleRestoreAll()}} className="dark:text-white">
+          <Button
+            autoFocus
+            onClick={() => {
+              handleRestoreAll();
+            }}
+            className="dark:text-white"
+          >
             Restore all
           </Button>
-          <Button autoFocus onClick={() => {setOpenAlert(true)}} className="dark:text-white">
+          <Button
+            autoFocus
+            onClick={() => {
+              setOpenAlert(true);
+            }}
+            className="dark:text-white"
+          >
             Delete all
           </Button>
         </DialogActions>
@@ -384,32 +407,49 @@ function Skills() {
 
       <Dialog
         PaperProps={{
-          style:{
+          style: {
             borderRadius: "8px",
             backgroundColor: isDarkMode ? "#18191a" : "white",
-            userSelect: "none"
-          }
+            userSelect: "none",
+          },
         }}
         open={openAlert}
         onClose={() => setOpenAlert(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title" className="dark:text-red-600 text-red-500 font-bold">
-          {"Deleting all skill alert!"}
+        <DialogTitle
+          id="alert-dialog-title"
+          className="dark:text-red-600 text-red-500 font-bold"
+        >
+          {"Deleting all skills alert!"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" className="dark:text-white">
-          Are you sure you want to delete everything in recycle?? If you agree, all data will be lost and cannot be recovered! Click disargree to cancel the delete all request.
+          <DialogContentText
+            id="alert-dialog-description"
+            className="dark:text-white"
+          >
+            Are you sure you want to delete everything in recycle?? If you
+            agree, all data will be lost and cannot be recovered! Click
+            disargree to cancel the delete all request.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {
-            setOpenAlert(false);
-          }} className="hover:text-green-400">Disagree</Button>
-          <Button onClick={() => {
-            handleDeleteAll()
-          }} autoFocus className="hover:text-red-500">
+          <Button
+            onClick={() => {
+              setOpenAlert(false);
+            }}
+            className="hover:text-green-400"
+          >
+            Disagree
+          </Button>
+          <Button
+            onClick={() => {
+              handleDeleteAll();
+            }}
+            autoFocus
+            className="hover:text-red-500"
+          >
             Agree
           </Button>
         </DialogActions>

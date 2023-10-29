@@ -24,6 +24,7 @@ import { AiFillSetting } from "react-icons/ai";
 import { IoLogOut } from "react-icons/io5";
 import { BsDatabaseFillGear } from "react-icons/bs";
 import { CgDarkMode } from "react-icons/cg";
+import { closeAllRoute } from "@/redux/slices/sideBarControl";
 
 function Header(): JSX.Element {
   const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
@@ -101,7 +102,13 @@ function Header(): JSX.Element {
             className="cursor-pointer w-[50px] h-[50px] p-2 rounded-md hover:bg-gray-100 dark:hover:bg-darkHover transition duration-200"
             onClick={handleOpenMenu}
           />
-          <div className="flex flex-row items-center gap-[4px]">
+          <div
+            className="flex flex-row items-center gap-[4px]"
+            onClick={() => {
+              router.push("/");
+              dispatch(closeAllRoute());
+            }}
+          >
             <Image
               src={logo}
               alt="Picture of the author"
@@ -172,6 +179,7 @@ function Header(): JSX.Element {
                       onClick={() => {
                         router.push("/data-organizer");
                         dispatch(closeSidebar());
+                        dispatch(closeAllRoute());
                       }}
                     >
                       <div className="p-[8px] bg-gray-200 dark:bg-darkSemi rounded-[50%]">
