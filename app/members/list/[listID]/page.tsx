@@ -27,14 +27,15 @@ import { Button as MUIButton } from "@mui/material/";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { store } from "@/redux/store";
-import { approveUser} from "@/apis/appUser";
+import { approveUser } from "@/apis/appUser";
 import { memberPros, memberType } from "@/ultils/types";
 import { dropdownMembers, openMemberList } from "@/redux/slices/sideBarControl";
+import { AiFillCheckCircle } from "react-icons/ai";
+import { FaTrash } from "react-icons/fa6";
 
 type pageProps = {
   params: { listID: string };
 };
-
 
 function MemberList({ params }: pageProps) {
   const userRole = useSelector(
@@ -46,6 +47,7 @@ function MemberList({ params }: pageProps) {
   const isMouseVisit = useSelector(
     (state: RootState) => state.app.isMouseVisit
   );
+  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode)
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const increaseIndex = 7;
@@ -81,8 +83,8 @@ function MemberList({ params }: pageProps) {
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data.body;
-        const currentUserRole = store.getState().userInfor.currentUser.role;        
-        
+        const currentUserRole = store.getState().userInfor.currentUser.role;
+
         const filteredData = data
           .map((value: memberType) => {
             if (currentUserRole === "admin") {
@@ -167,7 +169,7 @@ function MemberList({ params }: pageProps) {
       }
     }
   };
-  const handleApproveUser = async (userId:string, userEmail:string) => {
+  const handleApproveUser = async (userId: string, userEmail: string) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
@@ -187,20 +189,19 @@ function MemberList({ params }: pageProps) {
     }
   };
 
-
   const handleDelectSelectedMembers = () => {
     selectedMembers.forEach((value) => handleDeleteUser(value.id, value.email));
   };
-  
+
   const handleApproveSelectedMembers = () => {
     selectedMembers.forEach((item) => {
-      if(item.status !== "Approved") {
+      if (item.status !== "Approved") {
         handleApproveUser(item.id, item.email);
       } else {
         handleCloseApproveDialog();
       }
-    })
-  }    
+    });
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -219,14 +220,14 @@ function MemberList({ params }: pageProps) {
     >
       <div className="w-[100%] flex flex-col gap-[20px] select-none">
         <div>
-          <h1 className="font-bold text-[24px] select-none pt-[20px] px-[16px]">
+          <h1 className="font-bold text-[24px] select-none pt-[20px] px-[16px] dark:text-white">
             All Members
           </h1>
         </div>
         <div className="flex justify-between px-[16px]">
           <div className="flex gap-[16px]">
             <div className="flex w-fit h-[38px] rounded-[10px] overflow-hidden">
-              <select className="w-fit leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 bg-gray-100 select-none ">
+              <select className="w-fit leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 dark:border-darkHover bg-gray-100 dark:bg-dark dark:text-white select-none ">
                 <option value="All" className="">
                   All
                 </option>
@@ -242,7 +243,7 @@ function MemberList({ params }: pageProps) {
               </select>
               <input
                 type="search"
-                className="w-[392px] border-y-2 border-r-2 border-l-none border-slate-200 select-none outline-none"
+                className="w-[392px] border-y-2 border-r-2 border-l-none border-slate-200 dark:text-white dark:border-darkHover dark:bg-dark select-none outline-none"
               />
               <div className="w-[42px] h-[38px] bg-primaryBlue flex items-center justify-center cursor-pointer">
                 <Image
@@ -253,19 +254,15 @@ function MemberList({ params }: pageProps) {
               </div>
             </div>
             {userRole === "admin" ? (
-              <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200">
-                <Image
-                  src={checkIcon}
-                  alt="checkIcon"
-                  className="w-[24px] h-[38px] cursor-pointer"
+              <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200 items-center">
+                <AiFillCheckCircle
+                  className="text-[24px] dark:text-gray-300"
                   onClick={() => {
                     handleGetAllSelectedMembers("approve");
                   }}
                 />
-                <Image
-                  src={trashIcon}
-                  alt="trashIcon"
-                  className="w-[24px] h-[38px] cursor-pointer"
+                <FaTrash
+                  className="text-[20px] dark:text-gray-300"
                   onClick={() => {
                     handleGetAllSelectedMembers("delete");
                   }}
@@ -273,80 +270,6 @@ function MemberList({ params }: pageProps) {
               </div>
             ) : null}
           </div>
-
-          {/* Approve Dialog */}
-          <Dialog
-            fullScreen={fullScreen}
-            open={openDialogToApprove}
-            onClose={handleClickOpenDeleteDialog}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <DialogTitle id="responsive-dialog-title">
-              <p className="text-yellow-400 font-[600] ">
-                Warning about approve users
-              </p>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                <p>Make sure you want to approve these users:</p>
-                {selectedMembers.map((item, index) => (
-                  <p key={index} className={`${item.status === "Pending" ? "text-yellow-400" : item.status === "Rejected" ? "text-red-700" : "text-green-500" }`}>
-                    {item.email} 
-                    <span className={`ml-[10px] font-[500] ${item.status == "Approved" ? "text-green-700" : null}`}>{ item.status == "Approved" ? "Approved" : null }</span>
-                  </p>
-                ))}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <MUIButton autoFocus onClick={handleCloseApproveDialog}>
-                <p className="hover:text-green-600">Cancel</p>
-              </MUIButton>
-              <MUIButton
-                onClick={() => {
-                  handleApproveSelectedMembers();
-                }}
-                autoFocus
-              >
-                <p className="hover:text-red-600">Approve All</p>
-              </MUIButton>
-            </DialogActions>
-          </Dialog>
-          {/* Delete Diglog */}
-          <Dialog
-            fullScreen={fullScreen}
-            open={openDialogToDelete}
-            onClose={handleClickOpenDeleteDialog}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <DialogTitle id="responsive-dialog-title">
-              <p className="text-red-600 font-[600] ">
-                Warning about deleting users
-              </p>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                <p>Make sure you want to delete these users:</p>
-                {selectedMembers.map((value, index) => (
-                  <p key={index} className="text-green-600">
-                    {value.email}
-                  </p>
-                ))}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <MUIButton autoFocus onClick={handleCloseDeleteDialog}>
-                <p className="hover:text-green-600">Cancel</p>
-              </MUIButton>
-              <MUIButton
-                onClick={() => {
-                  handleDelectSelectedMembers();
-                }}
-                autoFocus
-              >
-                <p className="hover:text-red-600">Delete</p>
-              </MUIButton>
-            </DialogActions>
-          </Dialog>
 
           {userRole === "admin" ? (
             <div className="flex gap-[12px]">
@@ -357,7 +280,7 @@ function MemberList({ params }: pageProps) {
                 backgroundColor={"bg-green-700"}
                 href={""}
                 method={() => {}}
-                tailwind={"text-white"}
+                tailwind={"text-white dark:shadow-darkPrimaryGreen"}
               ></Button>
               <Button
                 textContent={"Import"}
@@ -366,7 +289,7 @@ function MemberList({ params }: pageProps) {
                 backgroundColor={"bg-white"}
                 href={""}
                 method={() => {}}
-                tailwind={"text-black border-2"}
+                tailwind={"text-black border-2 border-slate-200 dark:border-0 dark:shadow-darkPrimary"}
               ></Button>
             </div>
           ) : null}
@@ -375,7 +298,7 @@ function MemberList({ params }: pageProps) {
         <div>
           <div
             id="tableHeader"
-            className="flex border-b-2 bg-slate-50 h-[50px]"
+            className="flex border-b-2 bg-slate-50 dark:bg-dark h-[50px] dark:text-white dark:border-darkHover"
           >
             {/* checkbox */}
             <div className="w-[48px] flex items-center justify-center">
@@ -385,7 +308,7 @@ function MemberList({ params }: pageProps) {
                 value="Name"
                 checked={selectAll}
                 onChange={(e) => handleSelectAllChange(e)}
-                className="outline-none border-1 border-slate-200 rounded-[4px] focus:ring-offset-[shadow] cursor-pointer"
+                className="outline-none border-1 border-slate-200 dark:border-darkHover rounded-[4px] focus:ring-offset-[shadow] cursor-pointer"
               />
             </div>
             {/*Name*/}
@@ -413,8 +336,7 @@ function MemberList({ params }: pageProps) {
                 <LinearProgress />
               </div>
             </>
-          ) : members.length === 0 ? null : 
-          (
+          ) : members.length === 0 ? null : (
             <div id="tableBody">
               {members.map((value, index) => (
                 <MemberItem
@@ -439,6 +361,106 @@ function MemberList({ params }: pageProps) {
           ></Pagination>
         )}
       </div>
+      {/* Approve Dialog */}
+      <Dialog
+        PaperProps={{
+          style: {
+            backgroundColor: isDarkMode ? "#18191a" : "",
+            borderRadius: "8px"
+          }
+        }}
+        fullScreen={fullScreen}
+        open={openDialogToApprove}
+        onClose={() => setOpenDialogToApprove(false)}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          <p className="text-orange-400 font-[600] ">
+            Warning about approve users!
+          </p>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <p className="dark:text-gray-200">Make sure you want to approve these users:</p>
+            {selectedMembers.map((item, index) => (
+              <p
+                key={index}
+                className={`${
+                  item.status === "Pending"
+                    ? "text-yellow-400 dark:font-semibold"
+                    : item.status === "Rejected"
+                    ? "text-red-700 dark:text-red-500 dark:font-semibold"
+                    : "text-green-500"
+                }`}
+              >
+                {item.email}
+                <span
+                  className={`ml-[10px] font-[500] ${
+                    item.status == "Approved" ? "text-green-700 dark:text-green-400" : null
+                  }`}
+                >
+                  {item.status == "Approved" ? "Approved" : null}
+                </span>
+              </p>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <MUIButton autoFocus onClick={handleCloseApproveDialog}>
+            <p className="hover:text-green-600">Cancel</p>
+          </MUIButton>
+          <MUIButton
+            onClick={() => {
+              handleApproveSelectedMembers();
+            }}
+            autoFocus
+          >
+            <p className="hover:text-red-600">Approve All</p>
+          </MUIButton>
+        </DialogActions>
+      </Dialog>
+      {/* Delete Diglog */}
+      <Dialog
+        PaperProps={{
+          style: {
+            backgroundColor: isDarkMode ? "#18191a" : "",
+            borderRadius: "8px"
+          }
+        }}
+        fullScreen={fullScreen}
+        open={openDialogToDelete}
+        onClose={() => setOpenDialogToDelete(false)}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          <p className="text-red-600 font-[600] ">
+            Warning about deleting users!
+          </p>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <p className="dark:text-white">Make sure you want to delete these users:</p>
+            {selectedMembers.map((value, index) => (
+              <p key={index} className="text-green-600 dark:text-green-400">
+                {value.email}
+              </p>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <MUIButton autoFocus onClick={handleCloseDeleteDialog}>
+            <p className="hover:text-green-600">Cancel</p>
+          </MUIButton>
+          <MUIButton
+            onClick={() => {
+              handleDelectSelectedMembers();
+            }}
+            autoFocus
+          >
+            <p className="hover:text-red-600">Delete</p>
+          </MUIButton>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

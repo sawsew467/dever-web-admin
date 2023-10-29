@@ -360,7 +360,7 @@ function Skills() {
                     <p className="font-semibold"> {item.name}</p>
                     <div className="flex flex-row gap-[10px] items-center">
                       <p className="italic text-[12px] dark:text-slate-300 hidden lg:block">
-                        Deleted at: {new Date(item.deletedAt).toUTCString()}{" "}
+                        Deleted at: {new Date(item.deletedAt).toLocaleString()}{" "}
                       </p>
                       <button
                         className="border-[1px] dark:border-dark px-[4px] py-[5px] rounded-[5px] text-[12px] bg-blue-400 dark:bg-blue-600 text-white hover:scale-105 transition flex flex-row items-center gap-[4px]"

@@ -247,7 +247,7 @@ function SocialAccount({
     }
   };
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px]">Social accounts</h3>
         <button
@@ -269,7 +269,7 @@ function SocialAccount({
         <ul className="list-none flex flex-col gap-[10px]">
           {socialMediaState.length == 0 ? (
             <p
-              className="font-[500] text-[14px] text-blue-700 cursor-pointer"
+              className="font-[500] text-[14px] text-blue-700 cursor-pointer dark:text-white"
               onClick={() => {
                 setIsAdd(true);
                 setIsEdit(true);
@@ -280,11 +280,11 @@ function SocialAccount({
           ) : (
             socialMediaState.map((item: TSocialData, index: number) => (
               <li
-                className="flex flex-row border-b-2 pb-[10px] justify-between"
+                className="flex flex-row border-b-2 dark:border-darkHover pb-[10px] justify-between"
                 key={index}
               >
                 <div className="flex flex-row gap-[10px]">
-                  <div className="flex items-center justify-center w-[45px]">
+                  <div className="flex items-center justify-center w-[34px] h-[34px] dark:bg-white rounded-[50%]">
                     <Image
                       src={returnSocialIcon(item)}
                       alt={item.name}
@@ -299,7 +299,7 @@ function SocialAccount({
                     <a
                       href={addHttpsIfMissing(item.url)}
                       target="_blank"
-                      className="font-[300] text-[14px] text-blue-500 whitespace-nowrap truncate"
+                      className="font-[300] text-[14px] text-blue-500 whitespace-nowrap truncate dark:font-semibold"
                     >
                       <p className="truncate">{removeHttps(item.url)}</p>
                     </a>
@@ -311,12 +311,12 @@ function SocialAccount({
                       textContent={"Delete"}
                       icon={""}
                       iconPosition={"left"}
-                      backgroundColor={"hover:bg-blue-700"}
+                      backgroundColor={"dark:bg-dark dark:hover:bg-blue-500 hover:bg-blue-700"}
                       method={() => {
                         handleDeleteAccount(item.id);
                       }}
                       tailwind={
-                        "text-blue-700 border-[1px] font-[500] border-blue-500 hover:text-white transition"
+                        "text-blue-700 dark:text-blue-500 dark:font-bold border-[1px] font-[500] dark:hover:text-white border-blue-500 hover:text-white transition dark:shadow-darkPrimaryBlue"
                       }
                     ></UnlinkButton>
                   </div>
@@ -383,7 +383,7 @@ function SocialAccount({
               backgroundColor={"bg-blue-700"}
               method={handleSubmit}
               tailwind={
-                "text-white border-[1px] font-[500] border-blue-500 transition"
+                "text-white border-[1px] dark:border-0 dark:shadow-darkPrimaryBlue font-[500] border-blue-500 transition"
               }
             ></UnlinkButton>
           </div>

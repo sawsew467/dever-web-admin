@@ -110,10 +110,10 @@ function BrowseImage({
   return (
     <div className="flex flex-col gap-[8px]">
       <div>
-        <h4 className="select-none font-[300] text-[14px]">{formTitle}:</h4>
+        <h4 className="select-none font-[300] text-[14px] dark:font-semibold">{formTitle}:</h4>
       </div>
       <div
-        className="h-fit w-full border-2 border-dashed rounded-[8px] gap-[16px]"
+        className="h-fit w-full border-2 dark:border-darkHover border-dashed rounded-[8px] gap-[16px]"
         onDrop={(event: React.DragEvent<HTMLDivElement>) =>
           handleDrogFile(event)
         }
@@ -183,7 +183,7 @@ function BrowseImage({
                     iconPosition={"left"}
                     backgroundColor={"bg-blue-700"}
                     method={() => handleBrowseFile()}
-                    tailwind={"text-white"}
+                    tailwind={"text-white dark:shadow-darkPrimaryBlue"}
                   ></UnlinkButton>
                 </div>
               </div>
@@ -219,7 +219,7 @@ function BrowseImage({
                     iconPosition={"left"}
                     backgroundColor={"bg-blue-700"}
                     method={() => handleBrowseFile()}
-                    tailwind={"text-white"}
+                    tailwind={"text-white dark:shadow-darkPrimaryBlue"}
                   ></UnlinkButton>
                 </label>
               </div>

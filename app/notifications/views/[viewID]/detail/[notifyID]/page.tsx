@@ -3,11 +3,12 @@ import React, { ReactNode, useEffect } from "react";
 import Image from "next/image";
 
 import thumbnail from "@image/page/notification/list/thumbnail.png";
-import clockIcon from "@icon/page/notification/list/clock.svg";
 import Button from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { dropdownNotifications, openViewNotification } from "@/redux/slices/sideBarControl";
+import { GoClockFill } from "react-icons/go";
+
 
 interface pageProps {
   params: { notifyID: string };
@@ -47,7 +48,7 @@ function DetailNotification({ params }: pageProps) {
       <div className="py-[20px] px-[16px] flex flex-col gap-[30px]">
         <div className="flex justify-between">
           <div>
-            <h1 className="font-[700] text-[24px]">Notifications Details</h1>
+            <h1 className="font-[700] text-[24px] dark:text-white">Notifications Details</h1>
           </div>
           <div className="flex flex-row gap-[20px]">
             <Button
@@ -57,7 +58,7 @@ function DetailNotification({ params }: pageProps) {
               backgroundColor={"bg-green-700"}
               href={"/notifications/create"}
               method={() => {}}
-              tailwind={"text-white"}
+              tailwind={"text-white dark:shadow-darkPrimaryGreen"}
             ></Button>
             <Button
               textContent={"Notification"}
@@ -66,17 +67,17 @@ function DetailNotification({ params }: pageProps) {
               backgroundColor={"bg-blue-700"}
               href={"/notifications/views/1"}
               method={() => {}}
-              tailwind={"text-white"}
+              tailwind={"text-white dark:shadow-darkPrimaryBlue"}
             ></Button>
           </div>
         </div>
-        <div className="p-[30px] shadow-primary rounded-[10px] flex flex-col gap-[30px]">
+        <div className="p-[30px] shadow-primary rounded-[10px] flex flex-col gap-[30px] dark:shadow-darkPrimary">
           <div>
-            <h3 className="font-[700] text-[36px]">{data.title}</h3>
+            <h3 className="font-[700] text-[36px] dark:text-white">{data.title}</h3>
           </div>
           <div>
-            <p className="flex gap-[8px]">
-              <Image src={clockIcon} alt="clockIcon"></Image>
+            <p className="flex gap-[8px] items-center dark:text-gray-200">
+              <GoClockFill className="text-[20px]"/>
               {data.time}
             </p>
           </div>
@@ -87,7 +88,7 @@ function DetailNotification({ params }: pageProps) {
               className="w-[100%] h-[100%] object-cover"
             ></Image>
           </div>
-          <div id="notificationContent">{renderHtmlString(data.content)}</div>
+          <div id="notificationContent" className="dark:text-white">{renderHtmlString(data.content)}</div>
         </div>
       </div>
     </div>

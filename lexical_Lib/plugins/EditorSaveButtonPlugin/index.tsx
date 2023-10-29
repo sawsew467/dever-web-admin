@@ -54,7 +54,7 @@ function EditorSaveButtonPlugin({ setHtmlString, useFor }: TPros) {
         iconPosition={"left"}
         backgroundColor={"bg-blue-700"}
         method={() => handleSaveLetter()}
-        tailwind={"text-white mt-[20px]"}
+        tailwind={"text-white mt-[20px] dark:shadow-darkPrimaryBlue"}
       ></UnlinkButton>
     </>
   );

@@ -116,7 +116,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   };  
 
   return (
-    <div className="flex justify-between border-b-2 h-[78px]">
+    <div className="flex justify-between border-b-2 dark:border-darkHover h-[78px]">
       <div className="flex">
         <div className="w-[48px] flex items-center justify-center">
           <input
@@ -141,26 +141,26 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
           </div>
         </div>
         <div className="flex flex-col w-[276px] pt-[16px] px-[16px] text-[12px]">
-          <h3 className="text-[16px] font-[600]">
+          <h3 className="text-[16px] font-[600] dark:text-white dark:font-bold">
             {value.fullName.trim() == '' ? value.email : value.fullName}
           </h3>
-          <p className="text-[14px]">{value.email}</p>
+          <p className="text-[14px] dark:text-gray-100">{value.email}</p>
         </div>
         {/* position */}
-        <div className="w-[200px] flex p-[16px] items-center text-[16px] font-[600]">
+        <div className="w-[200px] flex p-[16px] items-center text-[16px] font-[600] dark:text-white">
           <p>{value.position == '' ? 'empty' : value.position}</p>
         </div>
         {/* department */}
-        <div className="w-[180px] flex p-[16px] items-center text-[14px] font-[600]">
+        <div className="w-[180px] flex p-[16px] items-center text-[14px] font-[600] dark:text-white">
           <p>{value.department == '' ? 'empty' : value.department}</p>
         </div>
         {/* status */}
         <div className="w-[100px] flex p-[16px] items-center text-[12px] relative">
           <p
-            className={`py-[2px] px-[10px]  rounded-[6px] font-[500] 
+            className={`py-[2px] px-[10px]  rounded-[6px] font-[500]
                 ${
                   value.status === "Approved"
-                    ? "bg-primaryGreenBland text-green-800"
+                    ? "bg-primaryGreenBland dark:shadow-darkPrimaryGreen text-green-800"
                     : value.status === "Pending"
                     ? "bg-primaryYellowBland text-primaryBrown cursor-pointer"
                     : "bg-primaryRedBland text-primaryRed"
@@ -177,7 +177,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
             {value.status === "Approved" ? "Active" : value.status}
           </p>
           {value.status === "Pending" && isClickPending ? (
-            <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white">
+            <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white dark:bg-dark dark:text-white dark:shadow-darkPrimary">
               <p
                 className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"
                 onClick={() => {
@@ -217,7 +217,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       <Dialog
         fullScreen={fullScreen}
         open={openDialog}
-        onClose={handleClickOpen}
+        onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
@@ -252,7 +252,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               backgroundColor="bg-blue-700"
               iconPosition="left"
               textContent="Edit"
-              tailwind="text-white"
+              tailwind="text-white dark:shadow-darkPrimaryBlue"
             ></UnlinkButton>
             <UnlinkButton
               method={handleClickOpen}
@@ -260,11 +260,11 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               backgroundColor="bg-red-700"
               iconPosition="left"
               textContent="Delete"
-              tailwind="text-white"
+              tailwind="text-white dark:shadow-darkPrimaryRed"
             ></UnlinkButton>
           </div>
         ) : null}
-        <div className="p-[16px] flex justify-center items-center text-primaryBlue text-[14px]">
+        <div className="p-[16px] flex justify-center items-center text-primaryBlue text-[16px] dark:font-semibold dark:text-sky-500">
           <Link href={`/members/profile/${value.id}`}>View Profile</Link>
         </div>
       </div>

@@ -64,7 +64,7 @@ function CreateBlog() {
               formTitle="Your content"
               htmlString={htmlString}
               setHtmlString={setHtmlStringg}
-              pageName="create_notification"
+              pageName="Blog"
             ></EditorLarge>
           </div>
         </div>

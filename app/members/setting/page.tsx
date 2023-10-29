@@ -100,7 +100,7 @@ function SettingList() {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div className="">
-          <h3 className="font-[700] text-[24px] ">
+          <h3 className="font-[700] text-[24px] select-none dark:text-white ">
             <span className="text-blue-500">Your</span> profile setting
           </h3>
         </div>

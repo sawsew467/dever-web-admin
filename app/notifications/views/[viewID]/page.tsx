@@ -4,7 +4,6 @@ import Image from "next/image";
 
 import thumbnail from "@image/page/notification/list/thumbnail.png";
 import searchIcon from "@icon/page/notification/list/search-outline.svg";
-import clockIcon from "@icon/page/notification/list/clock.svg";
 
 import Button from "@/components/Button";
 import Pagination from "@/components/Pagination";
@@ -14,6 +13,7 @@ import {
   dropdownNotifications,
   openViewNotification,
 } from "@/redux/slices/sideBarControl";
+import { GoClockFill } from "react-icons/go";
 
 interface pageProps {
   params: { viewID: string };
@@ -168,7 +168,7 @@ function View({ params }: pageProps) {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px] select-none">
         <div>
-          <h1 className="font-bold text-[24px] select-none">
+          <h1 className="font-bold text-[24px] select-none dark:text-white">
             All notifications
           </h1>
         </div>
@@ -176,7 +176,7 @@ function View({ params }: pageProps) {
         <div className="flex justify-between">
           <div className="flex gap-[16px]">
             <div className="flex w-fit h-[38px] rounded-[10px] overflow-hidden">
-              <select className="w-[84px] leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 bg-gray-100 select-none ">
+              <select className="w-[84px] leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 dark:border-darkHover bg-gray-100 dark:bg-dark dark:text-white select-none ">
                 <option value="All" className="">
                   All
                 </option>
@@ -189,7 +189,7 @@ function View({ params }: pageProps) {
               </select>
               <input
                 type="search"
-                className="w-[392px] border-y-2 border-r border-l-none border-slate-200 select-none outline-none"
+                className="w-[392px] border-y-2 border-r border-l-none border-slate-200 dark:border-darkHover dark:bg-dark dark:text-white select-none outline-none"
               />
               <div className="w-[42px] h-[38px] bg-primaryBlue flex items-cent    justify-center cursor-pointer">
                 <Image
@@ -208,7 +208,7 @@ function View({ params }: pageProps) {
               backgroundColor={"bg-green-700"}
               href={"/notifications/create"}
               method={() => {}}
-              tailwind={"text-white"}
+              tailwind={"text-white dark:shadow-darkPrimaryGreen"}
             ></Button>
           </div>
         </div>
@@ -217,7 +217,7 @@ function View({ params }: pageProps) {
           {notifications.map((item, index) => (
             <div
               key={index}
-              className="rounded-[16px] overflow-hidden shadow-primary"
+              className="rounded-[16px] overflow-hidden shadow-primary dark:shadow-darkPrimary"
             >
               <div className="w-[100%] h-[192px]">
                 <Image
@@ -228,12 +228,12 @@ function View({ params }: pageProps) {
               </div>
               <div className="p-[20px] flex flex-col gap-[12px]">
                 <div className="flex flex-col gap-[8px]">
-                  <h3 className="font-[700] text-[24px]">{item.title}</h3>
-                  <p className="font-[400] text-[16px] h-[48px] overflow-hidden">
+                  <h3 className="font-[700] text-[24px] dark:text-white">{item.title}</h3>
+                  <p className="font-[400] text-[16px] h-[48px] overflow-hidden dark:text-slate-200">
                     {item.second_title}
                   </p>
-                  <p className="flex gap-[8px]">
-                    <Image src={clockIcon} alt="clockIcon"></Image>
+                  <p className="flex gap-[8px] dark:text-slate-300 items-center">
+                    <GoClockFill className = {"text-[20px]"}/>
                     {item.time}
                   </p>
                 </div>
@@ -245,7 +245,7 @@ function View({ params }: pageProps) {
                     backgroundColor={"bg-blue-700"}
                     href={`/notifications/views/${params.viewID}/detail/${item.id}`}
                     method={() => {}}
-                    tailwind={"text-white"}
+                    tailwind={"text-white dark:shadow-darkPrimaryBlue"}
                   ></Button>
                 </div>
               </div>

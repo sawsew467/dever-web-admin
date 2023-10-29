@@ -7,16 +7,6 @@ import avatar from "@image/page/member/list/Fu-dever.png";
 import briefcaseIcon from "@icon/page/member/profile/briefcase.svg";
 import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
 
-import facebookIcon from "@icon/page/member/profile/facebook.svg";
-import githubIcon from "@icon/page/member/profile/github.svg";
-import youtubeIcon from "@icon/page/member/profile/youtube.svg";
-import instagramIcon from "@icon/page/member/profile/instagram.svg";
-import discordIcon from "@icon/page/member/profile/discord.svg";
-import twitterIcon from "@icon/page/member/profile/twitter.svg";
-import tiktokIcon from "@icon/page/member/profile/tiktok.svg";
-import linkedinIcon from "@icon/page/member/profile/linkedin.svg";
-import ubuntuIcon from "@icon/page/member/profile/unbuntu.svg";
-
 import ProjectCard from "@/components/ProjectCard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -30,6 +20,18 @@ import {
   dropdownMembers,
   openMemberProfile,
 } from "@/redux/slices/sideBarControl";
+
+import {
+  BsFacebook,
+  BsGithub,
+  BsYoutube,
+  BsLinkedin,
+  BsDiscord,
+} from "react-icons/bs";
+import { FaSquareXTwitter, FaCalendarDays } from "react-icons/fa6";
+import { PiTiktokLogoFill, PiBagSimpleFill } from "react-icons/pi";
+import { BiLogoInstagramAlt } from "react-icons/bi";
+import { GrUbuntu } from "react-icons/gr";
 
 type pageProps = {
   params: { profileID: string };
@@ -53,7 +55,6 @@ function Profile({ params }: pageProps) {
   );
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
   const [userData, setUserData] = useState<userInfo>();
-  console.log(userData);
 
   const renderHtmlString = (htmlString: string) => {
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
@@ -86,26 +87,26 @@ function Profile({ params }: pageProps) {
     dispatch(openMemberProfile(true));
   }, [dispatch]);
 
-  const returnSocialIcon = (item: TSocialData): StaticImageData => {
+  const returnSocialIcon = (item: TSocialData) => {
     switch (item.name.toLowerCase()) {
       case "facebook":
-        return facebookIcon;
+        return <BsFacebook className="text-[20px]" />;
       case "github":
-        return githubIcon;
+        return <BsGithub className="text-[20px]" />;
       case "youtube":
-        return youtubeIcon;
+        return <BsYoutube className="text-[20px]" />;
       case "instagram":
-        return instagramIcon;
+        return <BiLogoInstagramAlt className="text-[20px]" />;
       case "discord":
-        return discordIcon;
+        return <BsDiscord className="text-[20px]" />;
       case "linkedin":
-        return linkedinIcon;
+        return <BsLinkedin className="text-[18px]" />;
       case "tiktok":
-        return tiktokIcon;
+        return <PiTiktokLogoFill className="text-[20px]" />;
       case "twitter":
-        return twitterIcon;
+        return <FaSquareXTwitter className="text-[20px]" />;
       default:
-        return ubuntuIcon;
+        return <GrUbuntu className="text-[20px]" />;
     }
   };
 
@@ -124,8 +125,8 @@ function Profile({ params }: pageProps) {
       ) : (
         <div className=" py-[20px] px-[16px] flex gap-[20px] flex-col select-none">
           <div>
-            <h2 className="text-[24px] font-[700]">
-              <span className="text-blue-500">
+            <h2 className="text-[24px] font-[700] dark:text-white">
+              <span className="text-blue-500 dark:text-[#0198ff]">
                 {(userData?.firstName?.trim() || userData?.lastName.trim()) ===
                 ""
                   ? "Unnamed"
@@ -137,9 +138,9 @@ function Profile({ params }: pageProps) {
           </div>
           <div className="flex w-[100%] flex-col gap-[16px] lg:flex-row">
             <div className="w-full lg:w-[32%] flex flex-col gap-[16px]">
-              <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[16px]">
+              <div className="w-[100%] shadow-primary dark:shadow-darkPrimary rounded-[16px] p-[32px] flex flex-col gap-[16px] dark:text-white">
                 <div className="flex flex-col gap-[8px]">
-                  <div className="w-[120px] h-[120px] object-cover overflow-hidden rounded-[16px]">
+                  <div className="w-[180px] h-[180px] object-cover overflow-hidden rounded-[16px]">
                     <Image
                       src={
                         userData?.avatarUrl === ""
@@ -160,19 +161,23 @@ function Profile({ params }: pageProps) {
                 </div>
                 <div className="flex flex-col gap-[8px] ">
                   <div className="flex flex-row gap-[12px]">
-                    <Image src={briefcaseIcon} alt="briefcaseIcon" />
+                    <PiBagSimpleFill className="text-[23px]" />
                     <span className="font-[400] text-[16px]">
-                      {userData?.career == ""
-                        ? <p className="italic">Not set yet</p>
-                        : userData?.career}
+                      {userData?.career == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.career
+                      )}
                     </span>
                   </div>
                   <div className="flex flex-row gap-[12px]">
-                    <Image src={calendarIcon} alt="calendarIcon" />
+                    <FaCalendarDays className="text-[20px]" />
                     <span className="font-[400] text-[16px]">
-                      {userData?.birthDay == "0001-01-01T00:00:00"
-                        ? <p className="italic">Not set yet</p>
-                        : formatDateToMMDDYYYY(userData?.birthDay!)}
+                      {userData?.birthDay == "0001-01-01T00:00:00" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        formatDateToMMDDYYYY(userData?.birthDay!)
+                      )}
                     </span>
                   </div>
                 </div>
@@ -184,7 +189,11 @@ function Profile({ params }: pageProps) {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.email == "" ? <p className="italic">Not set yet</p> : userData?.email}
+                      {userData?.email == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.email
+                      )}
                     </span>
                   </div>
                 </div>
@@ -196,9 +205,11 @@ function Profile({ params }: pageProps) {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.homeAddress == ""
-                        ? <p className="italic">Not set yet</p>
-                        : userData?.homeAddress}
+                      {userData?.homeAddress == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.homeAddress
+                      )}
                     </span>
                   </div>
                 </div>
@@ -210,49 +221,48 @@ function Profile({ params }: pageProps) {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.phoneNumber == ""
-                        ? <p className="italic">Not set yet</p>
-                        : userData?.phoneNumber}
+                      {userData?.phoneNumber == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.phoneNumber
+                      )}
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-[6px]">
                   <div className="flex flex-row">
                     <span className="font-[700] text-[20px]">
                       Social media:
                     </span>
                   </div>
                   <div className="flex flex-row gap-[8px]">
-                    {userData?.userPlatforms?.length == 0 ? 
-                     (<p className="font-bold italic">Not set yet</p>) :  userData?.userPlatforms.map(
-                      (item: TSocialData, index: number) => {
-                        return (
-                          <a href={item.url} key={index}>
-                            <Image
-                              src={returnSocialIcon(item)}
-                              alt={item.name}
-                              width={24}
-                              height={24}
-                              className="hover:bg-slate-200 rounded-md transition"
-                            ></Image>
-                          </a>
-                        );
-                      }
+                    {userData?.userPlatforms?.length == 0 ? (
+                      <p className="font-bold italic">Not set yet</p>
+                    ) : (
+                      userData?.userPlatforms.map(
+                        (item: TSocialData, index: number) => {
+                          return (
+                            <a href={item.url} key={index}>
+                              {returnSocialIcon(item)}
+                            </a>
+                          );
+                        }
+                      )
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
+              <div className="w-[100%] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
                   <h3 className="font-[700] text-[24px]">Skills</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                {userData!.userSkills.length > 0 ? (
+                  {userData!.userSkills.length > 0 ? (
                     userData?.userSkills.map((item, index) => (
                       <p
                         key={index}
-                        className="py-[2px] px-[12px] bg-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
+                        className="py-[2px] px-[12px] bg-green-100  dark:bg-green-800 dark:text-green-100 text-green-800 rounded-[8px] text-[14px] font-[600]"
                       >
                         {item}
                       </p>
@@ -264,16 +274,16 @@ function Profile({ params }: pageProps) {
                   )}
                 </div>
               </div>
-              <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
+              <div className="w-[100%] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
                   <h3 className="font-[700] text-[24px]">Hobbies</h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
-                {userData!.userHobbies.length > 0 ? (
+                  {userData!.userHobbies.length > 0 ? (
                     userData?.userHobbies.map((item, index) => (
                       <p
                         key={index}
-                        className="py-[2px] px-[12px] bg-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
+                        className="py-[2px] px-[12px] bg-purple-100  dark:bg-purple-700 dark:text-purple-100 text-purple-800 rounded-[8px] text-[14px] font-[600]"
                       >
                         {item}
                       </p>
@@ -287,7 +297,7 @@ function Profile({ params }: pageProps) {
               </div>
             </div>
             <div className="w-full lg:w-[67%] flex flex-col gap-[16px]">
-              <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
+              <div className="w-[100%] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
                   <h3 className="font-[700] text-[24px]">
                     General information
@@ -319,9 +329,11 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.positionName == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.positionName}
+                          {userData?.positionName == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.positionName
+                          )}
                         </span>
                       </div>
                     </div>
@@ -333,9 +345,11 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.departmentName == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.departmentName}
+                          {userData?.departmentName == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.departmentName
+                          )}
                         </span>
                       </div>
                     </div>
@@ -349,9 +363,11 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                        {userData?.educationPlaceNames == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.educationPlaceNames}
+                          {userData?.educationPlaceNames == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.educationPlaceNames
+                          )}
                         </span>
                       </div>
                     </div>
@@ -361,9 +377,11 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.majorName == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.majorName}
+                          {userData?.majorName == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.majorName
+                          )}
                         </span>
                       </div>
                     </div>
@@ -375,16 +393,18 @@ function Profile({ params }: pageProps) {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                        {userData?.workplaces == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.workplaces}
+                          {userData?.workplaces == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.workplaces
+                          )}
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="w-[100%] shadow-primary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
+              <div className="w-[100%] shadow-primary  dark:shadow-darkPrimary dark:text-white rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
                   <h3 className="font-[700] text-[24px] ">Projects</h3>
                 </div>

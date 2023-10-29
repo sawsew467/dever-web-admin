@@ -30,7 +30,11 @@ module.exports = {
       boxShadow: {
         primary: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
         darkPrimary: "rgba(234, 237, 237, 0.35) 0px 0px 10px",
-        secondary: "4px 4px 8px 0px rgba(0, 0, 0, 0.10)"
+        darkPrimaryGreen: "#046c4e 0px 0px 10px",
+        darkPrimaryBlue: "#1a56db 0px 0px 10px",
+        darkPrimaryRed: "#c81e1e 0px 0px 10px",
+        secondary: "4px 4px 8px 0px rgba(0, 0, 0, 0.10)",
+        darkSecondary: "4px 4px 8px 0px rgba(234, 237, 237, 0.35)"
       },
       transitionProperty: {
         'height': 'height'

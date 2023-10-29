@@ -17,7 +17,6 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import {
   getAllDepartment,
-  getAllEducation,
   getAllMajor,
   getAllPosition,
 } from "@/apis/dataOrganizer";
@@ -185,9 +184,9 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px]">
       <div className="flex flex-row justify-between">
-        <h3 className="font-[700] text-[24px]">General infomation</h3>
+        <h3 className="font-[700] text-[24px] dark:text-white">General infomation</h3>
         <button
           className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
           onClick={handleEditClick}
@@ -201,7 +200,7 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
         </button>
       </div>
 
-      <div>
+      <div className="dark:text-white">
         <Formik
           initialValues={{
             firstName: userData.firstName,

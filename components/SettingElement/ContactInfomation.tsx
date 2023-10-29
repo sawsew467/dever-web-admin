@@ -57,7 +57,7 @@ function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] shadow-primary p-[24px] rounded-[10px]">
+    <div className="flex flex-col gap-[20px] shadow-primary dark:shadow-darkPrimary dark:text-white p-[24px] rounded-[10px]">
       <div className="flex flex-row justify-between items-center">
         <h3 className="font-[700] text-[24px]">Contact information</h3>
         <button

@@ -33,16 +33,16 @@ function Input({
 
   return (
     <div className="flex flex-col relative">
-      <span className="font-[300] text-[14px]">
+      <span className="font-[300] text-[14px] dark:font-semibold">
         {capitalizeFirstLetter(title)}
       </span>
       <input
         type={type}
-        placeholder={`Enter your ${lowercaseFirstLetter(title)}...`}
+        placeholder={`Enter your${lowercaseFirstLetter(title)}...`}
         value={value}
         onChange={(e) => onChange(e)}
         disabled={!isEdit}
-        className={`rounded-[6px] border-gray-300 bg-gray-50 text-[14px] ${
+        className={`rounded-[6px] border-gray-300 dark:border-darkHover font-[500] dark:text-white bg-gray-50 dark:bg-dark text-[14px] ${
           !isEdit ? "text-gray-500" : "text-black"
         }`}
       />

@@ -111,11 +111,11 @@ function TagField({
   return (
     <div className="flex flex-col gap-[20px]">
       <div
-        className={`form-group border-[1px] border-gray-300  rounded-[6px] p-[6px] 
+        className={`form-group border-[1px] border-gray-300 dark:border-darkHover  rounded-[6px] p-[6px] 
         ${useTagFor === "skills" ? "isSkills" : "isHobbies"}
       ${isEdit ? "" : "pointer-events-none"}`}
       >
-        <Tags value={state} settings={settings} readOnly={false} />
+        <Tags value={state} settings={settings} readOnly={false} className="dark:text-white"/>
       </div>
       {isEdit ? (
         <div>
@@ -127,7 +127,7 @@ function TagField({
             method={() => {
               handleSubmitTags();
             }}
-            tailwind={"text-white"}
+            tailwind={"text-white dark:shadow-darkPrimaryBlue"}
           ></UnlinkButton>
         </div>
       ) : null}

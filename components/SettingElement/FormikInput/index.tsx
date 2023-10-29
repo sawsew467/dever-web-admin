@@ -1,8 +1,10 @@
+import { RootState } from "@/redux/store";
 import { useField } from "formik";
 import { type } from "os";
 import React, { useState } from "react";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 type TPros = {
   label: string;
@@ -23,6 +25,7 @@ function FormikInput({
 }: TPros): JSX.Element {
   const [field, meta] = useField(props);
   const [isEyeOpen, setIsEyeOpen] = useState<boolean>(false);
+  const isDarkMode = useSelector((state:RootState) => state.app.isDarkMode);
 
   const capitalizeFirstLetter = (inputString: string): string => {
     if (inputString.length === 0) return inputString;
@@ -33,7 +36,7 @@ function FormikInput({
 
   return (
     <div className="flex flex-col relative">
-      <span className="font-[300] text-[14px] mb-[6px]">
+      <span className="font-[300] text-[14px] mb-[6px] dark:font-semibold">
         {capitalizeFirstLetter(title)}
       </span>
       <input
@@ -43,11 +46,11 @@ function FormikInput({
         disabled={!isEdit}
         className={
           meta.error && meta.touched
-            ? "p-[10px] text-sm font-medium leading-5 w-full border-solid border-[1px] border-red-500  outline-[#0065A9] rounded-[6px] bg-gray-50"
-            : "p-[10px] text-sm font-medium leading-5 w-full border-solid border-[1px] border-gray-300  outline-[#0065A9] rounded-[6px] bg-gray-50"
+            ? "p-[10px] text-sm font-medium leading-5 w-full border-solid border-[1px] border-red-500  outline-[#0065A9] rounded-[6px] bg-gray-50 dark:bg-dark"
+            : "p-[10px] text-sm font-medium leading-5 w-full border-solid border-[1px] border-gray-300 dark:border-darkHover  outline-[#0065A9] rounded-[6px] bg-gray-50 dark:bg-dark"
         }
         style={{
-          color: !isEdit ? "rgb(107 114 128)" : "#000",
+          color: !isEdit ? "rgb(107 114 128)" : isDarkMode ? "#fff" : "#000",
         }}
       />
       {type === "password" ? (

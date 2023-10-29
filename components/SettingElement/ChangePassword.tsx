@@ -36,7 +36,7 @@ function ChangePassword(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px]">Change password</h3>
         <button

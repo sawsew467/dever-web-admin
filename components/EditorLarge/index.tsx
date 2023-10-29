@@ -1,5 +1,5 @@
 "use client";
-import React, { useState , Suspense} from "react";
+import React, { useState, Suspense } from "react";
 import Button from "../Button";
 
 import PlaygroundEditorTheme from "@/lexical_Lib/theme/EditorTheme";
@@ -65,12 +65,14 @@ import HTMLSerializerPlugin from "@plugins/HtmlSerializerPlugin";
 import TextCounterPlugin from "@plugins/TextCounterPlugin";
 import UnlinkButton from "../UnlinkButton";
 import dynamic from "next/dynamic";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface IPros {
   formTitle: string;
   htmlString: string;
   setHtmlString: React.Dispatch<React.SetStateAction<string>>;
-  pageName: "create_notification" | "create_blog" | "any";
+  pageName: "Notification" | "Blog" | any;
 }
 
 const editorConfig = {
@@ -106,8 +108,7 @@ function EditorLarge({
       setFloatingAnchorElem(_floatingAnchorElem);
     }
   };
-
-  console.log(htmlString);
+  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
 
   const handleSubmitNotification = () => {
     console.log("POST NOTIFICATION TO SEVER!");
@@ -123,9 +124,18 @@ function EditorLarge({
     else return;
   };
 
-  const NoSSRTableSellResizer:any = dynamic(() => import('@lexicalLib/plugins/TableCellResizer'), {ssr:false});
-  const NoSSRFloatingLinkEditorPlugin:any = dynamic(() => import('@lexicalLib/plugins/FloatingLinkEditorPlugin'), {ssr:false});
-  const NOSSRActionsPlugin:any = dynamic(() => import('@lexicalLib/plugins/ActionsPlugin'), {ssr:false});
+  const NoSSRTableSellResizer: any = dynamic(
+    () => import("@lexicalLib/plugins/TableCellResizer"),
+    { ssr: false }
+  );
+  const NoSSRFloatingLinkEditorPlugin: any = dynamic(
+    () => import("@lexicalLib/plugins/FloatingLinkEditorPlugin"),
+    { ssr: false }
+  );
+  const NOSSRActionsPlugin: any = dynamic(
+    () => import("@lexicalLib/plugins/ActionsPlugin"),
+    { ssr: false }
+  );
   return (
     <div className="flex flex-col gap-[8px]">
       <div>
@@ -135,10 +145,10 @@ function EditorLarge({
       <div className="editor-shell">
         <LexicalComposer initialConfig={editorConfig}>
           <TableContext>
-            <div className="border-2 rounded-[10px]">
+            <div className="border-2 dark:border-darkHover rounded-[13px]">
               <div>{<ToolbarPlugin />}</div>
               <div className="relative">
-                <HistoryPlugin/>
+                <HistoryPlugin />
                 <DragDropPaste />
                 <AutoFocusPlugin />
                 <ClearEditorPlugin />
@@ -154,12 +164,12 @@ function EditorLarge({
                   contentEditable={
                     <div className="editor-scroller">
                       <div className="editor" ref={onRef}>
-                        <ContentEditable className="editor-input" />
+                        <ContentEditable className="editor-input dark:text-white" />
                       </div>
                     </div>
                   }
                   placeholder={
-                    <Placeholder className="absolute top-[15px] left-[20px] text-[14px] text-gray-500">
+                    <Placeholder className="absolute top-[15px] left-[20px] text-[14px] text-gray-500 dark:text-gray-300">
                       {"Enter some rich text..."}
                     </Placeholder>
                   }
@@ -174,7 +184,7 @@ function EditorLarge({
                   hasCellMerge={true}
                   hasCellBackgroundColor={true}
                 />
-                <NoSSRTableSellResizer/>
+                <NoSSRTableSellResizer />
                 <NewTablePlugin cellEditorConfig={cellEditorConfig}>
                   <AutoFocusPlugin />
                   <RichTextPlugin
@@ -198,7 +208,7 @@ function EditorLarge({
                 <ImagesPlugin />
                 <InlineImagePlugin />
                 <LinkPlugin />
-                <NoSSRFloatingLinkEditorPlugin/>
+                <NoSSRFloatingLinkEditorPlugin />
                 <PollPlugin />
                 <TwitterPlugin />
                 <YouTubePlugin />
@@ -233,7 +243,7 @@ function EditorLarge({
                   </>
                 )}
               </div>
-              {/* <TreeViewPlugin /> */}
+              {isDarkMode ? <TreeViewPlugin /> : null}
               <HTMLSerializerPlugin setHtmlString={setHtmlString} />
               <TextCounterPlugin
                 setTextContentCounting={setTextContentCounting}
@@ -246,14 +256,14 @@ function EditorLarge({
       <div className="mt-[12px] flex flex-row justify-between">
         <div>
           <UnlinkButton
-            textContent={"Publish notification"}
+            textContent={`Publish ${pageName}`}
             icon={"public"}
             iconPosition={"left"}
             backgroundColor={"bg-blue-700"}
             method={() => {
               handleSubmit();
             }}
-            tailwind={"text-white"}
+            tailwind={"text-white dark:shadow-darkPrimaryBlue"}
           ></UnlinkButton>
         </div>
         <div>

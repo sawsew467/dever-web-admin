@@ -51,16 +51,16 @@ function FormikSelect({
 
   return (
     <div className="w-full relative flex flex-col justify-between">
-      <span className="font-[300] text-[14px] mb-[6px]">
+      <span className="font-[300] text-[14px] mb-[6px] dark:font-semibold">
         {capitalizeFirstLetter(title)}
       </span>
       <select
         {...field}
         {...props}
-        className={`w-full text-sm font-medium text-gray-700 border-gray-300  bg-gray-50 py-[10px] ${
-          isEdit ? "text-black" : ""
+        className={`w-full text-sm font-medium text-gray-700 border-gray-300 dark:border-darkHover  bg-gray-50 dark:bg-dark dark:text-gray-400  py-[10px] ${
+          isEdit ? "text-black dark:text-white" : "pointer-events-none"
         } rounded-[6px]`}
-        disabled={!isEdit}
+        // disabled={!isEdit}
       >
         <option value="">Select a {lowercaseFirstLetter(title)}...</option>
         {renderSelectOption()}

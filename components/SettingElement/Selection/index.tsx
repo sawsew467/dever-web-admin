@@ -38,13 +38,13 @@ function Selection({
 
   return (
     <div className="w-full">
-      <span className="font-[300] text-[14px]">
+      <span className="font-[300] text-[14px] dark:font-semibold">
         {capitalizeFirstLetter(title)}
       </span>
       <select
         name=""
         id=""
-        className={`w-full text-[14px] text-gray-700 border-gray-300  bg-gray-50 ${
+        className={`w-full text-[14px] text-gray-700 border-gray-300 dark:border-darkHover font-[500] dark:bg-dark dark:text-white  bg-gray-50 ${
           isEdit ? "text-black" : ""
         } rounded-[6px]`}
         disabled={!isEdit}

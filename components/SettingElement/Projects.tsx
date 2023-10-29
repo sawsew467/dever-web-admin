@@ -99,9 +99,9 @@ function Projects(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px] select-none">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px] select-none">
       <div className="flex flex-row justify-between">
-        <h3 className="font-[700] text-[24px]">Your projects</h3>
+        <h3 className="font-[700] text-[24px] dark:text-white">Your projects</h3>
         <button
           className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
           onClick={handleEditClick}
@@ -117,7 +117,7 @@ function Projects(): JSX.Element {
       <div className="flex flex-col gap-[20px]">
         {projectState.length == 0 ? (
           <p
-            className="font-[500] text-[14px] text-blue-700 cursor-pointer "
+            className="font-[500] text-[14px] text-blue-700 cursor-pointer dark:text-white"
             onClick={() => {
               setIsEdit(true);
               setIsAdd(true);
@@ -154,7 +154,7 @@ function Projects(): JSX.Element {
         </div>
       ) : null}
       {isEdit && isAdd ? (
-        <div>
+        <div className="dark:text-white">
           <Formik
             initialValues={{
               title: "",
@@ -185,7 +185,7 @@ function Projects(): JSX.Element {
                     />
                     <div className="flex flex-col gap-[6px]">
                       <div>
-                        <h3 className="font-[300] text-[14px]">
+                        <h3 className="font-[300] text-[14px] dark:font-semibold">
                           Project description
                         </h3>
                       </div>
