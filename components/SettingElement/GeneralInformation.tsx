@@ -21,6 +21,7 @@ import {
   getAllPosition,
 } from "@/apis/dataOrganizer";
 import { patchGeneralInfo } from "@/apis/setting";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 
 type TGeneralFieldValues = {
   firstName: string;
@@ -184,19 +185,16 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px]">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px] dark:text-white">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px] dark:text-white">General infomation</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
-          onClick={handleEditClick}
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
+          onClick={() => {
+            handleEditClick()
+          }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          />
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
 
@@ -325,7 +323,7 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
                   <div>
                     <button
                       type="submit"
-                      className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                      className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white dark:shadow-darkPrimaryBlue"
                     >
                       Save
                     </button>

@@ -32,18 +32,18 @@ function CreateBlog() {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div>
-          <h1 className="font-[700] text-[24px] select-none">
+          <h1 className="font-[700] text-[24px] select-none dark:text-white">
             Create blog
           </h1>
         </div>
 
         <div className="flex flex-col gap-[20px]">
           <div className="flex flex-col gap-[8px]">
-            <h4 className="select-none font-[500]">Your title:</h4>
+            <h4 className="select-none font-[500] dark:text-white">Your title:</h4>
             <input
               type="text"
               placeholder="Write title here"
-              className="border-2 border-gray-300 rounded-[12px] w-full"
+              className="border-2 border-gray-300 dark:border-darkHover dark:bg-dark rounded-[12px] w-full"
             />
           </div>
           <div>

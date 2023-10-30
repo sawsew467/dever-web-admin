@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { dropdownBlogs, openBlogList } from "@/redux/slices/sideBarControl";
+import { GoClockFill } from "react-icons/go";
 
 interface pageProps {
   params: { blogDetailId: string };
@@ -47,7 +48,9 @@ function DetailBlog({ params }: pageProps) {
       <div className="py-[20px] px-[16px] flex flex-col gap-[30px]">
         <div className="flex justify-between">
           <div>
-            <h1 className="font-[700] text-[24px]">Blog details</h1>
+            <h1 className="font-[700] text-[24px] dark:text-white">
+              Blog details
+            </h1>
           </div>
           <div className="flex flex-row gap-[20px]">
             <Button
@@ -61,17 +64,17 @@ function DetailBlog({ params }: pageProps) {
             ></Button>
           </div>
         </div>
-        <div className="p-[30px] shadow-primary rounded-[10px] flex flex-col gap-[30px]">
+        <div className="p-[30px] shadow-primary dark:shadow-darkPrimary rounded-[10px] flex flex-col gap-[30px] dark:text-white">
           <div>
             <h3 className="font-[700] text-[36px]">{data.title}</h3>
           </div>
           <div>
             <p className="flex gap-[8px]">
-              <Image src={clockIcon} alt="clockIcon"></Image>
+              <GoClockFill className="text-[22px] dark:text-white text-[#1f2a37]" />
               {data.time}
             </p>
             <p className="flex gap-[8px]">
-              <IoPersonCircleSharp className="text-[24px] text-[#1f2a37]" />
+              <IoPersonCircleSharp className="text-[24px] dark:text-white text-[#1f2a37]" />
               Tran Van Bao Thang
             </p>
           </div>
@@ -90,4 +93,3 @@ function DetailBlog({ params }: pageProps) {
 }
 
 export default DetailBlog;
-

@@ -8,6 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { getAllSkills } from "@/apis/dataOrganizer";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 // import { getMemberSkill} from "@/apis/setting";
 
 type TSkill = {
@@ -50,21 +51,16 @@ function Skills({ userSkills }: TProps): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] rounded-[10px] shadow-primary dark:shadow-darkPrimary">
+    <div className="flex flex-col gap-[20px] p-[24px] rounded-[10px] shadow-primary dark:shadow-darkPrimary dark:text-white">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px] dark:text-white">Skills</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
           onClick={() => {
-            setIsEdit(!isEdit);
+           setIsEdit(!isEdit)
           }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          ></Image>
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div className="flex flex-col gap-[5px]" aria-disabled="true">

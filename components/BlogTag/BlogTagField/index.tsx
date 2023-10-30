@@ -59,7 +59,7 @@ function BlogTagField({
   return (
     <div className="flex flex-col gap-[20px]">
       <div
-        className={`form-group shadow-primary  rounded-[8px] p-[6px]`}
+        className={`form-group shadow-primary dark:shadow-darkPrimary rounded-[8px] p-[6px]`}
       >
         <Tags value={state} settings={settings} readOnly={false} />
       </div>

@@ -11,6 +11,7 @@ import EditIconPause from "@icon/components/Button/edit_pause.png";
 import FormikInput from "./FormikInput";
 import EditorNormal from "../EditorNormal";
 import BrowseImage from "./BrowseImage";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 
 type TProjectCreateFieldsValue = {
   title: string;
@@ -99,19 +100,16 @@ function Projects(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px] select-none">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px] select-none dark:text-white">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px] dark:text-white">Your projects</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
-          onClick={handleEditClick}
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
+          onClick={() => {
+            handleEditClick()
+          }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          />
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div className="flex flex-col gap-[20px]">

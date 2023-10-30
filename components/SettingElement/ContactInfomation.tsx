@@ -10,6 +10,7 @@ import FormikInput from "./FormikInput";
 import { getCookie } from "cookies-next";
 import { updateContactInfo } from "@/apis/setting";
 import { isAxiosError } from "axios";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 
 type TContactFieldValue = {
   phone: string;
@@ -61,17 +62,12 @@ function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
       <div className="flex flex-row justify-between items-center">
         <h3 className="font-[700] text-[24px]">Contact information</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
           onClick={() => {
             handleEditClick();
           }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          ></Image>
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
 
@@ -111,7 +107,7 @@ function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
                     <div>
                       <button
                         type="submit"
-                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white dark:shadow-darkPrimaryBlue"
                       >
                         Save
                       </button>

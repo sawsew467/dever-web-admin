@@ -11,7 +11,14 @@
 
 .dark {
   background-color: #18191a;
+  ::-webkit-inner-spin-button {
+    filter: invert(1);
+  }
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
 }
+
 
 body {
   color: rgb(var(--foreground-rgb));

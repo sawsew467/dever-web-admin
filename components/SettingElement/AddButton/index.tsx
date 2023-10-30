@@ -13,7 +13,7 @@ function AddButton({text, isAdd, setIsAdd}: TPros) {
 
     return (
         <div className='relative'>
-        <button className={`w-[40px] h-[40px] flex flex-col items-center justify-center border-2 text-[18px] border-blue-700 dark:border-blue-500 rounded-[50%] transition ${isAdd ? "text-white bg-blue-700"  : "text-blue-700 dark:text-blue-500 bg-white dark:bg-dark"} ${isVisit ? "rotate-[360deg]" : null}`}
+        <button className={`w-[40px] h-[40px] dark:shadow-darkPrimaryBlue flex flex-col items-center justify-center border-2 text-[18px] border-blue-700 dark:border-blue-500 rounded-[50%] transition ${isAdd ? "text-white bg-blue-700"  : "text-blue-700 dark:text-blue-500 bg-white dark:bg-dark"} ${isVisit ? "rotate-[360deg]" : null}`}
         onClick={() => setIsAdd(isAdd => !isAdd)}
         onMouseEnter={() => setIsVisit(true)}
         onMouseLeave={() => setIsVisit(false)}

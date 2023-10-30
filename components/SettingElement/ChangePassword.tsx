@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import EditIconAnimate from "@icon/components/Button/edit.gif";
 import EditIconPause from "@icon/components/Button/edit_pause.png";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 
 type TPasswordFieldValue = {
   currentPassword: string;
@@ -40,15 +41,12 @@ function ChangePassword(): JSX.Element {
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px]">Change password</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
-          onClick={handleEditClick}
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
+          onClick={() => {
+            handleEditClick()
+          }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          />
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div>
@@ -115,7 +113,7 @@ function ChangePassword(): JSX.Element {
                     <div>
                       <button
                         type="submit"
-                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white dark:shadow-darkPrimaryBlue"
                       >
                         Save
                       </button>
