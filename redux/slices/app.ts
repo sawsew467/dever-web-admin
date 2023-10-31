@@ -25,6 +25,14 @@ export const appSlice = createSlice({
     },
     toggleIsDarkMode: (state) => {
       state.isDarkMode = !state.isDarkMode;
+      if(!state.isDarkMode) {
+        localStorage.setItem('theme', JSON.stringify("light"));
+        setCookie('theme', 'light');
+      } else {
+        localStorage.removeItem('theme');
+        setCookie('theme', '', {maxAge:0})
+      } 
+
     },
     setIsDarkMode: (state,action) =>{
       state.isDarkMode = action.payload;

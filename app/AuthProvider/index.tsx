@@ -36,10 +36,18 @@ function AppProvider({children}:{children:React.ReactNode}) {
         if(userFromCookies) {
             dispatch(refreshUserInfoFromStorage(userFromCookies));
         }
-        if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
+
+        const theme = JSON.parse(localStorage.getItem('theme')!)
+        console.log(theme)
+
+        if(window.matchMedia('(prefers-color-scheme: dark)').matches && theme == null) {
             document.documentElement.classList.toggle('dark');
-            dispatch(setIsDarkMode(true))
+            dispatch(setIsDarkMode(true));
+        } else if(theme === 'light') {
+            document.documentElement.classList.remove('dark');
+            dispatch(setIsDarkMode(false));
         }
+
     },[dispatch])
 
     return <>{children}</>

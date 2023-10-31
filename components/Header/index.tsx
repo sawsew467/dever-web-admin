@@ -28,6 +28,7 @@ import { closeAllRoute } from "@/redux/slices/sideBarControl";
 
 function Header(): JSX.Element {
   const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
+
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );

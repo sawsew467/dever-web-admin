@@ -41,7 +41,7 @@ interface IPros {
   refreshApi: () => void;
 }
 
-function MemberItem({ value, selecteFunct, refreshApi }: IPros) {  
+function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   const handleCheckboxChange = () => {
     selecteFunct(value.id);
   };
@@ -53,6 +53,8 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
   const [openDialog, setOpenDialog] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
+
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -113,7 +115,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         toast.error(error?.response?.data?.errorMessages[0]);
       }
     }
-  };  
+  };
 
   return (
     <div className="flex justify-between border-b-2 dark:border-darkHover h-[78px]">
@@ -142,17 +144,17 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         </div>
         <div className="flex flex-col w-[276px] pt-[16px] px-[16px] text-[12px]">
           <h3 className="text-[16px] font-[600] dark:text-white dark:font-bold">
-            {value.fullName.trim() == '' ? value.email : value.fullName}
+            {value.fullName.trim() == "" ? value.email : value.fullName}
           </h3>
           <p className="text-[14px] dark:text-gray-100">{value.email}</p>
         </div>
         {/* position */}
         <div className="w-[200px] flex p-[16px] items-center text-[16px] font-[600] dark:text-white">
-          <p>{value.position == '' ? 'empty' : value.position}</p>
+          <p>{value.position == "" ? "empty" : value.position}</p>
         </div>
         {/* department */}
         <div className="w-[180px] flex p-[16px] items-center text-[14px] font-[600] dark:text-white">
-          <p>{value.department == '' ? 'empty' : value.department}</p>
+          <p>{value.department == "" ? "empty" : value.department}</p>
         </div>
         {/* status */}
         <div className="w-[100px] flex p-[16px] items-center text-[12px] relative">
@@ -215,21 +217,27 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       </div>
 
       <Dialog
+        PaperProps={{
+          style: {
+            backgroundColor: isDarkMode ? "#18191a" : "",
+            borderRadius: "8px",
+          },
+        }}
         fullScreen={fullScreen}
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          <p className="text-red-600 font-[600] ">
+          <p className="text-red-600 font-[600]">
             Warning about deleting users
           </p>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>
+            <p className="dark:text-white">
               {`Warning about deleting users with email: `}{" "}
-              <span className="text-green-600">{`${value.email}`}</span>
+              <span className="text-green-600 dark:text-green-400">{`${value.email}`}</span>
             </p>
           </DialogContentText>
         </DialogContent>
@@ -259,7 +267,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
               icon="delete"
               backgroundColor="bg-red-700"
               iconPosition="left"
-              textContent="Delete"
+              textContent="Remove"
               tailwind="text-white dark:shadow-darkPrimaryRed"
             ></UnlinkButton>
           </div>

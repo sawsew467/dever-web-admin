@@ -32,6 +32,7 @@ import { memberPros, memberType } from "@/ultils/types";
 import { dropdownMembers, openMemberList } from "@/redux/slices/sideBarControl";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa6";
+import { MdRecycling } from "react-icons/md";
 
 type pageProps = {
   params: { listID: string };
@@ -47,7 +48,7 @@ function MemberList({ params }: pageProps) {
   const isMouseVisit = useSelector(
     (state: RootState) => state.app.isMouseVisit
   );
-  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode)
+  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const increaseIndex = 7;
@@ -255,18 +256,28 @@ function MemberList({ params }: pageProps) {
             </div>
             {userRole === "admin" ? (
               <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200 items-center">
-                <AiFillCheckCircle
-                  className="text-[24px] dark:text-gray-300"
-                  onClick={() => {
-                    handleGetAllSelectedMembers("approve");
-                  }}
-                />
-                <FaTrash
-                  className="text-[20px] dark:text-gray-300"
-                  onClick={() => {
-                    handleGetAllSelectedMembers("delete");
-                  }}
-                />
+                <button type="button" title="Approve users">
+                  <AiFillCheckCircle
+                    className="text-[24px] dark:text-gray-300"
+                    onClick={() => {
+                      handleGetAllSelectedMembers("approve");
+                    }}
+                  />
+                </button>
+                <button type="button" title="Remove users">
+                  <FaTrash
+                    className="text-[20px] dark:text-gray-300"
+                    onClick={() => {
+                      handleGetAllSelectedMembers("delete");
+                    }}
+                  />
+                </button>
+                <button type="button" title="Users recovery">
+                  <MdRecycling
+                    className="text-[24px] dark:text-gray-300"
+                  
+                  />
+                </button>
               </div>
             ) : null}
           </div>
@@ -289,7 +300,9 @@ function MemberList({ params }: pageProps) {
                 backgroundColor={"bg-white"}
                 href={""}
                 method={() => {}}
-                tailwind={"text-black border-2 border-slate-200 dark:border-0 dark:shadow-darkPrimary"}
+                tailwind={
+                  "text-black border-2 border-slate-200 dark:border-0 dark:shadow-darkPrimary"
+                }
               ></Button>
             </div>
           ) : null}
@@ -366,8 +379,8 @@ function MemberList({ params }: pageProps) {
         PaperProps={{
           style: {
             backgroundColor: isDarkMode ? "#18191a" : "",
-            borderRadius: "8px"
-          }
+            borderRadius: "8px",
+          },
         }}
         fullScreen={fullScreen}
         open={openDialogToApprove}
@@ -381,7 +394,9 @@ function MemberList({ params }: pageProps) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p className="dark:text-gray-200">Make sure you want to approve these users:</p>
+            <p className="dark:text-gray-200">
+              Make sure you want to approve these users:
+            </p>
             {selectedMembers.map((item, index) => (
               <p
                 key={index}
@@ -396,7 +411,9 @@ function MemberList({ params }: pageProps) {
                 {item.email}
                 <span
                   className={`ml-[10px] font-[500] ${
-                    item.status == "Approved" ? "text-green-700 dark:text-green-400" : null
+                    item.status == "Approved"
+                      ? "text-green-700 dark:text-green-400"
+                      : null
                   }`}
                 >
                   {item.status == "Approved" ? "Approved" : null}
@@ -424,8 +441,8 @@ function MemberList({ params }: pageProps) {
         PaperProps={{
           style: {
             backgroundColor: isDarkMode ? "#18191a" : "",
-            borderRadius: "8px"
-          }
+            borderRadius: "8px",
+          },
         }}
         fullScreen={fullScreen}
         open={openDialogToDelete}
@@ -439,7 +456,9 @@ function MemberList({ params }: pageProps) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p className="dark:text-white">Make sure you want to delete these users:</p>
+            <p className="dark:text-white">
+              Make sure you want to delete these users:
+            </p>
             {selectedMembers.map((value, index) => (
               <p key={index} className="text-green-600 dark:text-green-400">
                 {value.email}
