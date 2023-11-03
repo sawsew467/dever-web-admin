@@ -23,6 +23,7 @@ import UnlinkButton from "../UnlinkButton";
 import { getCookie } from "cookies-next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { PiWarningFill } from "react-icons/pi";
 
 interface memberPros {
   id: string;
@@ -39,9 +40,10 @@ interface IPros {
   value: memberPros;
   selecteFunct: (id: string) => void;
   refreshApi: () => void;
+  getAllRemovedMember: () => void;
 }
 
-function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
+function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IPros) {
   const handleCheckboxChange = () => {
     selecteFunct(value.id);
   };
@@ -104,15 +106,16 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
       if (access_token) {
         const response = await deleteMemberInfo(value.id, access_token);
         // console.log(response);
-        toast.success(`Deleted user ${value.email} successfully!`);
+        toast.success(`Removed user ${value.email} successfully!`);
         refreshApi();
       }
       setOpenDialog(false);
+      getAllRemovedMember();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setOpenDialog(false);
-        toast.error(error?.response?.data?.errorMessages[0]);
+        toast.error("Something went wrong!");
       }
     }
   };
@@ -221,6 +224,7 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
           style: {
             backgroundColor: isDarkMode ? "#18191a" : "",
             borderRadius: "8px",
+            userSelect: "none"
           },
         }}
         fullScreen={fullScreen}
@@ -228,25 +232,48 @@ function MemberItem({ value, selecteFunct, refreshApi }: IPros) {
         onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
-          <p className="text-red-600 font-[600]">
-            Warning about deleting users
-          </p>
+        <DialogTitle
+          id="alert-dialog-title"
+          className="dark:text-red-600 text-red-500 font-bold flex items-center gap-[8px]"
+        >
+          <PiWarningFill />
+          {"Warning!"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            <p className="dark:text-white">
-              {`Warning about deleting users with email: `}{" "}
-              <span className="text-green-600 dark:text-green-400">{`${value.email}`}</span>
-            </p>
-          </DialogContentText>
+          <div className="flex flex-col gap-[8px]">
+            <p className="dark:text-white dark:font-semibold">This user will not be able to log in to the system: </p>
+            <div className="flex items-center justify-center">
+              <div className="flex flex-row gap-[10px] border-2 px-[8px] py-[8px] rounded-[10px] dark:border-darkHover">
+                <div className="w-[48px] h-[48px] rounded-[50%] overflow-hidden">
+                  <Image
+                    src={value?.avatarUrl!}
+                    alt="user_avatar"
+                    width={1200}
+                    height={600}
+                    className="w-full h-full object-cover"
+                  ></Image>
+                </div>
+                <div className="dark:text-white">
+                  <h3 className="text-[16px] font-[600] dark:text-white dark:font-bold">
+                    {value?.fullName.trim() == ""
+                      ? value?.email
+                      : value?.fullName}
+                  </h3>
+                  <p className="text-[14px] dark:text-gray-100">
+                    {value?.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p className="dark:text-white dark:font-semibold">Make sure you want to remove!</p>
+          </div>
         </DialogContent>
         <DialogActions>
           <MUIButton autoFocus onClick={handleClose}>
             <p className="hover:text-green-600">Cancle</p>
           </MUIButton>
           <MUIButton onClick={handleDeleteUser} autoFocus>
-            <p className="hover:text-red-600">Delete</p>
+            <p className="hover:text-red-600">Remove</p>
           </MUIButton>
         </DialogActions>
       </Dialog>

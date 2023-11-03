@@ -38,8 +38,6 @@ function AppProvider({children}:{children:React.ReactNode}) {
         }
 
         const theme = JSON.parse(localStorage.getItem('theme')!)
-        console.log(theme)
-
         if(window.matchMedia('(prefers-color-scheme: dark)').matches && theme == null) {
             document.documentElement.classList.toggle('dark');
             dispatch(setIsDarkMode(true));

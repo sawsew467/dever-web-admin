@@ -15,6 +15,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { ValidationError } from "yup";
 import jwt_decode from "jwt-decode";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery, useTheme} from "@mui/material";
+import { PiWarningFill } from "react-icons/pi";
 
 type UserLogin = {
   email: string;
@@ -34,6 +36,11 @@ function SignIn() {
     setRemember(status);
   };
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const onSubmit = async (values: UserLogin, actions: any) => {
     try {
       values.remember = remember;
@@ -73,7 +80,6 @@ function SignIn() {
       }
       if (axios.isAxiosError(error)) {
         console.log(error);
-        
         if (error.response?.data.responseStatusCode === 2) {
           toast.error(error?.response?.data?.errorMessages[0]);
         }
@@ -107,8 +113,12 @@ function SignIn() {
         if (error.response?.data.responseStatusCode === 15) {
           toast.warning(error?.response?.data?.errorMessages[0]);
         }
+        if (error.response?.data.responseStatusCode === 19) {
+          // toast.warning(error?.response?.data?.errorMessages[0]);
+          actions.resetForm();
+          setOpen(true);
+        }
       }
-      //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
     }
   };
 
@@ -210,6 +220,36 @@ function SignIn() {
           </div>
         </div>
       </div>
+
+      <Dialog
+        PaperProps={{
+
+        }}
+        fullScreen={fullScreen}
+        open={open}
+        onClose={() => {setOpen(false)}}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          <div className="flex flex-row gap-[8px]">
+            <PiWarningFill className = "text-red-500 text-[32px]"/>
+            <p>Warning!</p>
+          </div>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText style={{color: "black", fontSize: "semibold"}}>
+            Your account has been banned by admin for some reason!
+            <br/>
+            Please contact admin to restore your account!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {setOpen(false)}} autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </section>
   );
 }

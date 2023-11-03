@@ -139,7 +139,7 @@ function EditorLarge({
   return (
     <div className="flex flex-col gap-[8px]">
       <div>
-        <h4 className="select-none font-[500]">{formTitle}:</h4>
+        <h4 className="select-none font-[500] dark:font-semibold dark:text-white">{formTitle}:</h4>
       </div>
 
       <div className="editor-shell">
