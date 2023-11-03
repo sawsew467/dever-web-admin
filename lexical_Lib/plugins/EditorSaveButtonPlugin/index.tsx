@@ -25,7 +25,6 @@ function EditorSaveButtonPlugin({ setHtmlString, useFor }: TPros) {
       }
       if (access_token) {
         const response = await updateAbout(access_token, aboutMe);
-        console.log(response);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

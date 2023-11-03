@@ -64,8 +64,6 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
       const access_token = getCookie("accessToken");
       const userId = getCookie("userId");
       if (access_token && userId) {
-        console.log(userData);
-        
         const generalData = {
           userId: userId,
           firstName: values.firstName,
@@ -81,7 +79,7 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
           joinDate: values.joinDate,
         };
         console.log(generalData);
-        const res = await patchGeneralInfo(access_token, generalData);
+        await patchGeneralInfo(access_token, generalData);
         toast.success(`Update general information successfully!`);
         actions.resetForm();
         refreshApi();

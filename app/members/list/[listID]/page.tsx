@@ -105,12 +105,13 @@ function MemberList({ params }: pageProps) {
   const handleGetAllMember = async () => {
     try {
       const access_token = getCookie("accessToken");
+      const adminId = getCookie('userId');
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data.body;
         const currentUserRole = store.getState().userInfor.currentUser.role;
 
-        const filteredData = data
+        let filteredData = data
           .map((value: memberType) => {
             if (currentUserRole === "admin") {
               return {
@@ -126,6 +127,10 @@ function MemberList({ params }: pageProps) {
             return null;
           })
           .filter((value: memberPros) => value !== null);
+
+        if(currentUserRole == 'admin') {
+          filteredData = filteredData.filter((value: memberPros) => value.id !== adminId);
+        }
 
         setCountListPage(Math.ceil(filteredData.length / increaseIndex));
         setIsFetchData(false);

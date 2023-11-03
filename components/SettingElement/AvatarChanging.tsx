@@ -94,7 +94,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   },[imageState, setImageSource])
 
   return (
-    <div className="flex flex-col xl:flex-row gap-[25px] p-[24px] shadow-primary dark:shadow-darkPrimary text-white rounded-[10px]">
+    <div className="flex flex-col xl:flex-row gap-[25px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="w-[126px] h-[126px] rounded-[10px] overflow-hidden">
         <Image
           src={imageState ? URL.createObjectURL(imageState) : avatarUrl == '' ? Avatar : avatarUrl}

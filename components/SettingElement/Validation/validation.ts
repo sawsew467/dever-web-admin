@@ -40,7 +40,7 @@ export const generalInformationSchema =yup.object().shape({
   firstName: yup.string().required("Fist name is required"),
   lastName: yup.string().required("Last name is required"),
   birthday: yup.string().required("Birthday is required"),
-  homeAddress: yup.string(),
+  homeAddress: yup.string().required("Home address is required"),
   position: yup.string().required("Position is required"),
   career: yup.string().required("Role is required"),
   majorID: yup.string().required("Major is required"),
