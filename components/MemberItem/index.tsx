@@ -121,7 +121,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
   };
 
   return (
-    <div className="flex justify-between border-b-2 dark:border-darkHover h-[78px]">
+    <div className="flex justify-between border-b-2 dark:border-darkHover h-[78px] ">
       <div className="flex">
         <div className="w-[48px] flex items-center justify-center">
           <input
@@ -145,7 +145,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
             />
           </div>
         </div>
-        <div className="flex flex-col w-[276px] pt-[16px] px-[16px] text-[12px]">
+        <div className="flex flex-col w-[276px] pt-[16px] px-[16px] text-[12px] select-text">
           <h3 className="text-[16px] font-[600] dark:text-white dark:font-bold">
             {value.fullName.trim() == "" ? value.email : value.fullName}
           </h3>
