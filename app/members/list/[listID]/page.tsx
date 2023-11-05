@@ -63,17 +63,13 @@ function MemberList({ params }: pageProps) {
   const isMouseVisit = useSelector(
     (state: RootState) => state.app.isMouseVisit
   );
-  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const increaseIndex = 7;
   const [allMemberData, setAllMemberData] = useState([]);
   const [members, setMembers] = useState<memberPros[]>([]);
   const [countListPage, setCountListPage] = useState(0);
-  const pages: { param: string; startIndex: number; endIndex: number }[] = [];
   const [isFetchData, setIsFetchData] = useState(true);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [openDialogToDelete, setOpenDialogToDelete] = useState<boolean>(false);
   const [openDialogToApprove, setOpenDialogToApprove] =
     useState<boolean>(false);
@@ -105,7 +101,7 @@ function MemberList({ params }: pageProps) {
   const handleGetAllMember = async () => {
     try {
       const access_token = getCookie("accessToken");
-      const adminId = getCookie('userId');
+      const adminId = getCookie("userId");
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
         const data = response.data.body;
@@ -128,8 +124,10 @@ function MemberList({ params }: pageProps) {
           })
           .filter((value: memberPros) => value !== null);
 
-        if(currentUserRole == 'admin') {
-          filteredData = filteredData.filter((value: memberPros) => value.id !== adminId);
+        if (currentUserRole == "admin") {
+          filteredData = filteredData.filter(
+            (value: memberPros) => value.id !== adminId
+          );
         }
 
         setCountListPage(Math.ceil(filteredData.length / increaseIndex));
@@ -156,12 +154,15 @@ function MemberList({ params }: pageProps) {
       }
     }
   };
-  const handleRestoreUser = async (userInfo: memberPros, isNeedToast: boolean) => {
+  const handleRestoreUser = async (
+    userInfo: memberPros,
+    isNeedToast: boolean
+  ) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token && userInfo) {
         await restoreUser(access_token, userInfo.id);
-        if(isNeedToast) {
+        if (isNeedToast) {
           toast.success(
             "Restored user with email: " + userInfo.email + "successfully!"
           );
@@ -176,12 +177,15 @@ function MemberList({ params }: pageProps) {
       }
     }
   };
-  const handleDeleteUserOutOfBD = async (userInfo: memberType, isNeedToast: boolean) => {
+  const handleDeleteUserOutOfBD = async (
+    userInfo: memberType,
+    isNeedToast: boolean
+  ) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token && userInfo) {
         await deleteUserOutOfDB(access_token, userInfo.id);
-        if(isNeedToast) {
+        if (isNeedToast) {
           toast.success(
             "Deleted user with email: " + userInfo.email + " successfully!"
           );
@@ -197,15 +201,11 @@ function MemberList({ params }: pageProps) {
   };
   const handleRestoreAllUser = async () => {
     removedUsers.forEach((item) => handleRestoreUser(item, false));
-    toast.success(
-      "Restored successfully!"
-    );
+    toast.success("Restored successfully!");
   };
   const handleDeleteAllRemovedUser = async () => {
     removedUsers.forEach((item) => handleDeleteUserOutOfBD(item, false));
-    toast.success(
-      "Deleted successfully!"
-    );
+    toast.success("Deleted successfully!");
   };
 
   useEffect(() => {
@@ -273,12 +273,16 @@ function MemberList({ params }: pageProps) {
       }
     }
   };
-  const handleApproveUser = async (userId: string, userEmail: string, isNeedToast: boolean) => {
+  const handleApproveUser = async (
+    userId: string,
+    userEmail: string,
+    isNeedToast: boolean
+  ) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         await approveUser(userId, access_token);
-        if(isNeedToast) {
+        if (isNeedToast) {
           toast.success(`Approved user with email: ${userEmail}`);
         }
       }
