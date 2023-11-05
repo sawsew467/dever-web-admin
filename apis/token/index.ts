@@ -10,7 +10,6 @@ export async function refreshAccessToken():Promise<boolean> {
     return false;
 }
 export async function useRefreshAccessToken() {
-    console.log("oke");
     
 } 
 

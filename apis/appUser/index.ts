@@ -11,7 +11,7 @@ export const approveUser = (userId: string, access_token: string | null) => {
         headers: {Authorization: `Bearer ${access_token}`},
     })
 }
-export const rejectUser = (userId: string, access_token: string | null) => {
+export const rejectUser = (userId: string, access_token: string | null) => { 
     return axiosClient.post(`${END_POINT.REJECT}${userId}`,null, {
         headers: {Authorization: `Bearer ${access_token}`},
     })
