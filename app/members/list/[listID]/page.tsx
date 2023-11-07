@@ -1,52 +1,38 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 import searchIcon from "@icon/page/member/list/search-outline.svg";
 
-import MemberItem from "@/components/MemberItem/";
-import Button from "@/components/Button";
-import Pagination from "@/components/Pagination";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import axios from "axios";
-import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  LinearProgress,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { Button as MUIButton } from "@mui/material/";
-import { toast } from "react-toastify";
-import { getCookie } from "cookies-next";
-import { store } from "@/redux/store";
 import {
   approveUser,
   deleteUserOutOfDB,
   getAllRemovedUser,
   restoreUser,
 } from "@/apis/appUser";
-import { memberPros, memberType } from "@/ultils/types";
+import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
+import Button from "@/components/Button";
+import ApproveDialog from "@/components/Dialogs/MemberListDialog/ApproveDialog";
+import DeleteAllRemovedUserDialog from "@/components/Dialogs/MemberListDialog/DeleteAllRemovedUserDialog";
+import DeleteOutAUserDialog from "@/components/Dialogs/MemberListDialog/DeleteOutAUserDialog";
+import MemberRecycleBinDialog from "@/components/Dialogs/MemberListDialog/MemberRecycleBinDialog";
+import RemoveDialog from "@/components/Dialogs/MemberListDialog/RemoveDialog";
+import MemberItem from "@/components/MemberItem/";
+import Pagination from "@/components/Pagination";
 import { dropdownMembers, openMemberList } from "@/redux/slices/sideBarControl";
+import { RootState, store } from "@/redux/store";
+import { memberPros, memberType } from "@/ultils/types";
+import {
+  LinearProgress
+} from "@mui/material";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa6";
-import { MdRecycling, MdOpenInNew } from "react-icons/md";
-import { useRouter } from "next/navigation";
-import { BsDatabaseFillDash } from "react-icons/bs";
-import { PiWarningFill } from "react-icons/pi";
-import ApproveDialog from "@/components/Dialogs/MemberListDialog/ApproveDialog";
-import RemoveDialog from "@/components/Dialogs/MemberListDialog/RemoveDialog";
-import MemberRecycleBinDialog from "@/components/Dialogs/MemberListDialog/MemberRecycleBinDialog";
-import DeleteOutAUserDialog from "@/components/Dialogs/MemberListDialog/DeleteOutAUserDialog";
-import DeleteAllRemovedUserDialog from "@/components/Dialogs/MemberListDialog/DeleteAllRemovedUserDialog";
+import { MdRecycling } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 type pageProps = {
   params: { listID: string };
