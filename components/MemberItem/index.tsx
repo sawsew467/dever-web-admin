@@ -24,6 +24,7 @@ import { getCookie } from "cookies-next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { PiWarningFill } from "react-icons/pi";
+import EditOpenDialog from "../Dialogs/MemberListDialog/EditUserDialog";
 
 interface memberPros {
   id: string;
@@ -56,6 +57,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
+  const [openDialogToEditUser, setOpenDialogToEditUser] = useState<boolean>(false);
 
 
   const handleClickOpen = () => {
@@ -277,12 +279,20 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
           </MUIButton>
         </DialogActions>
       </Dialog>
+      {/* Dialog to edit user */}
+      {userRole == "admin" ? (
+        <EditOpenDialog
+          openDialogToEditUser={openDialogToEditUser}
+          setOpenDialogToEditUser={setOpenDialogToEditUser}
+          userEditedId={value.id}
+        ></EditOpenDialog>
+      ) : null}    
 
       <div className="flex h-[78px]">
         {userRole === "admin" ? (
           <div className="flex gap-[16px] justify-center items-center p-[16px]">
             <UnlinkButton
-              method={() => {}}
+              method={() => {setOpenDialogToEditUser(true)}}
               icon="edit"
               backgroundColor="bg-blue-700"
               iconPosition="left"

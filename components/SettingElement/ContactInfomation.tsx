@@ -1,8 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
 
-import EditIconAnimate from "@icon/components/Button/edit.gif";
-import EditIconPause from "@icon/components/Button/edit_pause.png";
 import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
 import { contactInformationSchema } from "./Validation/validation";
@@ -21,16 +18,10 @@ function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TContactFieldValue> | null>(null);
 
-  const fakeData = {
-    phone: "0828828497",
-    email: "thangtvbde170145@fpt.edu.vn",
-  };
-
   const onSubmit = async (
     values: TContactFieldValue,
     actions: FormikHelpers<TContactFieldValue>
   ) => {
-    console.log(values);
     try {
       const userId = getCookie("userId");
       const access_token = getCookie("accessToken");

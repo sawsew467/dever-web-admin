@@ -60,6 +60,7 @@ function SettingList() {
       }
     }
   };
+  console.log(userData);
 
   // const handleGetAllSocialAccounts = async () => {
   //   try {
@@ -133,7 +134,7 @@ function SettingList() {
                 userData={userData!}
                 refreshApi={handleGetUserProfile}
               />
-              <Projects />
+              <Projects userId={userData?.id!}/>
             </div>
           </div>
         )}

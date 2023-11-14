@@ -24,13 +24,13 @@ type userContact = {
 };
 
 type socialValue = {
-  userId: string,
-  platformId: string,
-  url: string,
+  userId: string;
+  platformId: string;
+  url: string;
 };
 
 type generalValueInfo = {
-  userId:string;
+  userId: string;
   firstName: string;
   lastName: string;
   birthday: string;
@@ -43,6 +43,15 @@ type generalValueInfo = {
   joinDate: string;
 };
 
+type ProjectPostValue = {
+  title: string;
+  authorId: string;
+  description: string;
+  projectUrl: string;
+  demoUrl: string;
+  thumbnailUrl: string;
+};
+
 export const END_POINT = {
   UPDATE_AVATAR: "/AppUser/avatar",
   UPDATE_ABOUT: "/AppUser/about-me",
@@ -51,7 +60,8 @@ export const END_POINT = {
   PLATFORM: "/Platform",
   SKILLS: "/AppUser/skill",
   HOBBIES: "/AppUser/hobby",
-  CONTACT: "/AppUser/contact-info"
+  CONTACT: "/AppUser/contact-info",
+  PROJECT: "/AppUser/project",
 };
 
 //update avatar
@@ -89,16 +99,17 @@ export const getAllAccountsByUserId = (
 };
 export const deleteSocialAccount = (
   access_token: string | null,
-  deleteValue: {userId:string; platformId:string}
+  deleteValue: { userId: string; platformId: string }
 ) => {
   return axiosClient.delete(`${END_POINT.SOCIAL}`, {
     headers: { Authorization: `Bearer ${access_token}` },
     data: {
       userId: deleteValue.userId,
-      platformId:deleteValue.platformId
-    }
+      platformId: deleteValue.platformId,
+    },
   });
 };
+
 export const postSocialAccount = (
   access_token: string | null,
   socialValue: socialValue
@@ -140,8 +151,53 @@ export const postMemberHobby = (
   });
 };
 //contact
-export const updateContactInfo = (access_token: string | null, value: userContact) => {
+export const updateContactInfo = (
+  access_token: string | null,
+  value: userContact
+) => {
   return axiosClient.patch(`${END_POINT.CONTACT}`, value, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+//project
+export const getAllProjectByUserId = (
+  access_token: string | null,
+  userId: string
+) => {
+  return axiosClient.get(`${END_POINT.PROJECT}/${userId}`, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+
+export const postProject = (
+  access_token: string | null,
+  value: ProjectPostValue
+) => {
+  return axiosClient.post(`${END_POINT.PROJECT}`, value, {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+};
+
+export const deleteProject = (
+  access_token: string | null,
+  projectId: string,
+  deleteBy: string
+) => {
+  return axiosClient.delete(`${END_POINT.PROJECT}`, {
+    headers: { Authorization: `Bearer ${access_token}` },
+    data: {
+      projectId: projectId,
+      deleteBy: deleteBy,
+    },
+  });
+};
+
+export const updateProject = (
+  access_token: string | null,
+  projectId: string,
+  value: ProjectPostValue
+) => {
+  return axiosClient.put(`${END_POINT.PROJECT}/${projectId}`, value, {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 };

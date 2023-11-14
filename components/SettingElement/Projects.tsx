@@ -15,7 +15,8 @@ import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 
 type TProjectCreateFieldsValue = {
   title: string;
-  demo: string;
+  sourceCode: string;
+  production: string;
 };
 
 type TProjectState = {
@@ -25,7 +26,11 @@ type TProjectState = {
   link: string;
 };
 
-function Projects(): JSX.Element {
+type TProps = {
+  userId: string;
+}
+
+function Projects({userId}: TProps): JSX.Element {
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [hmtlString, setHtmlString] = useState<string>("");
   const [importedImage, setImportedImage] = useState<File | null>(null);
@@ -59,12 +64,13 @@ function Projects(): JSX.Element {
     values: TProjectCreateFieldsValue,
     actions: FormikHelpers<TProjectCreateFieldsValue>
   ) => {
-    const { title, demo } = values;
+    const { title, sourceCode, production} = values;
+
     const newProjectData = {
       title: title,
       desc: hmtlString,
       img: imageURL,
-      link: removeHttps(demo),
+      link: removeHttps(sourceCode),
     };
     setProjectState((prevProjectState) => [
       ...prevProjectState,
@@ -124,7 +130,7 @@ function Projects(): JSX.Element {
             You haven&apos;t posted any projects yet
           </p>
         ) : (
-          <>
+          <div className="flex flex-col gap-[20px]">
             {projectState.map((item, index) => {
               return (
                 <ProjectCard
@@ -139,7 +145,7 @@ function Projects(): JSX.Element {
                 />
               );
             })}
-          </>
+          </div>
         )}
       </div>
       {isEdit ? (
@@ -156,14 +162,19 @@ function Projects(): JSX.Element {
           <Formik
             initialValues={{
               title: "",
-              demo: "",
+              sourceCode: "",
+              production: "",
             }}
             validationSchema={yup.object().shape({
               title: yup.string().required("Title is required"),
-              demo: yup
+              sourceCode: yup
                 .string()
                 .url("Invalid URL format")
-                .required("Demo URL is required"),
+                .required("Source code URL is required"),
+                production: yup
+                .string()
+                .url("Invalid URL format")
+                .required("Product URL is required"),
             })}
             onSubmit={onSubmit}
           >
@@ -201,10 +212,19 @@ function Projects(): JSX.Element {
                       setFileURL={setImageURL}
                     />
                     <FormikInput
-                      label={"demo"}
-                      id={"demo"}
-                      name={"demo"}
-                      placeholder={"Enter source code or deployment..."}
+                      label={"sourceCode"}
+                      id={"sourceCode"}
+                      name={"sourceCode"}
+                      placeholder={"Enter project's source code..."}
+                      type={"text"}
+                      isEdit={isEdit}
+                      title={"Source code URL"}
+                    />
+                    <FormikInput
+                      label={"production"}
+                      id={"production"}
+                      name={"production"}
+                      placeholder={"Enter product URL..."}
                       type={"text"}
                       isEdit={isEdit}
                       title={"Production"}

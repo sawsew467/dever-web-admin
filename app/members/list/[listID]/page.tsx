@@ -22,9 +22,7 @@ import Pagination from "@/components/Pagination";
 import { dropdownMembers, openMemberList } from "@/redux/slices/sideBarControl";
 import { RootState, store } from "@/redux/store";
 import { memberPros, memberType } from "@/ultils/types";
-import {
-  LinearProgress
-} from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
@@ -33,6 +31,7 @@ import { FaTrash } from "react-icons/fa6";
 import { MdRecycling } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import EditOpenDialog from "@/components/Dialogs/MemberListDialog/EditUserDialog";
 
 type pageProps = {
   params: { listID: string };
@@ -61,13 +60,14 @@ function MemberList({ params }: pageProps) {
     useState<boolean>(false);
   const [removedUsers, setRemovedUsers] = useState<memberPros[]>([]);
 
-  const [openDialogToRecycle, setOpenDialogToRecycle] = useState(false);
+  const [openDialogToRecycle, setOpenDialogToRecycle] =
+    useState<boolean>(false);
   const [openDialogToDeleteOneUser, setOpenDialogToDeleteOneUser] =
-    useState(false);
+    useState<boolean>(false);
   const [
     openDialogToDeleteAllRemovedUser,
     setOpenDialogToDeleteAllRemovedUser,
-  ] = useState(false);
+  ] = useState<boolean>(false);
   const [deleteUser, setDeleteUser] = useState<memberType>();
 
   const handleClickOpenDeleteDialog = () => {
