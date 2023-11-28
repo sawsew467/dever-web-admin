@@ -60,23 +60,6 @@ function SettingList() {
       }
     }
   };
-  console.log(userData);
-
-  // const handleGetAllSocialAccounts = async () => {
-  //   try {
-  //     const userId = getCookie("userId");
-  //     const access_token = getCookie("accessToken");
-  //     if (userId && access_token) {
-  //       const response = await getAllAccountsByUserId(access_token, userId);
-  //       const data = response.data.body;
-  //       setSocialMediaState(data);
-  //     }
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
 
   useEffect(() => {
     handleGetUserProfile();
