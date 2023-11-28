@@ -12,6 +12,9 @@ import FormikInput from "./FormikInput";
 import EditorNormal from "../EditorNormal";
 import BrowseImage from "./BrowseImage";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { isAxiosError } from "axios";
+import { postProject } from "@/apis/setting";
+import { getCookie } from "cookies-next";
 
 type TProjectCreateFieldsValue = {
   title: string;
@@ -19,18 +22,24 @@ type TProjectCreateFieldsValue = {
   production: string;
 };
 
-type TProjectState = {
+type TAppUserProject = {
+  createdAt: string;
+  demoUrl: string;
+  description: string;
+  projectId: string;
+  projectUrl: string;
+  thumbnailUrl: string;
   title: string;
-  desc: string;
-  img: string;
-  link: string;
+  updatedAt: string;
 };
 
 type TProps = {
   userId: string;
+  refreshApi: () => void;
+  userProjectList: TAppUserProject[];
 }
 
-function Projects({userId}: TProps): JSX.Element {
+function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [hmtlString, setHtmlString] = useState<string>("");
   const [importedImage, setImportedImage] = useState<File | null>(null);
@@ -40,26 +49,6 @@ function Projects({userId}: TProps): JSX.Element {
     null
   );
 
-  const project_List = [
-    {
-      title: "Noteworthy technology acquisitions 2021",
-      desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-      img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
-      link: "github.com/sawsew467/dever-web-frontend",
-    },
-  ];
-  const [projectState, setProjectState] =
-    useState<TProjectState[]>(project_List);
-
-  const removeHttps = (link: string): string => {
-    if (link.startsWith("http://")) {
-      return link.slice(7);
-    } else if (link.startsWith("https://")) {
-      return link.slice(8);
-    }
-    return link;
-  };
-
   const onSubmit = async (
     values: TProjectCreateFieldsValue,
     actions: FormikHelpers<TProjectCreateFieldsValue>
@@ -68,20 +57,27 @@ function Projects({userId}: TProps): JSX.Element {
 
     const newProjectData = {
       title: title,
-      desc: hmtlString,
-      img: imageURL,
-      link: removeHttps(sourceCode),
+      authorId: userId,
+      description: hmtlString,
+      projectUrl: sourceCode,
+      demoUrl: production,
+      thumbnailUrl: imageURL,
     };
-    setProjectState((prevProjectState) => [
-      ...prevProjectState,
-      newProjectData,
-    ]);
-    console.log(values);
-    console.log("POST NEW PROJECT: ", newProjectData);
+    
+    try {
+      const access_token = getCookie('accessToken');
+      if(access_token) {
+        await postProject(access_token, newProjectData);
+        refreshApi();
+        toast.success("Create new project successfully!")
+      }
+    } catch (error) {
+      if(isAxiosError(error)) {
+        toast.error("Error");
+      }
+    }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
-    toast.info("Create project successfully!");
     setIsEdit(false);
   };
 
@@ -94,16 +90,6 @@ function Projects({userId}: TProps): JSX.Element {
     setImportedImage(null);
   };
 
-  //demo function
-
-  //delete by index in state
-  const handleDeleteProject = (itemIndex: number) => {
-    const deteted = projectState.filter(
-      (value: TProjectState, index: number) => index !== itemIndex
-    );
-    setProjectState([...deteted]);
-    console.log("DELETE PROJECT ID:", itemIndex);
-  };
 
   return (
     <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px] select-none dark:text-white">
@@ -119,7 +105,7 @@ function Projects({userId}: TProps): JSX.Element {
         </button>
       </div>
       <div className="flex flex-col gap-[20px]">
-        {projectState.length == 0 ? (
+        {userProjectList.length == 0 ? (
           <p
             className="font-[500] text-[14px] text-blue-700 cursor-pointer dark:text-white"
             onClick={() => {
@@ -131,16 +117,19 @@ function Projects({userId}: TProps): JSX.Element {
           </p>
         ) : (
           <div className="flex flex-col gap-[20px]">
-            {projectState.map((item, index) => {
+            {userProjectList.map((item, index) => {
               return (
                 <ProjectCard
                   key={index}
-                  img={item.img}
+                  img={item.thumbnailUrl}
                   title={item.title}
-                  desc={item.desc}
-                  link={item.link}
+                  desc={item.description}
+                  projectSourcelink={item.projectUrl}
+                  projectDemoLink={item.demoUrl}
+                  projectId = {item.projectId}
+                  authorId = {userId}
                   canEdit={true}
-                  method={() => handleDeleteProject(index)}
+                  refreshApi={refreshApi}
                   isEdit={isEdit}
                 />
               );
@@ -151,7 +140,7 @@ function Projects({userId}: TProps): JSX.Element {
       {isEdit ? (
         <div>
           <AddButton
-            text={projectState.length == 0 ? "Add" : "Add more"}
+            text={userProjectList.length == 0 ? "Add" : "Add more"}
             isAdd={isAdd}
             setIsAdd={setIsAdd}
           />

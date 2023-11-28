@@ -13,7 +13,7 @@ const nextConfig = {
         hostname: "firebasestorage.googleapis.com",
         port: "",
         pathname: "/v0/b/**"
-      }
+      },
     ],
   },
 };

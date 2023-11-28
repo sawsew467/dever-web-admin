@@ -181,13 +181,13 @@ export const postProject = (
 export const deleteProject = (
   access_token: string | null,
   projectId: string,
-  deleteBy: string
+  authorId: string
 ) => {
   return axiosClient.delete(`${END_POINT.PROJECT}`, {
     headers: { Authorization: `Bearer ${access_token}` },
     data: {
       projectId: projectId,
-      deleteBy: deleteBy,
+      authorId: authorId,
     },
   });
 };

@@ -33,7 +33,7 @@ function RefreshToken() {
     try {
       if (refresh_token) {
         const res = await axios.post(
-          "https://fudeverapi.bsite.net/api/Auth/refresh-access-token",
+          "https://fudever.bsite.net/api/Auth/refresh-access-token",
           {
             refreshToken: refresh_token,
           },

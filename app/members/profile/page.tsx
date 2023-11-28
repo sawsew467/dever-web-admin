@@ -21,16 +21,34 @@ import {
   openMemberProfile,
 } from "@/redux/slices/sideBarControl";
 
-import { BsFacebook, BsGithub, BsYoutube, BsLinkedin, BsDiscord } from "react-icons/bs";
+import {
+  BsFacebook,
+  BsGithub,
+  BsYoutube,
+  BsLinkedin,
+  BsDiscord,
+} from "react-icons/bs";
 import { FaSquareXTwitter, FaCalendarDays } from "react-icons/fa6";
-import { PiTiktokLogoFill,PiBagSimpleFill } from "react-icons/pi";
+import { PiTiktokLogoFill, PiBagSimpleFill } from "react-icons/pi";
 import { BiLogoInstagramAlt } from "react-icons/bi";
 import { GrUbuntu } from "react-icons/gr";
+import ProjectCard from "@/components/ProjectCard";
 
 type TSocialData = {
   id: string;
   name: string;
   url: string;
+};
+
+type TAppUserProject = {
+  createdAt: string;
+  demoUrl: string;
+  description: string;
+  projectId: string;
+  projectUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  updatedAt: string;
 };
 
 function Profile() {
@@ -79,23 +97,23 @@ function Profile() {
   const returnSocialIcon = (item: TSocialData) => {
     switch (item.name.toLowerCase()) {
       case "facebook":
-        return <BsFacebook className="text-[20px]"/>;
+        return <BsFacebook className="text-[20px]" />;
       case "github":
-        return <BsGithub className="text-[20px]"/>;
+        return <BsGithub className="text-[20px]" />;
       case "youtube":
-        return <BsYoutube className="text-[20px]"/>;
+        return <BsYoutube className="text-[20px]" />;
       case "instagram":
-        return <BiLogoInstagramAlt className="text-[20px]"/>;
+        return <BiLogoInstagramAlt className="text-[20px]" />;
       case "discord":
-        return <BsDiscord className="text-[20px]"/>;
+        return <BsDiscord className="text-[20px]" />;
       case "linkedin":
-        return <BsLinkedin className="text-[18px]"/>;
+        return <BsLinkedin className="text-[18px]" />;
       case "tiktok":
-        return <PiTiktokLogoFill className="text-[20px]"/>;
+        return <PiTiktokLogoFill className="text-[20px]" />;
       case "twitter":
-        return <FaSquareXTwitter className="text-[20px]"/>;
+        return <FaSquareXTwitter className="text-[20px]" />;
       default:
-        return <GrUbuntu className="text-[20px]"/>;
+        return <GrUbuntu className="text-[20px]" />;
     }
   };
 
@@ -144,19 +162,23 @@ function Profile() {
                 </div>
                 <div className="flex flex-col gap-[8px] dark:text-white">
                   <div className="flex flex-row gap-[12px] ">
-                    <PiBagSimpleFill className="text-[23px]"/>
+                    <PiBagSimpleFill className="text-[23px]" />
                     <span className="font-[400] text-[16px]">
-                      {userData?.career == ""
-                        ? <p className="italic">Not set yet</p>
-                        : userData?.career}
+                      {userData?.career == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.career
+                      )}
                     </span>
                   </div>
                   <div className="flex flex-row gap-[12px] items-center">
-                    <FaCalendarDays className = "text-[20px]"/>
+                    <FaCalendarDays className="text-[20px]" />
                     <span className="font-[400] text-[16px]">
-                      {userData?.birthDay == "0001-01-01T00:00:00"
-                        ? <p className="italic">Not set yet</p>
-                        : formatDateToMMDDYYYY(userData?.birthDay!)}
+                      {userData?.birthDay == "0001-01-01T00:00:00" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        formatDateToMMDDYYYY(userData?.birthDay!)
+                      )}
                     </span>
                   </div>
                 </div>
@@ -168,7 +190,11 @@ function Profile() {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.email == "" ? <p className="italic">Not set yet</p> : userData?.email}
+                      {userData?.email == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.email
+                      )}
                     </span>
                   </div>
                 </div>
@@ -180,9 +206,11 @@ function Profile() {
                   </div>
                   <div className="flex flex-row dark:text-white">
                     <span className="font-[700] text-[16px]">
-                      {userData?.homeAddress == ""
-                        ? <p className="italic">Not set yet</p>
-                        : userData?.homeAddress}
+                      {userData?.homeAddress == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.homeAddress
+                      )}
                     </span>
                   </div>
                 </div>
@@ -194,9 +222,11 @@ function Profile() {
                   </div>
                   <div className="flex flex-row">
                     <span className="font-[700] text-[16px]">
-                      {userData?.phoneNumber == ""
-                        ? <p className="italic">Not set yet</p>
-                        : userData?.phoneNumber}
+                      {userData?.phoneNumber == "" ? (
+                        <p className="italic">Not set yet</p>
+                      ) : (
+                        userData?.phoneNumber
+                      )}
                     </span>
                   </div>
                 </div>
@@ -207,15 +237,18 @@ function Profile() {
                     </span>
                   </div>
                   <div className="flex flex-row gap-[12px] items-center">
-                    {userData?.userPlatforms?.length == 0 ? 
-                     (<p className="font-bold italic">Not set yet</p>) :  userData?.userPlatforms.map(
-                      (item: TSocialData, index: number) => {
-                        return (
-                          <a href={item.url} key={index} target="_blank">
-                            {returnSocialIcon(item)}
-                          </a>
-                        );
-                      }
+                    {userData?.userPlatforms?.length == 0 ? (
+                      <p className="font-bold italic">Not set yet</p>
+                    ) : (
+                      userData?.userPlatforms.map(
+                        (item: TSocialData, index: number) => {
+                          return (
+                            <a href={item.url} key={index} target="_blank">
+                              {returnSocialIcon(item)}
+                            </a>
+                          );
+                        }
+                      )
                     )}
                   </div>
                 </div>
@@ -223,7 +256,9 @@ function Profile() {
 
               <div className="w-[100%] shadow-primary dark:shadow-darkPrimary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
-                  <h3 className="font-[700] text-[24px] dark:text-white">Skills</h3>
+                  <h3 className="font-[700] text-[24px] dark:text-white">
+                    Skills
+                  </h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
                   {userData!.userSkills.length > 0 ? (
@@ -244,7 +279,9 @@ function Profile() {
               </div>
               <div className="w-[100%] shadow-primary dark:shadow-darkPrimary rounded-[16px] p-[32px] flex flex-col gap-[20px]">
                 <div>
-                  <h3 className="font-[700] text-[24px] dark:text-white">Hobbies</h3>
+                  <h3 className="font-[700] text-[24px] dark:text-white">
+                    Hobbies
+                  </h3>
                 </div>
                 <div className="flex flex-wrap gap-[8px]">
                   {userData!.userHobbies.length > 0 ? (
@@ -297,9 +334,11 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.positionName == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.positionName}
+                          {userData?.positionName == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.positionName
+                          )}
                         </span>
                       </div>
                     </div>
@@ -311,9 +350,11 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.departmentName == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.departmentName}
+                          {userData?.departmentName == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.departmentName
+                          )}
                         </span>
                       </div>
                     </div>
@@ -327,9 +368,11 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.educationPlaceNames == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.educationPlaceNames}
+                          {userData?.educationPlaceNames == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.educationPlaceNames
+                          )}
                         </span>
                       </div>
                     </div>
@@ -339,9 +382,11 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.majorName == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.majorName}
+                          {userData?.majorName == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.majorName
+                          )}
                         </span>
                       </div>
                     </div>
@@ -353,9 +398,11 @@ function Profile() {
                       </div>
                       <div className="flex flex-row">
                         <span className="font-[700] text-[16px]">
-                          {userData?.workplaces == ""
-                            ? <p className="italic">Not set yet</p>
-                            : userData?.workplaces}
+                          {userData?.workplaces == "" ? (
+                            <p className="italic">Not set yet</p>
+                          ) : (
+                            userData?.workplaces
+                          )}
                         </span>
                       </div>
                     </div>
@@ -367,21 +414,27 @@ function Profile() {
                   <h3 className="font-[700] text-[24px] ">My projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
-                  <p className="italic">Haven&apos;t no implement yet!</p>
-                  {/* {userData?.project.map((item, index) => {
-                return (
-                  <ProjectCard
-                    key={index}
-                    img={item.img}
-                    title={item.title}
-                    desc={item.desc}
-                    link={item.link}
-                    canEdit={false}
-                    method={() => {}}
-                    isEdit={false}
-                  />
-                );
-              })} */}
+                  {
+                    userData?.userProjects.length == 0 ? <p className="italic">No projects yet</p> : 
+                    userData?.userProjects.map(
+                      (item: TAppUserProject, index: number) => {
+                        return (
+                          <ProjectCard
+                            key={index}
+                            img={item.thumbnailUrl}
+                            title={item.title}
+                            desc={item.description}
+                            canEdit={false}
+                            refreshApi={() => { } }
+                            isEdit={false}
+                            projectSourcelink={item.projectUrl}
+                            projectDemoLink={item.demoUrl} 
+                            projectId={item.projectId} 
+                            authorId={userData.id}                          />
+                        );
+                      }
+                    )
+                  }
                 </div>
               </div>
             </div>

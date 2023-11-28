@@ -28,6 +28,17 @@ type TSocialData = {
   url: string;
 };
 
+type TAppUserProject = {
+  createdAt: string;
+  demoUrl: string;
+  description: string;
+  projectId: string;
+  projectUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  updatedAt: string;
+};
+
 function SettingList() {
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
@@ -37,8 +48,10 @@ function SettingList() {
   );
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
   const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
+  const [userProjects, setUserProjects] = useState<TAppUserProject[]>([]);
 
   const [userData, setUserData] = useState<userInfo>();
+  console.log(userData);
 
   const handleGetUserProfile = async () => {
     try {
@@ -52,6 +65,7 @@ function SettingList() {
           setUserData(data);
           setIsFetchData(false);
           setSocialMediaState(data.userPlatforms);
+          setUserProjects(data.userProjects)
         }
       }
     } catch (error) {
@@ -117,7 +131,11 @@ function SettingList() {
                 userData={userData!}
                 refreshApi={handleGetUserProfile}
               />
-              <Projects userId={userData?.id!}/>
+              <Projects
+                userId={userData?.id!}
+                refreshApi={handleGetUserProfile}
+                userProjectList={userProjects}
+              />
             </div>
           </div>
         )}

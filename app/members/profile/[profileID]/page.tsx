@@ -36,7 +36,16 @@ import { GrUbuntu } from "react-icons/gr";
 type pageProps = {
   params: { profileID: string };
 };
-
+type TAppUserProject = {
+  createdAt: string;
+  demoUrl: string;
+  description: string;
+  projectId: string;
+  projectUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  updatedAt: string;
+};
 type objectItemOne = {
   value: string;
 };
@@ -409,22 +418,28 @@ function Profile({ params }: pageProps) {
                   <h3 className="font-[700] text-[24px] ">Projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
-                  <h3>Haven&apos;t no implement yet!</h3>
-
-                  {/* {userData?.project.map((item, index) => {
-              return (
-                <ProjectCard
-                  key={index}
-                  img={item.img}
-                  title={item.title}
-                  desc={item.desc}
-                  link={item.link}
-                  canEdit={false}
-                  method={() => {}}
-                  isEdit={false}
-                />
-              );
-            })} */}
+                {
+                    userData?.userProjects.length == 0 ? <p className="italic">No projects yet</p> : 
+                    userData?.userProjects.map(
+                      (item: TAppUserProject, index: number) => {
+                        return (
+                          <ProjectCard
+                            key={index}
+                            img={item.thumbnailUrl}
+                            title={item.title}
+                            desc={item.description}
+                            canEdit={false}
+                            refreshApi={() => {}}
+                            isEdit={false}
+                            projectSourcelink={item.projectUrl}
+                            projectDemoLink={item.demoUrl}
+                            projectId={item.projectId} 
+                            authorId={userData.id}          
+                          />
+                        );
+                      }
+                    )
+                  }
                 </div>
               </div>
             </div>
