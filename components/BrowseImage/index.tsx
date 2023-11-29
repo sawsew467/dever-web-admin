@@ -136,7 +136,7 @@ function BrowseImage({
                 {
                   isUploading ? <>
                     <div className="relative">
-                      <Skeleton variant="rounded" height={200}></Skeleton>
+                      <Skeleton variant="rounded" height={200} className="dark:bg-[#3b3b3b]"></Skeleton>
                       <p className="absolute top-[50%] left-[50%] translate-x-[-50%]
                       translate-y-[-50%] font-[700]"> Uploading image...</p>
                     </div>

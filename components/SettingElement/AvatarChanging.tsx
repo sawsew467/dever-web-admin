@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { updateAvatar } from "@/apis/setting";
+import { Skeleton } from "@mui/material";
 
 type TProps = {
   avatarUrl:string;
@@ -20,6 +21,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   const fileInputRef = useRef(null);
   const [imageState, setImageState] = useState<File | null>(null);
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   // console.log(imageSource);
 
   const handleBrowseImage = () => {
@@ -30,6 +32,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   ) => {
     const file = event.target.files && event.target.files[0];
     if (file && isValidFileType(file)) {
+      setIsUploading(true);
       setImageState(file);
     } else {
       setImageState(null);
@@ -82,6 +85,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
       );
       const imageURL = responseData.data.secure_url;      
       setImageSource(imageURL);
+      setIsUploading(false);
     } catch (error) {
       console.error("Error uploading image: ", error);
       return null;
@@ -96,17 +100,23 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   return (
     <div className="flex flex-col xl:flex-row gap-[25px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="w-[126px] h-[126px] rounded-[10px] overflow-hidden">
+       {
+        isUploading ? 
+        <div>
+          <Skeleton variant="rounded" height={126} className="dark:bg-[#3b3b3b]"></Skeleton>
+        </div> :
         <Image
-          src={imageState ? URL.createObjectURL(imageState) : avatarUrl == '' ? Avatar : avatarUrl}
-          width={1200}
-          height={800}
-          alt="avt"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        ></Image>
+        src={imageState ? URL.createObjectURL(imageState) : avatarUrl == '' ? Avatar : avatarUrl}
+        width={1200}
+        height={800}
+        alt="avt"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+        ></Image>        
+       }
       </div>
       <div className="flex flex-col gap-[16px]">
         <h3 className="font-[700] text-[24px]">{fullName == ' ' ? "Haven't set name yet" : fullName}</h3>

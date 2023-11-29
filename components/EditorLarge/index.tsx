@@ -243,7 +243,7 @@ function EditorLarge({
                   </>
                 )}
               </div>
-              {isDarkMode ? <TreeViewPlugin /> : null}
+              {/* {isDarkMode ? <TreeViewPlugin /> : null} */}
               <HTMLSerializerPlugin setHtmlString={setHtmlString} />
               <TextCounterPlugin
                 setTextContentCounting={setTextContentCounting}

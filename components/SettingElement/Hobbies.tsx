@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import Image from "next/image";
-import EditIconAnimate from "@icon/components/Button/edit.gif";
-import EditIconPause from "@icon/components/Button/edit_pause.png";
 import TagField from "./TagField";
 import { getCookie } from "cookies-next";
 import { getAllHobbies } from "@/apis/dataOrganizer";

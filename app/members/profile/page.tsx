@@ -128,10 +128,21 @@ function Profile() {
       } absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}
     >
       <div className=" py-[20px] px-[16px] flex gap-[20px] flex-col select-none">
-        <div>
+        <div className="flex flex-row justify-between">
           <h2 className="text-[24px] font-[700] dark:text-white">
             <span className="text-blue-500">Your</span> Profile
           </h2>
+          <div>
+            <Button
+              textContent={"Setting"}
+              icon={"arrowRight"}
+              iconPosition={"right"}
+              backgroundColor={"bg-blue-700"}
+              href={"/members/setting"}
+              method={() => {}}
+              tailwind={"text-white dark:shadow-darkPrimaryBlue"}
+            ></Button>
+          </div>
         </div>
         {isFetchData ? (
           <LinearProgress />
@@ -294,7 +305,7 @@ function Profile() {
                       </p>
                     ))
                   ) : (
-                    <p className="italic">
+                    <p className="italic dark:text-white">
                       Haven&apos;t updated any hobbies yet!
                     </p>
                   )}
@@ -414,8 +425,9 @@ function Profile() {
                   <h3 className="font-[700] text-[24px] ">My projects</h3>
                 </div>
                 <div className=" flex flex-col gap-[20px]">
-                  {
-                    userData?.userProjects.length == 0 ? <p className="italic">No projects yet</p> : 
+                  {userData?.userProjects.length == 0 ? (
+                    <p className="italic">No projects yet</p>
+                  ) : (
                     userData?.userProjects.map(
                       (item: TAppUserProject, index: number) => {
                         return (
@@ -425,16 +437,17 @@ function Profile() {
                             title={item.title}
                             desc={item.description}
                             canEdit={false}
-                            refreshApi={() => { } }
+                            refreshApi={() => {}}
                             isEdit={false}
                             projectSourcelink={item.projectUrl}
-                            projectDemoLink={item.demoUrl} 
-                            projectId={item.projectId} 
-                            authorId={userData.id}                          />
+                            projectDemoLink={item.demoUrl}
+                            projectId={item.projectId}
+                            authorId={userData.id}
+                          />
                         );
                       }
                     )
-                  }
+                  )}
                 </div>
               </div>
             </div>

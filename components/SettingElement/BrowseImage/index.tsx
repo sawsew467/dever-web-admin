@@ -131,7 +131,7 @@ function BrowseImage({
                 {
                   isUploading ? <>
                     <div className="relative">
-                      <Skeleton variant="rounded" height={200}></Skeleton>
+                      <Skeleton variant="rounded" height={200} className="dark:bg-[#3b3b3b]"></Skeleton>
                       <p className="absolute top-[50%] left-[50%] translate-x-[-50%]
                       translate-y-[-50%] font-[700]"> Uploading image...</p>
                     </div>
@@ -146,7 +146,7 @@ function BrowseImage({
               </div>
               <div className="w-[40%] m-[8px] rounded-[10px] border-2 border-dashed p-[10px] flex flex-col gap-[20px]">
                 <div>
-                  <h2 className="text-[14px] font-[500]">
+                  <h2 className="text-[14px] font-[500] max-w-full overflow-hidden">
                     File name:{" "}
                     <span className="ml-[8px] font-[400]">
                       {fileStorage.name}
