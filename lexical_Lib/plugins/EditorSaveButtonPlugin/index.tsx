@@ -6,29 +6,36 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { updateAbout } from "@/apis/setting";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TPros = {
   setHtmlString: React.Dispatch<React.SetStateAction<string>>;
   useFor: string;
+  userId:string;
 };
 
-function EditorSaveButtonPlugin({ setHtmlString, useFor }: TPros) {
+function EditorSaveButtonPlugin({ setHtmlString, useFor, userId }: TPros) {
   const [editor] = useLexicalComposerContext();
+  const dispatch = useDispatch();
 
   const handleUpdateBio = async (bio: string) => {
     try {
       const access_token = getCookie("accessToken");
-      const userId = getCookie("userId")?.toString();
       const aboutMe = {
         userId: userId!,
         aboutMe: bio
       }
+      console.log(aboutMe);
       if (access_token) {
-        const response = await updateAbout(access_token, aboutMe);
+        dispatch(setIsBackdrop(true));
+        await updateAbout(access_token, aboutMe);
+        toast.success("Change bio successfully!");
+        dispatch(setIsBackdrop(false));
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.warning("Update bio failed!");
       }
     }
@@ -40,7 +47,6 @@ function EditorSaveButtonPlugin({ setHtmlString, useFor }: TPros) {
       setHtmlString(htmlString);
       if (useFor === "about") {
         handleUpdateBio(htmlString);
-        toast.success("Change bio successfully!");
       }
     });
   };

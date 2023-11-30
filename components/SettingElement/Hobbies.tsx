@@ -12,9 +12,10 @@ type THobby = {
 };
 type TProps = {
   userHobbies: string[];
+  userId: string;
 };
 
-function Hobbies({ userHobbies }: TProps) {
+function Hobbies({ userHobbies, userId }: TProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [hobbies, setHobbies] = useState<string[]>(userHobbies);
@@ -47,16 +48,20 @@ function Hobbies({ userHobbies }: TProps) {
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px] dark:text-white">Hobbies</h3>
         <button
-          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${
+            isEdit ? "bg-blue-700 text-white" : ""
+          } `}
           onClick={() => {
-           setIsEdit(!isEdit)
+            setIsEdit(!isEdit);
           }}
         >
-          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
+          {isEdit ? <PiPencilSimpleLineFill /> : <PiPencilSimpleFill />}
         </button>
       </div>
       <div className="flex flex-col gap-[5px]" aria-disabled="true">
-        <p className="font-[300] text-[14px] dark:text-white dark:font-bold">Add tag</p>
+        <p className="font-[300] text-[14px] dark:text-white dark:font-bold">
+          Add tag
+        </p>
         {suggestions.length === 0 ? null : (
           <TagField
             suggestions={suggestions}
@@ -64,6 +69,7 @@ function Hobbies({ userHobbies }: TProps) {
             state={hobbies}
             setState={setHobbies}
             useTagFor={"hobbies"}
+            userId={userId}
           />
         )}
       </div>

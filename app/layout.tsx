@@ -12,7 +12,7 @@ import { store } from "../redux/store";
 
 import AuthProvider from "@/app/AuthProvider";
 import RefreshToken from "./RefreshToken";
-import { getCookie } from "cookies-next";
+import BackDrop from "@/components/Backdrop";
 const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
@@ -40,6 +40,7 @@ export default function RootLayout({
             {!isSpecial && <Header />}
             {!isSpecial && <Sidebar />}
             {children}
+            <BackDrop/>
             <ToastNotificationComp />
             <RefreshToken />
           </AuthProvider>

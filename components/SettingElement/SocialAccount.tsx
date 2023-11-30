@@ -31,6 +31,8 @@ import {
 } from "@/apis/setting";
 import { toast } from "react-toastify";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { setIsBackdrop } from "@/redux/slices/app";
+import { useDispatch } from "react-redux";
 
 type TSocialData = {
   id: string;
@@ -41,21 +43,14 @@ type TSocialData = {
 function SocialAccount({
   socialMediaState,
   refreshApi,
+  userId
 }: {
   socialMediaState: TSocialData[];
   refreshApi: () => void;
+  userId:string;
 }): JSX.Element {
 
-  const platforms = [
-    "Facebook",
-    "Github",
-    "Youtube",
-    "Instagram",
-    "Discord",
-    "Linkedin",
-    "Tiktok",
-    "Twitter",
-  ];
+  const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isDelete, setIsDelete] = useState<boolean>(false);
@@ -203,10 +198,9 @@ function SocialAccount({
     handleGetPlatforms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   const handlePostSocialAccount = async () => {
     try {
-      const userId = getCookie("userId");
       const access_token = getCookie("accessToken");
       if (access_token && userId) {
         const postValue = {
@@ -214,8 +208,11 @@ function SocialAccount({
           platformId: selectPlatform,
           url: linkState,
         };
+        console.log(postValue);
+        dispatch(setIsBackdrop(true));
         await postSocialAccount(access_token, postValue);
-        toast.success(`Post ${selectedPlatformName} account successfully!`);
+        dispatch(setIsBackdrop(false));
+        toast.success(`Add ${selectedPlatformName} account successfully!`);
         setIsEdit(false);
         setLinkState('');
         setSelectPlatform('');
@@ -223,7 +220,8 @@ function SocialAccount({
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast.error(`Post ${selectedPlatformName} account failed`);
+        dispatch(setIsBackdrop(false));
+        toast.error(`Add ${selectedPlatformName} account failed`);
       }
     }
   };

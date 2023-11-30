@@ -8,16 +8,19 @@ import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { updateAvatar } from "@/apis/setting";
 import { Skeleton } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TProps = {
   avatarUrl:string;
   fullName:string | undefined;
   career: string;
+  userId: string;
   refreshApi: () => void
 }
 
-function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.Element {
-  
+function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps): JSX.Element {
+  const dispatch = useDispatch();
   const fileInputRef = useRef(null);
   const [imageState, setImageState] = useState<File | null>(null);
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
@@ -50,21 +53,22 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
     return acceptedTypes.includes(file.type);
   };
   const handleUpdataProfileImage = async (avatarUrl:string) => {
-    const userId = getCookie("userId")?.toString();
     const avatar = {
       userId: userId!,
       avatarUrl: avatarUrl
     }
     try {
       const access_token = getCookie('accessToken');
+      dispatch(setIsBackdrop(true));
       if(access_token) {
         await updateAvatar(access_token, avatar);
+        dispatch(setIsBackdrop(false));
         toast.success("Update profile image successfully!");
         refreshApi();
       }
     } catch (error) {
       if(axios.isAxiosError(error)) {
-        console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.error("Upload profile image failed!")
       }
     }

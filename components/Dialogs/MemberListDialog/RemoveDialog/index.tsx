@@ -93,7 +93,7 @@ function RemoveDialog({
           </p>
         </DialogContent>
         <DialogActions>
-          <MUIButton autoFocus onClick={handleCloseDeleteDialog}>
+          <MUIButton autoFocus onClick={handleCloseDeleteDialog} className="hover:text-green-600">
             <p className="hover:text-green-600">Cancel</p>
           </MUIButton>
           <MUIButton
@@ -101,6 +101,7 @@ function RemoveDialog({
               handleDelectSelectedMembers();
             }}
             autoFocus
+            className="hover:text-red-600"
           >
             <p className="hover:text-red-600">Remove</p>
           </MUIButton>

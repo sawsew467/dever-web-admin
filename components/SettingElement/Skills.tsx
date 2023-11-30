@@ -17,9 +17,10 @@ type TSkill = {
 };
 type TProps = {
   userSkills: string[];
+  userId: string;
 };
 
-function Skills({ userSkills }: TProps): JSX.Element {
+function Skills({ userSkills, userId }: TProps): JSX.Element {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [skills, setSkills] = useState<string[]>(userSkills);
@@ -72,6 +73,7 @@ function Skills({ userSkills }: TProps): JSX.Element {
             useTagFor="skills"
             state={skills}
             setState={setSkills}
+            userId={userId}
           />
         )}
       </div>

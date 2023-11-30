@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import Image from "next/image";
 import { registerSchema } from "@/app/validation";
@@ -7,23 +7,26 @@ import Logo from "@image/page/authentication/signin/logo.svg";
 import SignupImage from "@image/page/authentication/signup/signupImage.jpg";
 import InputForm from "@/components/InputForm";
 import Link from "next/link";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 import { registerAccount } from "@/apis/auth";
 import { useRouter } from "next/navigation";
 import { ValidationError } from "yup";
 import axios from "axios";
+import PasswordStrengthMeter from "@/components/PasswordStrengthMeter";
+import InputFormSpecial from "@/components/InputFormSpecial";
 type UserRegister = {
-  email : string,
-  password : string,
-}
+  email: string;
+  password: string;
+};
 function SignUp() {
   const router = useRouter();
+  const [password, setPassword] = useState<string | null>( '' );
   const onSubmit = async (values: UserRegister, actions: any) => {
-    
-    try {      
+    try {
       await registerAccount(values);
       toast.success("Register success ! Check your email to validated");
-      setTimeout(() => {  router.push('/auth/sign-in');
+      setTimeout(() => {
+        router.push("/auth/sign-in");
       }, 500);
     } catch (error: unknown) {
       if (error instanceof ValidationError) {
@@ -33,7 +36,7 @@ function SignUp() {
       }
       if (axios.isAxiosError(error)) {
         console.log(error);
-        
+
         if (
           error.response?.status === 401 ||
           error.response?.status === 404 ||
@@ -41,8 +44,8 @@ function SignUp() {
         ) {
           toast.error("Cannot register !");
         }
-        if(error.response?.status === 500) {
-          toast.error("This email had been denied by sever!")
+        if (error.response?.status === 500) {
+          toast.error("This email had been denied by sever!");
         }
       }
       if (axios.isAxiosError(error)) {
@@ -54,9 +57,9 @@ function SignUp() {
         }
       }
       // actions.resetForm();
-    //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
-  }
-};
+      //export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
+    }
+  };
   return (
     <section>
       <div className="h-screen w-full flex justify-center bg-[#F9FAFB] dark:bg-[#F9FAFB] bg-opacity-50 items-center">
@@ -104,16 +107,27 @@ function SignUp() {
                       ></InputForm>
                     </div>
                     <div className="mb-6">
-                      <div className="text-sm font-medium block leading-5 mb-2">
-                        Your password:
+                      <div className="text-sm flex font-medium leading-5 mb-2">
+                        <p className="w-[150px]">Your password:</p>
+
+                       {
+                        password?.length == 0 ? null : 
+                        <PasswordStrengthMeter
+                        password={password!}
+                        ></PasswordStrengthMeter>
+                       }
+
                       </div>
-                      <InputForm
+
+                      <InputFormSpecial
                         label="password"
                         type="password"
                         name="password"
                         id="password"
                         placeholder="Enter your password"
-                      ></InputForm>
+                        password={password!}
+                        setTextChanged={setPassword}
+                      ></InputFormSpecial>
                     </div>
                     <div className="mb-6">
                       <div className="text-sm font-medium block leading-5 mb-2">

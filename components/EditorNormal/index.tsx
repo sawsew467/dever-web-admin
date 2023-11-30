@@ -48,10 +48,11 @@ type TPros = {
   htmlString: string;
   setHtmlString: React.Dispatch<React.SetStateAction<string>>;
   isNeedSave: boolean;
-  useEditorFor: string
+  useEditorFor: string;
+  userId: string;
 };
 
-function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: TPros) {
+function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor, userId }: TPros) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
 
@@ -106,7 +107,7 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
           </div>
         </div>
         {isNeedSave ? (
-          <EditorSaveButtonPlugin setHtmlString={setHtmlString} useFor={useEditorFor}/>
+          <EditorSaveButtonPlugin setHtmlString={setHtmlString} useFor={useEditorFor} userId={userId}/>
         ) : (
           <HTMLSerializerPlugin setHtmlString={setHtmlString} />
         )}

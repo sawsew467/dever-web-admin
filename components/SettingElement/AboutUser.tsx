@@ -3,21 +3,35 @@ import UnlinkButton from "../UnlinkButton";
 import EditorNormal from "../EditorNormal";
 
 type TPros = {
-  about:string;
-}
+  about: string;
+  userId: string;
+};
 
-function AboutUser({about}:TPros): JSX.Element {
+function AboutUser({ about, userId }: TPros): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isSave, setIsSave] = useState<boolean>(false);
   const [htmlString, setHtmlString] = useState<string>(about);
 
   return (
     <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px]">
-      <h3 className="font-[700] text-[24px] select-none dark:text-white">About you</h3>
+      <h3 className="font-[700] text-[24px] select-none dark:text-white">
+        About you
+      </h3>
       {
-        // htmlString.length == 0 ? <p className="italic">Haven&apos;t set bio yet!</p> : 
-        <div className="dark:text-white" dangerouslySetInnerHTML={{ __html: htmlString }}></div>
-
+        // htmlString.length == 0 ? <p className="italic">Haven&apos;t set bio yet!</p> :
+        htmlString.length == 0 || htmlString == "<p class=\"EditorTheme__paragraph\"><br></p>" ? (
+          <p
+            className="italic select-none cursor-pointer dark:text-white"
+            onClick={() => setIsEdit(true)}
+          >
+            Write something about you...
+          </p>
+        ) : (
+          <div
+            className="dark:text-white"
+            dangerouslySetInnerHTML={{ __html: htmlString }}
+          ></div>
+        )
       }
       <div>
         <UnlinkButton
@@ -39,6 +53,7 @@ function AboutUser({about}:TPros): JSX.Element {
             setHtmlString={setHtmlString}
             isNeedSave={true}
             useEditorFor={"about"}
+            userId = {userId}
           />
         </>
       ) : null}

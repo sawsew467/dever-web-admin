@@ -5,6 +5,7 @@ const initialState = {
   isOpenSlidebar: false,
   isMouseVisit: false,
   isDarkMode: false,
+  isBackdrop: false,
 };
 
 export const appSlice = createSlice({
@@ -36,12 +37,15 @@ export const appSlice = createSlice({
     },
     setIsDarkMode: (state,action) =>{
       state.isDarkMode = action.payload;
+    },
+    setIsBackdrop: (state, action) => {
+      state.isBackdrop = action.payload
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { toggleIsOpenSlidebar, changeIsMouseVisit, toggleIsDarkMode, closeSidebar, openSidebar, setIsDarkMode } =
+export const { toggleIsOpenSlidebar, changeIsMouseVisit, toggleIsDarkMode, closeSidebar, openSidebar, setIsDarkMode, setIsBackdrop } =
   appSlice.actions;
 
 export default appSlice.reducer;

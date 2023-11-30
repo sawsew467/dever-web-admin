@@ -15,6 +15,8 @@ import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 import { isAxiosError } from "axios";
 import { postProject } from "@/apis/setting";
 import { getCookie } from "cookies-next";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TProjectCreateFieldsValue = {
   title: string;
@@ -48,6 +50,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
   const formikRef = useRef<FormikHelpers<TProjectCreateFieldsValue> | null>(
     null
   );
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     values: TProjectCreateFieldsValue,
@@ -63,17 +66,21 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
       demoUrl: production,
       thumbnailUrl: imageURL,
     };
+    console.log(newProjectData);
     
     try {
       const access_token = getCookie('accessToken');
       if(access_token) {
+        dispatch(setIsBackdrop(true));
         await postProject(access_token, newProjectData);
+        dispatch(setIsBackdrop(false));
         refreshApi();
         toast.success("Create new project successfully!")
       }
     } catch (error) {
       if(isAxiosError(error)) {
-        toast.error("Error");
+        dispatch(setIsBackdrop(false));
+        toast.error("Add project failed!");
       }
     }
 
@@ -113,7 +120,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
               setIsAdd(true);
             }}
           >
-            You haven&apos;t posted any projects yet
+            Haven&apos;t posted any projects yet
           </p>
         ) : (
           <div className="flex flex-col gap-[20px]">
@@ -192,6 +199,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
                         setHtmlString={setHtmlString}
                         isNeedSave={false}
                         useEditorFor={"projectSetting"}
+                        userId={userId}
                       />
                     </div>
                     <BrowseImage

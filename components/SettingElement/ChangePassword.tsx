@@ -8,6 +8,8 @@ import Image from "next/image";
 import EditIconAnimate from "@icon/components/Button/edit.gif";
 import EditIconPause from "@icon/components/Button/edit_pause.png";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TPasswordFieldValue = {
   currentPassword: string;
@@ -18,13 +20,15 @@ type TPasswordFieldValue = {
 function ChangePassword(): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TPasswordFieldValue> | null>(null);
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     values: TPasswordFieldValue,
     actions: FormikHelpers<TPasswordFieldValue>
   ) => {
-    console.log(values);
+    dispatch(setIsBackdrop(true));
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    dispatch(setIsBackdrop(false));
     actions.resetForm();
     toast.info("Changed passsword successfully!");
   };

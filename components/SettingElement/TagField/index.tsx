@@ -7,6 +7,8 @@ import { getCookie } from "cookies-next";
 import { postMemberHobby, postMemberSkill } from "@/apis/setting";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 interface TagFieldProps {
   suggestions: string[];
@@ -14,6 +16,7 @@ interface TagFieldProps {
   state: string[];
   isEdit: boolean;
   useTagFor: "skills" | "hobbies";
+  userId: string;
 }
 
 const baseTagifySettings = {
@@ -34,8 +37,10 @@ function TagField({
   state,
   isEdit,
   useTagFor,
+  userId
 }: TagFieldProps) {
   const [data, setData] = useState<string[]>(state);
+  const dispatch = useDispatch();
   
   const handleChange = (e: CustomEvent) => {
     setData(e.detail.tagify.value.map((item: { value: string }) => item.value));
@@ -61,19 +66,20 @@ function TagField({
   const handlePostMemberSkills = async () => {
     try {
       const access_token = getCookie("accessToken");
-      const userId = getCookie("userId")?.toString();      
       if (access_token) {
         const value = {
           userId: userId!,
           skills: data
         };
-
+        dispatch(setIsBackdrop(true));
         await postMemberSkill(access_token, value);
+        dispatch(setIsBackdrop(false));
         toast.success(`Post skills successfully!`)
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.error(`Post skills failed!`)
       }
     }
@@ -81,19 +87,20 @@ function TagField({
   const handlePostMemberHobbies = async () => {
     try {
       const access_token = getCookie("accessToken");
-      const userId = getCookie("userId")?.toString();      
 
       if (access_token && userId) {
         const value = {
           userId: userId,
           hobbies: data
         }
+        dispatch(setIsBackdrop(true));
         await postMemberHobby(access_token, value);
+        dispatch(setIsBackdrop(false));
         toast.success(`Post hobbies successfully!`)
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.error(`Post hobbies failed!`)
       }
     }

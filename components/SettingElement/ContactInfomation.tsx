@@ -8,22 +8,30 @@ import { getCookie } from "cookies-next";
 import { updateContactInfo } from "@/apis/setting";
 import { isAxiosError } from "axios";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { setIsBackdrop } from "@/redux/slices/app";
+import { useDispatch } from "react-redux";
 
 type TContactFieldValue = {
   phone: string;
   email: string;
 };
 
-function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
+type TProps = {
+  phone: string;
+  email: string;
+  userId: string;
+}
+
+function ContactInfomation({ phone, email, userId }: TProps): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TContactFieldValue> | null>(null);
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     values: TContactFieldValue,
     actions: FormikHelpers<TContactFieldValue>
   ) => {
     try {
-      const userId = getCookie("userId");
       const access_token = getCookie("accessToken");
       if (access_token && userId) {
         const contactInfo = {
@@ -31,11 +39,15 @@ function ContactInfomation({ phone, email }: TContactFieldValue): JSX.Element {
           phoneNumber: values.phone,
           email: values.email,
         };
+        console.log(contactInfo);
+        dispatch(setIsBackdrop(true));
         await updateContactInfo(access_token, contactInfo);
+        dispatch(setIsBackdrop(false));
         toast.success("Update contact information successfully!");
       }
     } catch (error) {
       if(isAxiosError(error)) {        
+        dispatch(setIsBackdrop(false));
         toast.error(error?.response?.data?.errorMessages[0])
       }
     }

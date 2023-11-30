@@ -24,7 +24,7 @@ import { getCookie } from "cookies-next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { PiWarningFill } from "react-icons/pi";
-import EditOpenDialog from "../Dialogs/MemberListDialog/EditUserDialog";
+import { useRouter } from "next/navigation";
 
 interface memberPros {
   id: string;
@@ -57,8 +57,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
-  const [openDialogToEditUser, setOpenDialogToEditUser] = useState<boolean>(false);
-
+  const route = useRouter();
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -205,19 +204,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
               </p>
             </div>
           ) : null}
-          {/* {value.status === "Rejected" && isClickReject ? (
-            <div className="flex flex-col ml-[10px] shadow-primary rounded-md bg-white">
-              <p
-                className="font-[600] px-[6px] py-[4px] cursor-pointer hover:bg-green-200 hover:text-green-700 text-center rounded-t-[4px]"
-                onClick={() => {
-                  setIsClickReject(false);
-                  handleApproveUser();
-                }}
-              >
-                Approve
-              </p>
-            </div>
-          ) : null} */}
+
         </div>
       </div>
 
@@ -279,20 +266,15 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
           </MUIButton>
         </DialogActions>
       </Dialog>
-      {/* Dialog to edit user */}
-      {userRole == "admin" ? (
-        <EditOpenDialog
-          openDialogToEditUser={openDialogToEditUser}
-          setOpenDialogToEditUser={setOpenDialogToEditUser}
-          userEditedId={value.id}
-        ></EditOpenDialog>
-      ) : null}    
+  
 
       <div className="flex h-[78px]">
         {userRole === "admin" ? (
           <div className="flex gap-[16px] justify-center items-center p-[16px]">
             <UnlinkButton
-              method={() => {setOpenDialogToEditUser(true)}}
+              method={() => {
+                route.push(`/members/setting/${value.id}`)
+              }}
               icon="edit"
               backgroundColor="bg-blue-700"
               iconPosition="left"
@@ -318,3 +300,4 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
 }
 
 export default MemberItem;
+

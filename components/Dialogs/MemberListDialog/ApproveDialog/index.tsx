@@ -112,7 +112,7 @@ function ApproveDialog({
           )}
         </DialogContent>
         <DialogActions>
-          <MUIButton autoFocus onClick={handleCloseApproveDialog}>
+          <MUIButton autoFocus onClick={handleCloseApproveDialog} className="hover:text-green-600">
             <p className="hover:text-green-600">Cancel</p>
           </MUIButton>
           {approveAbleUser.length == 0 ? null : (
@@ -121,6 +121,7 @@ function ApproveDialog({
                 handleApproveSelectedMembers();
               }}
               autoFocus
+              className="hover:text-green-600"
             >
               <p className="hover:text-green-600">
                 Approve {`${approveAbleUser!.length <= 1 ? "" : "all"}`}

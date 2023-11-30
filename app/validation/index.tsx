@@ -11,7 +11,7 @@ export const registerSchema = yup.object().shape({
   password: yup
     .string()
     .min(8)
-    .matches(passRule, { message: "Please enter a stronger password" })
+    .matches(passRule, { message: "Please enter a stronger password (include: @, !, #,...)" })
     .required("This field is required"),
   confirmPassword: yup
     .string()

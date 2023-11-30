@@ -51,7 +51,6 @@ function SettingList() {
   const [userProjects, setUserProjects] = useState<TAppUserProject[]>([]);
 
   const [userData, setUserData] = useState<userInfo>();
-  console.log(userData);
 
   const handleGetUserProfile = async () => {
     try {
@@ -65,7 +64,7 @@ function SettingList() {
           setUserData(data);
           setIsFetchData(false);
           setSocialMediaState(data.userPlatforms);
-          setUserProjects(data.userProjects)
+          setUserProjects(data.userProjects);
         }
       }
     } catch (error) {
@@ -108,6 +107,7 @@ function SettingList() {
           <div className="flex flex-col lg:flex-row gap-[16px]">
             <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
               <AvatarChanging
+                userId={userData?.id!}
                 avatarUrl={userData?.avatarUrl!}
                 fullName={userData?.lastName.concat(" ", userData?.firstName!)}
                 career={userData?.career!}
@@ -116,20 +116,30 @@ function SettingList() {
               <ContactInfomation
                 phone={userData?.phoneNumber!}
                 email={userData?.email!}
+                userId={userData?.id!}
               />
               <SocialAccount
                 socialMediaState={socialMediaState}
                 refreshApi={handleGetUserProfile}
+                userId={userData?.id!}
               />
-              <Skills userSkills={userData?.userSkills!} />
-              <Hobbies userHobbies={userData?.userHobbies!} />
+              <Skills
+                userSkills={userData?.userSkills!}
+                userId={userData?.id!}
+              />
+              <Hobbies
+                userHobbies={userData?.userHobbies!}
+                userId={userData?.id!}
+              />
               <ChangePassword />
             </div>
             <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
-              <AboutUser about={userData?.aboutMe!} />
+              <AboutUser about={userData?.aboutMe!} 
+              userId={userData?.id!}/>
               <GeneralInformation
                 userData={userData!}
                 refreshApi={handleGetUserProfile}
+                userId={userData?.id!}
               />
               <Projects
                 userId={userData?.id!}

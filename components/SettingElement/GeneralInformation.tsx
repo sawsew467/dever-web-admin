@@ -22,6 +22,8 @@ import {
 } from "@/apis/dataOrganizer";
 import { patchGeneralInfo } from "@/apis/setting";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TGeneralFieldValues = {
   firstName: string;
@@ -45,15 +47,17 @@ type TOptionsList = {
 type TProps = {
   userData: userInfo;
   refreshApi: () => void;
+  userId: string
 };
 
-function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
+function GeneralInformation({ userData, refreshApi, userId }: TProps): JSX.Element {
   const [postionOptions, setPositionOptions] = useState<TOptionsList[]>([]);
   const [majorOptions, setMajorOptions] = useState<TOptionsList[]>([]);
   const [departmentOptions, setDeparmentOptions] = useState<TOptionsList[]>([]);
   const [educationOptions, setEducationOptions] = useState<TOptionsList[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TGeneralFieldValues> | null>(null);
+  const dispatch = useDispatch()
 
   const onSubmit = async (
     values: TGeneralFieldValues,
@@ -62,7 +66,6 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
 
     try {
       const access_token = getCookie("accessToken");
-      const userId = getCookie("userId");
       if (access_token && userId) {
         const generalData = {
           userId: userId,
@@ -78,14 +81,16 @@ function GeneralInformation({ userData, refreshApi }: TProps): JSX.Element {
           departmentID: values.departmentID,
           joinDate: values.joinDate,
         };
-        console.log(generalData);
+        dispatch(setIsBackdrop(true));
         await patchGeneralInfo(access_token, generalData);
+        dispatch(setIsBackdrop(false));
         toast.success(`Update general information successfully!`);
         actions.resetForm();
         refreshApi();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        dispatch(setIsBackdrop(false));
         toast.error(`Update general information failed!`);
       }
     }
