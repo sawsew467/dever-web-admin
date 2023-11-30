@@ -7,6 +7,9 @@ import Image from "next/image";
 
 import EditIconAnimate from "@icon/components/Button/edit.gif";
 import EditIconPause from "@icon/components/Button/edit_pause.png";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TPasswordFieldValue = {
   currentPassword: string;
@@ -17,13 +20,15 @@ type TPasswordFieldValue = {
 function ChangePassword(): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TPasswordFieldValue> | null>(null);
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     values: TPasswordFieldValue,
     actions: FormikHelpers<TPasswordFieldValue>
   ) => {
-    console.log(values);
+    dispatch(setIsBackdrop(true));
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    dispatch(setIsBackdrop(false));
     actions.resetForm();
     toast.info("Changed passsword successfully!");
   };
@@ -36,19 +41,16 @@ function ChangePassword(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px]">Change password</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
-          onClick={handleEditClick}
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
+          onClick={() => {
+            handleEditClick()
+          }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          />
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div>
@@ -115,7 +117,7 @@ function ChangePassword(): JSX.Element {
                     <div>
                       <button
                         type="submit"
-                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white dark:shadow-darkPrimaryBlue"
                       >
                         Save
                       </button>

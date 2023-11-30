@@ -7,18 +7,24 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { updateAvatar } from "@/apis/setting";
+import { Skeleton } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TProps = {
   avatarUrl:string;
-  fullName:string;
+  fullName:string | undefined;
   career: string;
+  userId: string;
   refreshApi: () => void
 }
 
-function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.Element {
+function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps): JSX.Element {
+  const dispatch = useDispatch();
   const fileInputRef = useRef(null);
   const [imageState, setImageState] = useState<File | null>(null);
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   // console.log(imageSource);
 
   const handleBrowseImage = () => {
@@ -29,6 +35,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   ) => {
     const file = event.target.files && event.target.files[0];
     if (file && isValidFileType(file)) {
+      setIsUploading(true);
       setImageState(file);
     } else {
       setImageState(null);
@@ -47,19 +54,21 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   };
   const handleUpdataProfileImage = async (avatarUrl:string) => {
     const avatar = {
+      userId: userId!,
       avatarUrl: avatarUrl
     }
     try {
       const access_token = getCookie('accessToken');
+      dispatch(setIsBackdrop(true));
       if(access_token) {
-        const response = await updateAvatar(access_token, avatar);
-        console.log(response);
+        await updateAvatar(access_token, avatar);
+        dispatch(setIsBackdrop(false));
         toast.success("Update profile image successfully!");
         refreshApi();
       }
     } catch (error) {
       if(axios.isAxiosError(error)) {
-        console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.error("Upload profile image failed!")
       }
     }
@@ -80,6 +89,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
       );
       const imageURL = responseData.data.secure_url;      
       setImageSource(imageURL);
+      setIsUploading(false);
     } catch (error) {
       console.error("Error uploading image: ", error);
       return null;
@@ -92,22 +102,28 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
   },[imageState, setImageSource])
 
   return (
-    <div className="flex flex-col xl:flex-row gap-[25px] p-[24px] shadow-primary rounded-[10px]">
+    <div className="flex flex-col xl:flex-row gap-[25px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="w-[126px] h-[126px] rounded-[10px] overflow-hidden">
+       {
+        isUploading ? 
+        <div>
+          <Skeleton variant="rounded" height={126} className="dark:bg-[#3b3b3b]"></Skeleton>
+        </div> :
         <Image
-          src={imageState ? URL.createObjectURL(imageState) : avatarUrl == '' ? Avatar : avatarUrl}
-          width={1200}
-          height={800}
-          alt="avt"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        ></Image>
+        src={imageState ? URL.createObjectURL(imageState) : avatarUrl == '' ? Avatar : avatarUrl}
+        width={1200}
+        height={800}
+        alt="avt"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+        ></Image>        
+       }
       </div>
       <div className="flex flex-col gap-[16px]">
-        <h3 className="font-[700] text-[24px]">{fullName == '' ? "Haven't set name yet" : fullName}</h3>
+        <h3 className="font-[700] text-[24px]">{fullName == ' ' ? "Haven't set name yet" : fullName}</h3>
         <p className="font-[400] text-[16px]">{career == '' ? "Not set yet" : career}</p>
         <div>
           <input
@@ -122,14 +138,14 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
               console.log("Submit");
             }}
           />
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-[20px]">
             <UnlinkButton
               textContent={"Change Image"}
               icon={"upload"}
               iconPosition={"left"}
               backgroundColor={"bg-blue-700"}
               method={() => handleBrowseImage()}
-              tailwind={"text-white"}
+              tailwind={"text-white dark:shadow-darkPrimaryBlue"}
             ></UnlinkButton>
             {imageState ? (
               <UnlinkButton
@@ -138,7 +154,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi}:TProps): JSX.E
                 iconPosition={"left"}
                 backgroundColor={"bg-blue-700"}
                 method={() => {handleUpdataProfileImage(imageSource!)}}
-                tailwind={"text-white"}
+                tailwind={"text-white dark:shadow-darkPrimaryBlue"}
               ></UnlinkButton>
             ) : null}
           </div>

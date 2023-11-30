@@ -28,8 +28,8 @@ function Pagination({
       buttons.push(
         <Link href={`${route}/${i}`} key={i}>
           <button
-            className={`px-2 py-1 border-r ${
-              paramID === i.toString() ? "bg-blue-200 text-blue-600" : ""
+            className={`px-2 py-1 border-r dark:border-darkHover ${
+              paramID === i.toString() ? "bg-blue-200 text-blue-600" : "dark:text-white"
             }`}
           >
             {i}
@@ -57,10 +57,10 @@ function Pagination({
     <>
       {countNumberOfPage == 1 ? null : 
       <div className="w-full flex justify-center items-center pb-4">
-      <div className="border rounded-md text-sm">
+      <div className="border dark:border-darkHover rounded-md text-sm">
         <button
-          className={`px-2 py-1 border-r ${
-            paramID === "1" ? "text-gray-400 cursor-not-allowed" : ""
+          className={`px-2 py-1 border-r dark:border-darkHover ${
+            paramID === "1" ? "text-gray-400 cursor-not-allowed" : "dark:text-white"
           }`}
           onClick={() => {
             if (paramID !== "1") {
@@ -77,7 +77,7 @@ function Pagination({
           className={`px-2 py-1 ${
             paramID === countNumberOfPage.toString()
               ? "text-gray-400 cursor-not-allowed"
-              : ""
+              : "dark:text-white"
           }`}
           onClick={() => {
             if (paramID !== countNumberOfPage.toString()) {

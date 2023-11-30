@@ -1,35 +1,56 @@
 import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
 
-import EditIconAnimate from "@icon/components/Button/edit.gif";
-import EditIconPause from "@icon/components/Button/edit_pause.png";
 import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
 import { contactInformationSchema } from "./Validation/validation";
 import FormikInput from "./FormikInput";
+import { getCookie } from "cookies-next";
+import { updateContactInfo } from "@/apis/setting";
+import { isAxiosError } from "axios";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { setIsBackdrop } from "@/redux/slices/app";
+import { useDispatch } from "react-redux";
 
 type TContactFieldValue = {
   phone: string;
   email: string;
 };
 
-function ContactInfomation(): JSX.Element {
+type TProps = {
+  phone: string;
+  email: string;
+  userId: string;
+}
+
+function ContactInfomation({ phone, email, userId }: TProps): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TContactFieldValue> | null>(null);
-
-  const fakeData = {
-    phone: "0828828497",
-    email: "thangtvbde170145@fpt.edu.vn",
-  };
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     values: TContactFieldValue,
     actions: FormikHelpers<TContactFieldValue>
   ) => {
-    console.log(values);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.resetForm();
-    toast.info("Changed contact information successfully");
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token && userId) {
+        const contactInfo = {
+          userId: userId,
+          phoneNumber: values.phone,
+          email: values.email,
+        };
+        console.log(contactInfo);
+        dispatch(setIsBackdrop(true));
+        await updateContactInfo(access_token, contactInfo);
+        dispatch(setIsBackdrop(false));
+        toast.success("Update contact information successfully!");
+      }
+    } catch (error) {
+      if(isAxiosError(error)) {        
+        dispatch(setIsBackdrop(false));
+        toast.error(error?.response?.data?.errorMessages[0])
+      }
+    }
   };
 
   const handleEditClick = () => {
@@ -40,29 +61,24 @@ function ContactInfomation(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] shadow-primary p-[24px] rounded-[10px]">
+    <div className="flex flex-col gap-[20px] shadow-primary dark:shadow-darkPrimary dark:text-white p-[24px] rounded-[10px]">
       <div className="flex flex-row justify-between items-center">
         <h3 className="font-[700] text-[24px]">Contact information</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
           onClick={() => {
             handleEditClick();
           }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          ></Image>
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
 
       <div>
         <Formik
           initialValues={{
-            phone: fakeData.phone,
-            email: fakeData.email,
+            phone: phone,
+            email: email,
           }}
           validationSchema={contactInformationSchema}
           onSubmit={onSubmit}
@@ -94,7 +110,7 @@ function ContactInfomation(): JSX.Element {
                     <div>
                       <button
                         type="submit"
-                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white"
+                        className="rounded-[8px] px-[12px] py-[8px] text-[12px] bg-blue-700 text-white dark:shadow-darkPrimaryBlue"
                       >
                         Save
                       </button>

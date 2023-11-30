@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Skills from "@/components/DataOrganizerElement/Skills";
 import Hobbies from "@/components/DataOrganizerElement/Hobbies";
 import Majors from "@/components/DataOrganizerElement/Majors";
 import Department from "@/components/DataOrganizerElement/Department";
 import Position from "@/components/DataOrganizerElement/Position";
+import { closeSidebar } from "@/redux/slices/app";
+import Platform from "@/components/DataOrganizerElement/Platform";
 
 function SettingList() {
   const isOpenSlidebar = useSelector(
@@ -18,6 +20,10 @@ function SettingList() {
   const userInfo = useSelector(
     (state: RootState) => state.userInfor.currentUser
   );
+  const dispath = useDispatch();
+  useEffect(() => {
+    dispath(closeSidebar())
+  }, [dispath])
 
   return (
     <div
@@ -31,24 +37,30 @@ function SettingList() {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div>
-          <h3 className="text-blue-600 font-[700] text-[24px]">
+         {
+          userInfo.role === "admin" ? (
+            <h3 className="text-blue-600 dark:text-[#0198ff] font-[700] text-[24px]">
             Data Organizer
           </h3>
+          ) : null
+         }
         </div>
-        {userInfo.UserRole !== "admin" ? (
-          <div className="font-[600] text-[20px]">
-            You do not have permission to view information on this page...
+        {userInfo.role !== "admin" ? (
+          <div className="flex flex-col items-center justify-center mt-[100px]">
+              <div className="text-[72px] font-bold text-sky-500 dark:text-sky-500">OPPS!</div>
+              <p className="text-[32px] font-bold dark:text-white text-center">You do not have permission to access this page!</p>
           </div>
         ) : (
           <div className="flex flex-col lg:flex-row gap-[16px]">
             <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
               <Skills />
               <Majors />
-              <Position/>
+              <Department/>
             </div>
             <div className="w-full lg:w-[50%] flex flex-col gap-[20px]">
               <Hobbies />
-              <Department/>
+              <Position/>
+              <Platform/>
             </div>
           </div>
         )}

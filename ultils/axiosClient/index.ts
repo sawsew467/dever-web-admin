@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 const axiosServices = axios.create({
-    baseURL: "https://fudeverapi.bsite.net/api",
+    baseURL: "https://fudever.bsite.net/api/",
     timeout: 50000,
 });
 

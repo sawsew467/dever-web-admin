@@ -33,8 +33,8 @@
   $tag-invalid-bg: rgba($tag-remove, 0.5) !default;
   $tag-inset-shadow-size: 1.1em !default;
   $tag-hide-transition: 0.3s !default;
-  $placeholder-color: rgba($tag-text-color, 0.4) !default;
-  $placeholder-color-focus: rgba($tag-text-color, 0.25) !default;
+  $placeholder-color: #6b7280 !default;
+  $placeholder-color-focus: #6b7280 !default;
   $input-color: inherit !default;
   $tagify-dd-bg-color: white !default;
   $tagify-dd-color-primary: rgb(53, 149, 246) !default;
@@ -365,7 +365,7 @@
 
     &--editable {
       > div {
-        color: #03543F;
+        color: #00b0b9;
         &::before {
           box-shadow: 0 0 0 2px var(--tag-hover) inset !important;
         }

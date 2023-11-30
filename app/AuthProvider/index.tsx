@@ -3,13 +3,12 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 import { refreshUserInfoFromStorage } from '@/redux/slices/userInfor';
+import { setIsDarkMode } from '@/redux/slices/app';
 
 type EncodeType = {
-    email : string;
-    sub : string;
-    UserRole : string;
-    "remember-me" : boolean
-  }
+    sub:string,
+    role: string,
+};
 
 function AppProvider({children}:{children:React.ReactNode}) {
     const dispatch = useDispatch();
@@ -20,13 +19,15 @@ function AppProvider({children}:{children:React.ReactNode}) {
 
         if(access_token && refresh_token) {
             const decoded:EncodeType = jwtDecode(access_token);
-            const user = {
-                email: decoded!.email,
-                sub: decoded!.sub,
-                UserRole: decoded!.UserRole,
-                remember: decoded!['remember-me']
-            };
-            return user;
+            const currentUser = {
+                id: decoded!.sub,
+                email: '',
+                avatarUrl: '',
+                role: decoded!.role,
+                remember: null,
+            }
+
+            return currentUser;
         }
         return null;
     }    
@@ -35,6 +36,16 @@ function AppProvider({children}:{children:React.ReactNode}) {
         if(userFromCookies) {
             dispatch(refreshUserInfoFromStorage(userFromCookies));
         }
+
+        const theme = JSON.parse(localStorage.getItem('theme')!)
+        if(window.matchMedia('(prefers-color-scheme: dark)').matches && theme == null) {
+            document.documentElement.classList.toggle('dark');
+            dispatch(setIsDarkMode(true));
+        } else if(theme === 'light') {
+            document.documentElement.classList.remove('dark');
+            dispatch(setIsDarkMode(false));
+        }
+
     },[dispatch])
 
     return <>{children}</>

@@ -11,20 +11,37 @@ import EditIconPause from "@icon/components/Button/edit_pause.png";
 import FormikInput from "./FormikInput";
 import EditorNormal from "../EditorNormal";
 import BrowseImage from "./BrowseImage";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { isAxiosError } from "axios";
+import { postProject } from "@/apis/setting";
+import { getCookie } from "cookies-next";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 type TProjectCreateFieldsValue = {
   title: string;
-  demo: string;
+  sourceCode: string;
+  production: string;
 };
 
-type TProjectState = {
+type TAppUserProject = {
+  createdAt: string;
+  demoUrl: string;
+  description: string;
+  projectId: string;
+  projectUrl: string;
+  thumbnailUrl: string;
   title: string;
-  desc: string;
-  img: string;
-  link: string;
+  updatedAt: string;
 };
 
-function Projects() {
+type TProps = {
+  userId: string;
+  refreshApi: () => void;
+  userProjectList: TAppUserProject[];
+}
+
+function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [hmtlString, setHtmlString] = useState<string>("");
   const [importedImage, setImportedImage] = useState<File | null>(null);
@@ -33,48 +50,41 @@ function Projects() {
   const formikRef = useRef<FormikHelpers<TProjectCreateFieldsValue> | null>(
     null
   );
-
-  const project_List = [
-    {
-      title: "Noteworthy technology acquisitions 2021",
-      desc: "<p>Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>",
-      img: "https://res.cloudinary.com/dy1uuo6ql/image/upload/v1694281714/FU_DEVER_ADMIN/project_image/y81w3mxwnrgmf967l7tw.jpg",
-      link: "github.com/sawsew467/dever-web-frontend",
-    },
-  ];
-  const [projectState, setProjectState] =
-    useState<TProjectState[]>(project_List);
-
-  const removeHttps = (link: string): string => {
-    if (link.startsWith("http://")) {
-      return link.slice(7);
-    } else if (link.startsWith("https://")) {
-      return link.slice(8);
-    }
-    return link;
-  };
+  const dispatch = useDispatch();
 
   const onSubmit = async (
     values: TProjectCreateFieldsValue,
     actions: FormikHelpers<TProjectCreateFieldsValue>
   ) => {
-    const { title, demo } = values;
+    const { title, sourceCode, production} = values;
+
     const newProjectData = {
       title: title,
-      desc: hmtlString,
-      img: imageURL,
-      link: removeHttps(demo),
+      authorId: userId,
+      description: hmtlString,
+      projectUrl: sourceCode,
+      demoUrl: production,
+      thumbnailUrl: imageURL,
     };
-    setProjectState((prevProjectState) => [
-      ...prevProjectState,
-      newProjectData,
-    ]);
-    console.log(values);
-    console.log("POST NEW PROJECT: ", newProjectData);
+    console.log(newProjectData);
+    
+    try {
+      const access_token = getCookie('accessToken');
+      if(access_token) {
+        dispatch(setIsBackdrop(true));
+        await postProject(access_token, newProjectData);
+        dispatch(setIsBackdrop(false));
+        refreshApi();
+        toast.success("Create new project successfully!")
+      }
+    } catch (error) {
+      if(isAxiosError(error)) {
+        dispatch(setIsBackdrop(false));
+        toast.error("Add project failed!");
+      }
+    }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     actions.resetForm();
-    toast.info("Create project successfully!");
     setIsEdit(false);
   };
 
@@ -87,82 +97,80 @@ function Projects() {
     setImportedImage(null);
   };
 
-  //demo function
-
-  //delete by index in state
-  const handleDeleteProject = (itemIndex: number) => {
-    const deteted = projectState.filter(
-      (value: TProjectState, index: number) => index !== itemIndex
-    );
-    setProjectState([...deteted]);
-    console.log("DELETE PROJECT ID:", itemIndex);
-  };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px] select-none">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary rounded-[10px] select-none dark:text-white">
       <div className="flex flex-row justify-between">
-        <h3 className="font-[700] text-[24px]">Your projects</h3>
+        <h3 className="font-[700] text-[24px] dark:text-white">Your projects</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
-          onClick={handleEditClick}
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
+          onClick={() => {
+            handleEditClick()
+          }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          />
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div className="flex flex-col gap-[20px]">
-        {projectState.length == 0 ? (
-          <p className="font-[500] text-[14px] text-blue-700 cursor-pointer "
-          onClick={() => {
-            setIsEdit(true);
-            setIsAdd(true);
-          }}
-          >You haven&apos;t posted any projects yet</p>
+        {userProjectList.length == 0 ? (
+          <p
+            className="font-[500] text-[14px] text-blue-700 cursor-pointer dark:text-white"
+            onClick={() => {
+              setIsEdit(true);
+              setIsAdd(true);
+            }}
+          >
+            Haven&apos;t posted any projects yet
+          </p>
         ) : (
-          <>
-            {projectState.map((item, index) => {
+          <div className="flex flex-col gap-[20px]">
+            {userProjectList.map((item, index) => {
               return (
                 <ProjectCard
                   key={index}
-                  img={item.img}
+                  img={item.thumbnailUrl}
                   title={item.title}
-                  desc={item.desc}
-                  link={item.link}
+                  desc={item.description}
+                  projectSourcelink={item.projectUrl}
+                  projectDemoLink={item.demoUrl}
+                  projectId = {item.projectId}
+                  authorId = {userId}
                   canEdit={true}
-                  method={() => handleDeleteProject(index)}
+                  refreshApi={refreshApi}
                   isEdit={isEdit}
                 />
               );
             })}
-          </>
+          </div>
         )}
       </div>
       {isEdit ? (
         <div>
           <AddButton
-            text={projectState.length == 0 ? "Add" : "Add more"}
+            text={userProjectList.length == 0 ? "Add" : "Add more"}
             isAdd={isAdd}
             setIsAdd={setIsAdd}
           />
         </div>
       ) : null}
       {isEdit && isAdd ? (
-        <div>
+        <div className="dark:text-white">
           <Formik
             initialValues={{
               title: "",
-              demo: "",
+              sourceCode: "",
+              production: "",
             }}
             validationSchema={yup.object().shape({
               title: yup.string().required("Title is required"),
-              demo: yup
+              sourceCode: yup
                 .string()
                 .url("Invalid URL format")
-                .required("Demo URL is required"),
+                .required("Source code URL is required"),
+                production: yup
+                .string()
+                .url("Invalid URL format")
+                .required("Product URL is required"),
             })}
             onSubmit={onSubmit}
           >
@@ -182,7 +190,7 @@ function Projects() {
                     />
                     <div className="flex flex-col gap-[6px]">
                       <div>
-                        <h3 className="font-[300] text-[14px]">
+                        <h3 className="font-[300] text-[14px] dark:font-semibold">
                           Project description
                         </h3>
                       </div>
@@ -191,6 +199,7 @@ function Projects() {
                         setHtmlString={setHtmlString}
                         isNeedSave={false}
                         useEditorFor={"projectSetting"}
+                        userId={userId}
                       />
                     </div>
                     <BrowseImage
@@ -200,10 +209,19 @@ function Projects() {
                       setFileURL={setImageURL}
                     />
                     <FormikInput
-                      label={"demo"}
-                      id={"demo"}
-                      name={"demo"}
-                      placeholder={"Enter source code or deployment..."}
+                      label={"sourceCode"}
+                      id={"sourceCode"}
+                      name={"sourceCode"}
+                      placeholder={"Enter project's source code..."}
+                      type={"text"}
+                      isEdit={isEdit}
+                      title={"Source code URL"}
+                    />
+                    <FormikInput
+                      label={"production"}
+                      id={"production"}
+                      name={"production"}
+                      placeholder={"Enter product URL..."}
                       type={"text"}
                       isEdit={isEdit}
                       title={"Production"}

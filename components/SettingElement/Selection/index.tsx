@@ -3,7 +3,7 @@ import React from "react";
 
 type TPros = {
   title: string;
-  options: {id:string, value:string}[];
+  options: {id:string, name:string}[];
   value: string;
   isEdit: boolean;
   onChange(event: React.ChangeEvent<HTMLSelectElement>): void;
@@ -16,13 +16,13 @@ function Selection({
   isEdit,
   onChange,
 }: TPros): JSX.Element {
-
+  
   const renderSelectOption = () => {
     const options_list = [];
     for (let option of options) {
       options_list.push(
         <option value={option.id} key={option.id}>
-          {option.value}
+          {option.name}
         </option>
       );
     }
@@ -38,13 +38,13 @@ function Selection({
 
   return (
     <div className="w-full">
-      <span className="font-[300] text-[14px]">
+      <span className="font-[300] text-[14px] dark:font-semibold">
         {capitalizeFirstLetter(title)}
       </span>
       <select
         name=""
         id=""
-        className={`w-full text-[14px] text-gray-700 border-gray-300  bg-gray-50 ${
+        className={`w-full text-[14px] text-gray-700 border-gray-300 dark:border-darkHover font-[500] dark:bg-dark dark:text-white  bg-gray-50 ${
           isEdit ? "text-black" : ""
         } rounded-[6px]`}
         disabled={!isEdit}
@@ -53,7 +53,7 @@ function Selection({
           onChange(e);
         }}
       >
-        <option value={""}>Default...</option>
+        <option value={""}>Select platform...</option>
         {renderSelectOption()}
       </select>
     </div>

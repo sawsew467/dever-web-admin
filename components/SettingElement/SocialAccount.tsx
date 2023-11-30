@@ -1,3 +1,4 @@
+"use-client";
 import React, { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 
@@ -29,31 +30,32 @@ import {
   postSocialAccount,
 } from "@/apis/setting";
 import { toast } from "react-toastify";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+import { setIsBackdrop } from "@/redux/slices/app";
+import { useDispatch } from "react-redux";
 
 type TSocialData = {
   id: string;
-  memberId: string;
-  platform: string;
-  platformId: string;
-  value: string;
+  name: string;
+  url: string;
 };
 
-function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocialData[], refreshApi: () => void}) {
-  const platforms = [
-    "Facebook",
-    "Github",
-    "Youtube",
-    "Instagram",
-    "Discord",
-    "Linkedin",
-    "Tiktok",
-    "Twitter",
-  ];
+function SocialAccount({
+  socialMediaState,
+  refreshApi,
+  userId
+}: {
+  socialMediaState: TSocialData[];
+  refreshApi: () => void;
+  userId:string;
+}): JSX.Element {
+
+  const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [platformList, setPlatformList] = useState<
-    { id: string; value: string }[]
+    { id: string; name: string }[]
   >([]);
 
   const [selectPlatform, setSelectPlatform] = useState<string>(
@@ -73,7 +75,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
     setSelectPlatform(event.target.value);
     platformList.forEach((item) => {
       if (item.id == event.target.value) {
-        setSelectedPlatformName(item.value);
+        setSelectedPlatformName(item.name);
       }
     });
   };
@@ -84,68 +86,60 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   };
 
   const returnSocialIcon = (item: TSocialData): StaticImageData => {
-    switch (item.platform) {
-      case "Facebook":
+    switch (item.name.toLowerCase()) {
+      case "facebook":
         return FacebookIcon;
-      case "Github":
+      case "github":
         return GithubIcon;
-      case "Youtube":
+      case "youtube":
         return YoutubeIcon;
-      case "Instagram":
+      case "instagram":
         return InstagramIcon;
-      case "Discord":
+      case "discord":
         return DiscordIcon;
-      case "LinkedIn":
+      case "linkedin":
         return LinkedinIcon;
-      case "Tiktok":
+      case "tiktok":
         return TiktokIcon;
-      case "Twitter":
+      case "twitter":
         return TwitterIcon;
       default:
         return UndefineIcon;
     }
   };
   const addHttpsIfMissing = (link: string): string => {
-    if (!link.startsWith("http://") && !link.startsWith("https://")) {
-      return "https://" + link;
+    if (link && typeof link === "string") {
+      if (!link.startsWith("http://") && !link.startsWith("https://")) {
+        return "https://" + link;
+      }
     }
     return link;
   };
   const removeHttps = (link: string): string => {
-    if (link.startsWith("http://")) {
-      return link.slice(7);
-    } else if (link.startsWith("https://")) {
-      return link.slice(8);
+    if (link && typeof link === "string") {
+      if (link.startsWith("http://")) {
+        return link.slice(7);
+      } else if (link.startsWith("https://")) {
+        return link.slice(8);
+      }
     }
     return link;
   };
 
-  const checkExistAccounts = (
-    inputLink: string,
-    selectPlatform: string
-  ): boolean => {
+  const checkExist = (inputLink: string, selectPlatform: string): boolean => {
     const linkExists = socialMediaState.some(
-      (item: TSocialData) => item.value === addHttpsIfMissing(inputLink)
+      (item: TSocialData) => item.url === addHttpsIfMissing(inputLink)
     );
-    const platformExist = socialMediaState.some(
-      (item: TSocialData) => item.platformId === selectPlatform
-    );
+
     if (linkExists) {
       setIsAlert(true);
       setTimeout(() => {
         setIsAlert(false);
       }, 4000);
-      setAlertMessage("This account already exists!");
+      setAlertMessage("This url already exists!");
       return true;
     }
-    if (platformExist) {
-      setIsAlert(true);
-      setTimeout(() => {
-        setIsAlert(false);
-      }, 4000);
-      setAlertMessage("This account with the platform already exists!");
-      return true;
-    }
+
     if (inputLink.length == 0) {
       setIsAlert(true);
       setTimeout(() => {
@@ -173,7 +167,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   };
 
   const handleSubmit = async () => {
-    if (checkExistAccounts(removeHttps(linkState), selectPlatform)) {
+    if (checkExist(removeHttps(linkState), selectPlatform)) {
       return;
     } else if (checkIsValidLink(linkState)) return;
     else {
@@ -187,9 +181,11 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
       if (access_token) {
         const response = await getAllPlatform(access_token);
         const data = response.data.body;
-        const platFormFilted = data.filter(
-          (item: { id: string; value: string }) => item.value !== "default"
-        );
+        const platFormFilted = data
+          .filter(
+            (item: { id: string; name: string }) => item.name !== "default"
+          )
+          .filter((item: { id: string; name: string }) => item.name !== "");
         setPlatformList(platFormFilted);
       }
     } catch (error) {
@@ -200,33 +196,46 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
   };
   useEffect(() => {
     handleGetPlatforms();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   const handlePostSocialAccount = async () => {
     try {
-      const userId = getCookie("userId");
       const access_token = getCookie("accessToken");
       if (access_token && userId) {
         const postValue = {
+          userId: userId,
           platformId: selectPlatform,
-          value: linkState,
+          url: linkState,
         };
-        const response = await postSocialAccount(access_token, postValue);
-        toast.success(`Post ${selectedPlatformName} account successfully!`);
+        console.log(postValue);
+        dispatch(setIsBackdrop(true));
+        await postSocialAccount(access_token, postValue);
+        dispatch(setIsBackdrop(false));
+        toast.success(`Add ${selectedPlatformName} account successfully!`);
+        setIsEdit(false);
+        setLinkState('');
+        setSelectPlatform('');
         refreshApi();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast.error(`Post ${selectedPlatformName} account failed`);
+        dispatch(setIsBackdrop(false));
+        toast.error(`Add ${selectedPlatformName} account failed`);
       }
     }
   };
   const handleDeleteAccount = async (platformId: string) => {
     try {
       const access_token = getCookie("accessToken");
-      if (access_token) {
-        const res = await deleteSocialAccount(access_token, platformId);
+      const userId = getCookie("userId");
+      if (access_token && userId) {
+        const req = {
+          userId: userId,
+          platformId: platformId,
+        };
+        await deleteSocialAccount(access_token, req);
+        
         toast.success(`Deleting successfully!`);
         refreshApi();
       }
@@ -237,29 +246,24 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
     }
   };
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary rounded-[10px]">
+    <div className="flex flex-col gap-[20px] p-[24px] shadow-primary dark:shadow-darkPrimary dark:text-white rounded-[10px]">
       <div className="flex flex-row justify-between">
         <h3 className="font-[700] text-[24px]">Social accounts</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
           onClick={() => {
-            setIsEdit(!isEdit);
+          setIsEdit(!isEdit);
             if (isEdit == false) setIsAdd(false);
           }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          ></Image>
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div>
         <ul className="list-none flex flex-col gap-[10px]">
           {socialMediaState.length == 0 ? (
             <p
-              className="font-[500] text-[14px] text-blue-700 cursor-pointer"
+              className="font-[500] text-[14px] text-blue-700 cursor-pointer dark:text-white"
               onClick={() => {
                 setIsAdd(true);
                 setIsEdit(true);
@@ -270,26 +274,28 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
           ) : (
             socialMediaState.map((item: TSocialData, index: number) => (
               <li
-                className="flex flex-row border-b-2 pb-[10px] justify-between"
+                className="flex flex-row border-b-2 dark:border-darkHover pb-[10px] justify-between"
                 key={index}
               >
                 <div className="flex flex-row gap-[10px]">
-                  <div className="flex items-center justify-center w-[45px]">
+                  <div className="flex items-center justify-center w-[34px] h-[34px] dark:bg-white rounded-[50%]">
                     <Image
                       src={returnSocialIcon(item)}
-                      alt={item.platform}
+                      alt={item.name}
                       width={26}
                       height={26}
                     ></Image>
                   </div>
-                  <div className="max-w-[200px]">
-                    <p className="font-[600] text-[14px]">{item.platform}</p>
+                  <div className="max-w-[300px]">
+                    <p className="font-[600] text-[14px]">
+                      {item.name}
+                    </p>
                     <a
-                      href={addHttpsIfMissing(item.value)}
+                      href={addHttpsIfMissing(item.url)}
                       target="_blank"
-                      className="font-[300] text-[14px] text-blue-500 whitespace-nowrap truncate"
+                      className="font-[300] text-[14px] text-blue-500 whitespace-nowrap truncate dark:font-semibold"
                     >
-                      <p className="truncate">{removeHttps(item.value)}</p>
+                      <p className="truncate">{removeHttps(item.url)}</p>
                     </a>
                   </div>
                 </div>
@@ -299,12 +305,12 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
                       textContent={"Delete"}
                       icon={""}
                       iconPosition={"left"}
-                      backgroundColor={"hover:bg-blue-700"}
+                      backgroundColor={"dark:bg-dark dark:hover:bg-blue-500 hover:bg-blue-700"}
                       method={() => {
-                        handleDeleteAccount(item.platformId);
+                        handleDeleteAccount(item.id);
                       }}
                       tailwind={
-                        "text-blue-700 border-[1px] font-[500] border-blue-500 hover:text-white transition"
+                        "text-blue-700 dark:text-blue-500 dark:font-bold border-[1px] font-[500] dark:hover:text-white border-blue-500 hover:text-white transition dark:shadow-darkPrimaryBlue"
                       }
                     ></UnlinkButton>
                   </div>
@@ -371,7 +377,7 @@ function SocialAccount({socialMediaState, refreshApi}: {socialMediaState:TSocial
               backgroundColor={"bg-blue-700"}
               method={handleSubmit}
               tailwind={
-                "text-white border-[1px] font-[500] border-blue-500 transition"
+                "text-white border-[1px] dark:border-0 dark:shadow-darkPrimaryBlue font-[500] border-blue-500 transition"
               }
             ></UnlinkButton>
           </div>

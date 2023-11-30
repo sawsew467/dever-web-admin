@@ -42,6 +42,7 @@ function UnlinkButton({
     <button
       className={`rounded-[8px] px-[12px] py-[8px] text-[12px] ${backgroundColor} ${tailwind}`}
       onClick={method}
+      type="button"
     >
       <div
         className="flex gap-[8px]"

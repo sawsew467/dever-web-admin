@@ -7,11 +7,11 @@ export default function withAuth(Component: React.ComponentType<any>) {
     const router = useRouter();
     const path = usePathname();
     const authenticate = getCookie('refreshToken');
-    const isAuthenticated = authenticate !==null && authenticate !== undefined;
+    const isAuthenticated = authenticate !== null && authenticate !== undefined;
     const isAuthProcess = path.includes("auth");    
     if (!isAuthenticated && !isAuthProcess) {
       toast.error('please login !!');
-      return router.push('/auth/sign-in');
+      return router.push('/auth/sign-in'); 
     }
 
     if (isAuthenticated && isAuthProcess) {

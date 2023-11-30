@@ -8,52 +8,37 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
 import { getAllSkills } from "@/apis/dataOrganizer";
-import { getMemberSkill} from "@/apis/setting";
+import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
+// import { getMemberSkill} from "@/apis/setting";
 
 type TSkill = {
-  blogTagEntities: any;
-  createdAt: string;
-  creator: string;
-  deleteFlag: boolean;
   id: string;
-  memberSkillEntities: any;
-  remover: string;
-  updatedAt: string;
-  value: string;
+  name: string;
+};
+type TProps = {
+  userSkills: string[];
+  userId: string;
 };
 
-function Skills() {
+function Skills({ userSkills, userId }: TProps): JSX.Element {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [skills, setSkills] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>(userSkills);
+  // console.log(suggestions);
 
   const handleGetAllSkillSuggestions = async () => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const response = await getAllSkills(access_token);
-        const data = response.data;
+        const data = response.data.body;
+        // console.log(data);
         const filtedData = data
           .map((item: TSkill) => {
-            return item.value;
+            return item.name;
           })
-          .filter((item: TSkill) => item.value !== "default");
-        setSuggestions(filtedData);        
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-      }
-    }
-  };
-  const handleGetMemberSkill = async () => {
-    try {
-      const access_token = getCookie("accessToken");
-      const userId = getCookie("userId");
-      if (access_token && userId) {
-        const response = await getMemberSkill(access_token, userId);
-        const data = response.data;
-        setSkills(data);
+          .filter((item: TSkill) => item.name !== "default");
+        setSuggestions(filtedData);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -64,39 +49,33 @@ function Skills() {
 
   useEffect(() => {
     handleGetAllSkillSuggestions();
-    handleGetMemberSkill();
   }, []);
 
   return (
-    <div className="flex flex-col gap-[20px] p-[24px] rounded-[10px] shadow-primary">
+    <div className="flex flex-col gap-[20px] p-[24px] rounded-[10px] shadow-primary dark:shadow-darkPrimary dark:text-white">
       <div className="flex flex-row justify-between">
-        <h3 className="font-[700] text-[24px] ">Skills</h3>
+        <h3 className="font-[700] text-[24px] dark:text-white">Skills</h3>
         <button
-          className="w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition"
+          className={`w-[28px] h-[28px] flex items-center justify-center hover:scale-125 rounded-[50%] hover:border-[1px] hover:border-blue-700 cursor-pointer transition ${isEdit ? "bg-blue-700 text-white" :  ""} `}
           onClick={() => {
-            setIsEdit(!isEdit);
+           setIsEdit(!isEdit)
           }}
         >
-          <Image
-            src={isEdit ? EditIconAnimate : EditIconPause}
-            alt="Edit"
-            width={18}
-            height={18}
-          ></Image>
+          {isEdit ? <PiPencilSimpleLineFill/> : <PiPencilSimpleFill/>}
         </button>
       </div>
       <div className="flex flex-col gap-[5px]" aria-disabled="true">
-        <p className="font-[300] text-[14px]">Add tag</p>
-        {
-          suggestions.length === 0 ? null :
+        <p className="font-[300] text-[14px] dark:text-white dark:font-semibold">Add tag</p>
+        {suggestions.length === 0 ? null : (
           <TagField
-          suggestions={suggestions!}
-          isEdit={isEdit}
-          useTagFor="skills"
-          state={skills}
-          setState={setSkills}
-        />
-        }
+            suggestions={suggestions!}
+            isEdit={isEdit}
+            useTagFor="skills"
+            state={skills}
+            setState={setSkills}
+            userId={userId}
+          />
+        )}
       </div>
     </div>
   );

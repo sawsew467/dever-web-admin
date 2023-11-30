@@ -32,6 +32,8 @@ import DomToLexicalPlugin from "@/lexical_Lib/plugins/DomToLexicalPlugin";
 import TreeViewPlugin from "@plugins/TreeViewPlugin";
 import EditorSaveButtonPlugin from "@plugins/EditorSaveButtonPlugin";
 import FloatingTextFormatToolbarPlugin from "@/lexical_Lib/plugins/FloatingTextFormatToolbarPlugin";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const editorConfig = {
   onError(error: Error) {
@@ -46,10 +48,11 @@ type TPros = {
   htmlString: string;
   setHtmlString: React.Dispatch<React.SetStateAction<string>>;
   isNeedSave: boolean;
-  useEditorFor: string
+  useEditorFor: string;
+  userId: string;
 };
 
-function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: TPros) {
+function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor, userId }: TPros) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
 
@@ -58,11 +61,12 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
       setFloatingAnchorElem(_floatingAnchorElem);
     }
   };
+  const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
 
   return (
     <div className="editor-shell">
       <LexicalComposer initialConfig={editorConfig}>
-        <div className="shadow-primary rounded-[10px] overflow-hidden">
+        <div className="shadow-primary rounded-[12px] overflow-hidden dark:shadow-darkPrimary dark:text-white dark:border-darkHover">
           <div>
             <ToolbarPlugin></ToolbarPlugin>
           </div>
@@ -83,7 +87,7 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
               ErrorBoundary={LexicalErrorBoundary}
             />
             {isNeedSave ? <DomToLexicalPlugin html={htmlString} /> : null}
-            {/* <TreeViewPlugin/> */}
+            {/* {isDarkMode ?  <TreeViewPlugin/> : null} */}
             {floatingAnchorElem && (
               <FloatingTextFormatToolbarPlugin
               anchorElem={floatingAnchorElem}/>
@@ -103,7 +107,7 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor }: T
           </div>
         </div>
         {isNeedSave ? (
-          <EditorSaveButtonPlugin setHtmlString={setHtmlString} useFor={useEditorFor}/>
+          <EditorSaveButtonPlugin setHtmlString={setHtmlString} useFor={useEditorFor} userId={userId}/>
         ) : (
           <HTMLSerializerPlugin setHtmlString={setHtmlString} />
         )}

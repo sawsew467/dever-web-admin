@@ -115,10 +115,10 @@ function BrowseImage({
   return (
     <div className="flex flex-col gap-[8px]">
       <div>
-        <h4 className="select-none font-[500]">{formTitle}:</h4>
+        <h4 className="select-none font-[500] dark:text-white">{formTitle}:</h4>
       </div>
       <div
-        className="h-fit w-full border-2 border-dashed rounded-[8px] gap-[16px]"
+        className="h-fit w-full border-2 border-dashed dark:border-darkHover rounded-[8px] gap-[16px]"
         onDrop={(event: React.DragEvent<HTMLDivElement>) =>
           handleDrogFile(event)
         }
@@ -136,7 +136,7 @@ function BrowseImage({
                 {
                   isUploading ? <>
                     <div className="relative">
-                      <Skeleton variant="rounded" height={200}></Skeleton>
+                      <Skeleton variant="rounded" height={200} className="dark:bg-[#3b3b3b]"></Skeleton>
                       <p className="absolute top-[50%] left-[50%] translate-x-[-50%]
                       translate-y-[-50%] font-[700]"> Uploading image...</p>
                     </div>
@@ -224,7 +224,7 @@ function BrowseImage({
                     iconPosition={"left"}
                     backgroundColor={"bg-blue-700"}
                     method={() => handleBrowseFile()}
-                    tailwind={"text-white"}
+                    tailwind={"text-white dark:shadow-darkPrimaryBlue"}
                   ></UnlinkButton>
                 </label>
               </div>

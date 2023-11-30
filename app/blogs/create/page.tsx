@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BrowseFile from "@/components/BrowseImage";
 import EditorLarge from "@/components/EditorLarge";
 import BlogTag from "@/components/BlogTag";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { dropdownBlogs, openCreateBlog } from "@/redux/slices/sideBarControl";
 
 function CreateBlog() {
   const isOpenSlidebar = useSelector((state: RootState) => state.app.isOpenSlidebar);
@@ -12,6 +13,12 @@ function CreateBlog() {
   const [importedImage, setImportedImage] = useState<File | null>(null);
   const [imageURL, setImageURL] = useState<string>('');
   const [htmlString, setHtmlStringg] = useState<string>("");
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownBlogs(true));
+    dispatch(openCreateBlog(true));
+  }, [dispatch]);
 
   return (
     <div
@@ -25,18 +32,18 @@ function CreateBlog() {
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
         <div>
-          <h1 className="font-[700] text-[24px] select-none">
+          <h1 className="font-[700] text-[24px] select-none dark:text-white">
             Create blog
           </h1>
         </div>
 
         <div className="flex flex-col gap-[20px]">
           <div className="flex flex-col gap-[8px]">
-            <h4 className="select-none font-[500]">Your title:</h4>
+            <h4 className="select-none font-[500] dark:text-white">Your title:</h4>
             <input
               type="text"
               placeholder="Write title here"
-              className="border-2 border-gray-300 rounded-[12px] w-full"
+              className="border-2 border-gray-300 dark:border-darkHover dark:bg-dark rounded-[12px] w-full"
             />
           </div>
           <div>
@@ -57,7 +64,7 @@ function CreateBlog() {
               formTitle="Your content"
               htmlString={htmlString}
               setHtmlString={setHtmlStringg}
-              pageName="create_notification"
+              pageName="Blog"
             ></EditorLarge>
           </div>
         </div>

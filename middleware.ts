@@ -1,22 +1,35 @@
-import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { NextRequest } from 'next/dist/server/web/spec-extension/request'
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { NextRequest } from "next/dist/server/web/spec-extension/request";
 import { NextResponse } from "next/dist/server/web/spec-extension/response";
 
-function shouldRedirectToSignIn(verify: RequestCookie | undefined, url: string | string[]) {
-    return !verify && (url.includes('/blogs') || url.includes('/members') || url.includes('/notifications') || url === "http://localhost:3000/");
+function shouldRedirectToSignIn(
+  verify: RequestCookie | undefined,
+  url: string
+) {
+  const host = new URL(url);
+  return (
+    !verify &&
+    (url.includes("/blogs") ||
+      url.includes("/members") ||
+      url.includes("/notifications") ||
+      url === `${host.origin}/`)
+  );
 }
 
-export default function middleware(req: NextRequest): NextResponse<unknown> | undefined {
-    let verify = req.cookies.get("refreshToken");
-    let url = req.url;
-       
-    if (shouldRedirectToSignIn(verify, url)) {
-        return NextResponse.redirect("http://localhost:3000/auth/sign-in");
-    }
+export default async function middleware(
+  req: NextRequest
+): Promise<NextResponse<unknown> | undefined> {
+  let verify = req.cookies.get("refreshToken");
+  let darkMode = req.cookies.get("darkMode?");
+  let url = req.url;
+  const host = new URL(url);
 
-    if (verify && url.includes('/auth')) {
-        return NextResponse.redirect("http://localhost:3000/");
-    }
+  if (shouldRedirectToSignIn(verify, url)) {
+    return NextResponse.redirect(`${host.origin}/auth/sign-in`);
+  }
 
-    return NextResponse.next();
+  if (verify && url.includes("/auth")) {
+    return NextResponse.redirect(`${host.origin}/`);
+  }
+  return NextResponse.next();
 }

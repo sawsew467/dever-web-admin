@@ -1,44 +1,46 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 import searchIcon from "@icon/page/member/list/search-outline.svg";
-import checkIcon from "@icon/page/member/list/check-circle.svg";
-import trashIcon from "@icon/page/member/list/trash.svg";
 
-import MemberItem from "@/components/MemberItem/";
-import Button from "@/components/Button";
-import Pagination from "@/components/Pagination";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import axios from "axios";
-import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
 import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  LinearProgress,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { Button as MUIButton } from "@mui/material/";
-import { toast } from "react-toastify";
-import { getCookie } from "cookies-next";
-import { store } from "@/redux/store";
-import { approveUser} from "@/apis/appUser";
+  approveUser,
+  deleteUserOutOfDB,
+  getAllRemovedUser,
+  restoreUser,
+} from "@/apis/appUser";
+import { deleteMemberInfo, getAllMemberInfo } from "@/apis/profile";
+import Button from "@/components/Button";
+import ApproveDialog from "@/components/Dialogs/MemberListDialog/ApproveDialog";
+import DeleteAllRemovedUserDialog from "@/components/Dialogs/MemberListDialog/DeleteAllRemovedUserDialog";
+import DeleteOutAUserDialog from "@/components/Dialogs/MemberListDialog/DeleteOutAUserDialog";
+import MemberRecycleBinDialog from "@/components/Dialogs/MemberListDialog/MemberRecycleBinDialog";
+import RemoveDialog from "@/components/Dialogs/MemberListDialog/RemoveDialog";
+import MemberItem from "@/components/MemberItem/";
+import Pagination from "@/components/Pagination";
+import { dropdownMembers, openMemberList } from "@/redux/slices/sideBarControl";
+import { RootState, store } from "@/redux/store";
 import { memberPros, memberType } from "@/ultils/types";
+import { LinearProgress } from "@mui/material";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { AiFillCheckCircle } from "react-icons/ai";
+import { FaTrash } from "react-icons/fa6";
+import { MdRecycling } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 type pageProps = {
   params: { listID: string };
 };
 
-
 function MemberList({ params }: pageProps) {
   const userRole = useSelector(
-    (state: RootState) => state.userInfor.currentUser.UserRole
+    (state: RootState) => state.userInfor.currentUser.role
   );
+  const router = useRouter();
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
@@ -51,14 +53,21 @@ function MemberList({ params }: pageProps) {
   const [allMemberData, setAllMemberData] = useState([]);
   const [members, setMembers] = useState<memberPros[]>([]);
   const [countListPage, setCountListPage] = useState(0);
-  const pages: { param: string; startIndex: number; endIndex: number }[] = [];
   const [isFetchData, setIsFetchData] = useState(true);
-  console.log(members);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [openDialogToDelete, setOpenDialogToDelete] = useState<boolean>(false);
   const [openDialogToApprove, setOpenDialogToApprove] =
     useState<boolean>(false);
+  const [removedUsers, setRemovedUsers] = useState<memberPros[]>([]);
+
+  const [openDialogToRecycle, setOpenDialogToRecycle] =
+    useState<boolean>(false);
+  const [openDialogToDeleteOneUser, setOpenDialogToDeleteOneUser] =
+    useState<boolean>(false);
+  const [
+    openDialogToDeleteAllRemovedUser,
+    setOpenDialogToDeleteAllRemovedUser,
+  ] = useState<boolean>(false);
+  const [deleteUser, setDeleteUser] = useState<memberType>();
 
   const handleClickOpenDeleteDialog = () => {
     setOpenDialogToDelete(true);
@@ -74,23 +83,23 @@ function MemberList({ params }: pageProps) {
   const handleCloseApproveDialog = () => {
     setOpenDialogToApprove(false);
   };
-
   const handleGetAllMember = async () => {
     try {
       const access_token = getCookie("accessToken");
+      const adminId = getCookie("userId");
       if (access_token) {
         const response = await getAllMemberInfo(access_token);
-        const data = response.data;
-        const currentUserRole = store.getState().userInfor.currentUser.UserRole;        
-        
-        const filteredData = data
+        const data = response.data.body;
+        const currentUserRole = store.getState().userInfor.currentUser.role;
+
+        let filteredData = data
           .map((value: memberType) => {
             if (currentUserRole === "admin") {
               return {
                 ...value,
                 isSelected: false,
               };
-            } else if (value.status.value === "Approved") {
+            } else if (value.status === "Approved") {
               return {
                 ...value,
                 isSelected: false,
@@ -99,6 +108,12 @@ function MemberList({ params }: pageProps) {
             return null;
           })
           .filter((value: memberPros) => value !== null);
+
+        if (currentUserRole == "admin") {
+          filteredData = filteredData.filter(
+            (value: memberPros) => value.id !== adminId
+          );
+        }
 
         setCountListPage(Math.ceil(filteredData.length / increaseIndex));
         setIsFetchData(false);
@@ -110,8 +125,77 @@ function MemberList({ params }: pageProps) {
       }
     }
   };
+  const getAllRemovedMember = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token) {
+        const response = await getAllRemovedUser(access_token);
+        const data = response.data.body;
+        setRemovedUsers(data);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+      }
+    }
+  };
+  const handleRestoreUser = async (
+    userInfo: memberPros,
+    isNeedToast: boolean
+  ) => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token && userInfo) {
+        await restoreUser(access_token, userInfo.id);
+        if (isNeedToast) {
+          toast.success(
+            "Restored user with email: " + userInfo.email + "successfully!"
+          );
+        }
+        handleGetAllMember();
+        getAllRemovedMember();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        toast.error("Something went wrong when restore user " + userInfo.email);
+      }
+    }
+  };
+  const handleDeleteUserOutOfBD = async (
+    userInfo: memberType,
+    isNeedToast: boolean
+  ) => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token && userInfo) {
+        await deleteUserOutOfDB(access_token, userInfo.id);
+        if (isNeedToast) {
+          toast.success(
+            "Deleted user with email: " + userInfo.email + " successfully!"
+          );
+        }
+        getAllRemovedMember();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        toast.error("Something went wrong when delete user " + userInfo.email);
+      }
+    }
+  };
+  const handleRestoreAllUser = async () => {
+    removedUsers.forEach((item) => handleRestoreUser(item, false));
+    toast.success("Restored successfully!");
+  };
+  const handleDeleteAllRemovedUser = async () => {
+    removedUsers.forEach((item) => handleDeleteUserOutOfBD(item, false));
+    toast.success("Deleted successfully!");
+  };
+
   useEffect(() => {
     handleGetAllMember();
+    getAllRemovedMember();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -150,30 +234,42 @@ function MemberList({ params }: pageProps) {
     }
   };
 
-  const handleDeleteUser = async (userId: string, userEmail: string) => {
+  const handleRemoveUser = async (
+    userId: string,
+    userEmail: string,
+    isNeedToast: boolean
+  ) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await deleteMemberInfo(userId, access_token);
-        toast.success(`Deleted user ${userEmail} successfully!`);
+        await deleteMemberInfo(userId, access_token);
+        if (isNeedToast) {
+          toast.success(`Remove user ${userEmail} successfully!`);
+        }
       }
       setOpenDialogToDelete(false);
       handleGetAllMember();
+      getAllRemovedMember();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setOpenDialogToDelete(false);
-        toast.error("Deleting failed!");
+        toast.error("Something went wrong when remove user " + userEmail);
       }
     }
   };
-  const handleApproveUser = async (userId:string, userEmail:string) => {
+  const handleApproveUser = async (
+    userId: string,
+    userEmail: string,
+    isNeedToast: boolean
+  ) => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await approveUser(userId, access_token);
-        console.log(response);
-        toast.success(`Rejected user with email: ${userEmail}`);
+        await approveUser(userId, access_token);
+        if (isNeedToast) {
+          toast.success(`Approved user with email: ${userEmail}`);
+        }
       }
       handleGetAllMember();
       setOpenDialogToApprove(false);
@@ -181,24 +277,38 @@ function MemberList({ params }: pageProps) {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setOpenDialogToApprove(false);
-        toast.error("Rejecting failed!");
+        if (error.response?.data.responseStatusCode === 4) {
+          toast.error("Something went wrong when approve user: " + userEmail);
+        }
       }
     }
   };
 
-
   const handleDelectSelectedMembers = () => {
-    selectedMembers.forEach((value) => handleDeleteUser(value.id, value.email));
+    selectedMembers.forEach((value) =>
+      handleRemoveUser(value.id, value.email, false)
+    );
+    toast.success(`Remove successfully!`);
+    setOpenDialogToRecycle(false);
   };
+
   const handleApproveSelectedMembers = () => {
     selectedMembers.forEach((item) => {
-      if(item.status.value !== "Approved") {
-        handleApproveUser(item.id, item.email);
+      if (item.status !== "Approved") {
+        handleApproveUser(item.id, item.email, false);
       } else {
         handleCloseApproveDialog();
       }
-    })
-  }    
+    });
+    toast.success(`Approved successfully!`);
+  };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(dropdownMembers(true));
+    dispatch(openMemberList(true));
+  }, [dispatch]);
+
   return (
     <div
       className={`w-[100%] ${
@@ -211,14 +321,14 @@ function MemberList({ params }: pageProps) {
     >
       <div className="w-[100%] flex flex-col gap-[20px] select-none">
         <div>
-          <h1 className="font-bold text-[24px] select-none pt-[20px] px-[16px]">
+          <h1 className="font-bold text-[24px] select-none pt-[20px] px-[16px] dark:text-white">
             All Members
           </h1>
         </div>
         <div className="flex justify-between px-[16px]">
           <div className="flex gap-[16px]">
             <div className="flex w-fit h-[38px] rounded-[10px] overflow-hidden">
-              <select className="w-fit leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 bg-gray-100 select-none ">
+              <select className="w-fit leading-4 px-[20px] rounded-tl-[10px] rounded-bl-[10px] border-2 outline-none border-slate-200 dark:border-darkHover bg-gray-100 dark:bg-dark dark:text-white select-none ">
                 <option value="All" className="">
                   All
                 </option>
@@ -234,7 +344,7 @@ function MemberList({ params }: pageProps) {
               </select>
               <input
                 type="search"
-                className="w-[392px] border-y-2 border-r-2 border-l-none border-slate-200 select-none outline-none"
+                className="w-[392px] border-y-2 border-r-2 border-l-none border-slate-200 dark:text-white dark:border-darkHover dark:bg-dark select-none outline-none"
               />
               <div className="w-[42px] h-[38px] bg-primaryBlue flex items-center justify-center cursor-pointer">
                 <Image
@@ -245,100 +355,45 @@ function MemberList({ params }: pageProps) {
               </div>
             </div>
             {userRole === "admin" ? (
-              <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200">
-                <Image
-                  src={checkIcon}
-                  alt="checkIcon"
-                  className="w-[24px] h-[38px] cursor-pointer"
+              <div className="flex gap-[16px] px-[16px] border-l-[2px] border-slate-200 items-center">
+                <button type="button" title="Approve users">
+                  <AiFillCheckCircle
+                    className="text-[24px] dark:text-gray-300"
+                    onClick={() => {
+                      handleGetAllSelectedMembers("approve");
+                    }}
+                  />
+                </button>
+                <button type="button" title="Remove users">
+                  <FaTrash
+                    className="text-[20px] dark:text-gray-300"
+                    onClick={() => {
+                      handleGetAllSelectedMembers("delete");
+                    }}
+                  />
+                </button>
+                <button
+                  type="button"
+                  title="Users recovery"
+                  className="relative"
                   onClick={() => {
-                    handleGetAllSelectedMembers("approve");
+                    if (removedUsers.length > 0) {
+                      setOpenDialogToRecycle(true);
+                    }
                   }}
-                />
-                <Image
-                  src={trashIcon}
-                  alt="trashIcon"
-                  className="w-[24px] h-[38px] cursor-pointer"
-                  onClick={() => {
-                    handleGetAllSelectedMembers("delete");
-                  }}
-                />
+                >
+                  <MdRecycling className="text-[24px] dark:text-gray-300" />
+                  {removedUsers.length == 0 ? null : (
+                    <div className="absolute w-[16px] h-[16px] bg-red-500 top-[-4px] right-[-6px] rounded-[50%]">
+                      <p className="text-[10px] text-white text-center">
+                        {removedUsers.length}
+                      </p>
+                    </div>
+                  )}
+                </button>
               </div>
             ) : null}
           </div>
-
-          {/* Approve Dialog */}
-          <Dialog
-            fullScreen={fullScreen}
-            open={openDialogToApprove}
-            onClose={handleClickOpenDeleteDialog}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <DialogTitle id="responsive-dialog-title">
-              <p className="text-yellow-400 font-[600] ">
-                Warning about approve users
-              </p>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                <p>Make sure you want to approve these users:</p>
-                {selectedMembers.map((item, index) => (
-                  <p key={index} className={`${item.status.value === "Pending" ? "text-yellow-400" : item.status.value === "Rejected" ? "text-red-700" : "text-green-500" }`}>
-                    {item.email} 
-                    <span className={`ml-[10px] font-[500] ${item.status.value == "Approved" ? "text-green-700" : null}`}>{ item.status.value == "Approved" ? "Approved" : null }</span>
-                  </p>
-                ))}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <MUIButton autoFocus onClick={handleCloseApproveDialog}>
-                <p className="hover:text-green-600">Cancel</p>
-              </MUIButton>
-              <MUIButton
-                onClick={() => {
-                  handleApproveSelectedMembers();
-                }}
-                autoFocus
-              >
-                <p className="hover:text-red-600">Approve All</p>
-              </MUIButton>
-            </DialogActions>
-          </Dialog>
-          {/* Delete Diglog */}
-          <Dialog
-            fullScreen={fullScreen}
-            open={openDialogToDelete}
-            onClose={handleClickOpenDeleteDialog}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <DialogTitle id="responsive-dialog-title">
-              <p className="text-red-600 font-[600] ">
-                Warning about deleting users
-              </p>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                <p>Make sure you want to delete these users:</p>
-                {selectedMembers.map((value, index) => (
-                  <p key={index} className="text-green-600">
-                    {value.email}
-                  </p>
-                ))}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <MUIButton autoFocus onClick={handleCloseDeleteDialog}>
-                <p className="hover:text-green-600">Cancel</p>
-              </MUIButton>
-              <MUIButton
-                onClick={() => {
-                  handleDelectSelectedMembers();
-                }}
-                autoFocus
-              >
-                <p className="hover:text-red-600">Delete</p>
-              </MUIButton>
-            </DialogActions>
-          </Dialog>
 
           {userRole === "admin" ? (
             <div className="flex gap-[12px]">
@@ -349,7 +404,7 @@ function MemberList({ params }: pageProps) {
                 backgroundColor={"bg-green-700"}
                 href={""}
                 method={() => {}}
-                tailwind={"text-white"}
+                tailwind={"text-white dark:shadow-darkPrimaryGreen"}
               ></Button>
               <Button
                 textContent={"Import"}
@@ -358,7 +413,9 @@ function MemberList({ params }: pageProps) {
                 backgroundColor={"bg-white"}
                 href={""}
                 method={() => {}}
-                tailwind={"text-black border-2"}
+                tailwind={
+                  "text-black border-2 border-slate-200 dark:border-0 dark:shadow-darkPrimary"
+                }
               ></Button>
             </div>
           ) : null}
@@ -367,7 +424,7 @@ function MemberList({ params }: pageProps) {
         <div>
           <div
             id="tableHeader"
-            className="flex border-b-2 bg-slate-50 h-[50px]"
+            className="flex border-b-2 bg-slate-50 dark:bg-dark h-[50px] dark:text-white dark:border-darkHover"
           >
             {/* checkbox */}
             <div className="w-[48px] flex items-center justify-center">
@@ -377,7 +434,7 @@ function MemberList({ params }: pageProps) {
                 value="Name"
                 checked={selectAll}
                 onChange={(e) => handleSelectAllChange(e)}
-                className="outline-none border-1 border-slate-200 rounded-[4px] focus:ring-offset-[shadow] cursor-pointer"
+                className="outline-none border-1 border-slate-200 dark:border-darkHover rounded-[4px] focus:ring-offset-[shadow] cursor-pointer"
               />
             </div>
             {/*Name*/}
@@ -405,8 +462,7 @@ function MemberList({ params }: pageProps) {
                 <LinearProgress />
               </div>
             </>
-          ) : members.length === 0 ? null : 
-          (
+          ) : members.length === 0 ? null : (
             <div id="tableBody">
               {members.map((value, index) => (
                 <MemberItem
@@ -414,6 +470,7 @@ function MemberList({ params }: pageProps) {
                   value={value}
                   selecteFunct={toggleMemberSelection}
                   refreshApi={handleGetAllMember}
+                  getAllRemovedMember={getAllRemovedMember}
                 ></MemberItem>
               ))}
             </div>
@@ -431,6 +488,62 @@ function MemberList({ params }: pageProps) {
           ></Pagination>
         )}
       </div>
+
+      {/* Approve Dialog */}
+      {userRole == "admin" ? (
+        <ApproveDialog
+          openDialogToApprove={openDialogToApprove}
+          setOpenDialogToApprove={setOpenDialogToApprove}
+          selectedMembers={selectedMembers}
+          handleApproveSelectedMembers={handleApproveSelectedMembers}
+          handleCloseApproveDialog={handleCloseApproveDialog}
+        ></ApproveDialog>
+      ) : null}
+      {/* Delete Diglog */}
+      {userRole == "admin" ? (
+        <RemoveDialog
+          openDialogToDelete={openDialogToDelete}
+          setOpenDialogToDelete={setOpenDialogToDelete}
+          selectedMembers={selectedMembers}
+          handleCloseDeleteDialog={handleCloseDeleteDialog}
+          handleDelectSelectedMembers={handleDelectSelectedMembers}
+        ></RemoveDialog>
+      ) : null}
+      {/* Users RecycleBin */}
+      {userRole == "admin" ? (
+        <MemberRecycleBinDialog
+          setOpenDialogToRecycle={setOpenDialogToRecycle}
+          openDialogToRecycle={openDialogToRecycle}
+          removedUsers={removedUsers}
+          handleRestoreUser={handleRestoreUser}
+          setOpenDialogToDeleteOneUser={setOpenDialogToDeleteOneUser}
+          setDeleteUser={setDeleteUser}
+          handleRestoreAllUser={handleRestoreAllUser}
+          setOpenDialogToDeleteAllRemovedUser={
+            setOpenDialogToDeleteAllRemovedUser
+          }
+        ></MemberRecycleBinDialog>
+      ) : null}
+      {/* {Dialog ask admin make sure to delete user} */}
+      {userRole == "admin" ? (
+        <DeleteOutAUserDialog
+          openDialogToDeleteOneUser={openDialogToDeleteOneUser}
+          setOpenDialogToDeleteOneUser={setOpenDialogToDeleteOneUser}
+          deleteUser={deleteUser!}
+          handleDeleteUserOutOfBD={handleDeleteUserOutOfBD}
+        ></DeleteOutAUserDialog>
+      ) : null}
+      {/* Dialog to ask admin make sure to delete all removed user! */}
+      {userRole == "admin" ? (
+        <DeleteAllRemovedUserDialog
+          openDialogToDeleteAllRemovedUser={openDialogToDeleteAllRemovedUser}
+          setOpenDialogToDeleteAllRemovedUser={
+            setOpenDialogToDeleteAllRemovedUser
+          }
+          removedUsers={removedUsers}
+          handleDeleteAllRemovedUser={handleDeleteAllRemovedUser}
+        ></DeleteAllRemovedUserDialog>
+      ) : null}
     </div>
   );
 }

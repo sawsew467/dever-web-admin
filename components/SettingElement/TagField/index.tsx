@@ -7,6 +7,8 @@ import { getCookie } from "cookies-next";
 import { postMemberHobby, postMemberSkill } from "@/apis/setting";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 interface TagFieldProps {
   suggestions: string[];
@@ -14,6 +16,7 @@ interface TagFieldProps {
   state: string[];
   isEdit: boolean;
   useTagFor: "skills" | "hobbies";
+  userId: string;
 }
 
 const baseTagifySettings = {
@@ -34,8 +37,10 @@ function TagField({
   state,
   isEdit,
   useTagFor,
+  userId
 }: TagFieldProps) {
   const [data, setData] = useState<string[]>(state);
+  const dispatch = useDispatch();
   
   const handleChange = (e: CustomEvent) => {
     setData(e.detail.tagify.value.map((item: { value: string }) => item.value));
@@ -62,13 +67,19 @@ function TagField({
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const value = data;
-        const response = await postMemberSkill(access_token, value);
+        const value = {
+          userId: userId!,
+          skills: data
+        };
+        dispatch(setIsBackdrop(true));
+        await postMemberSkill(access_token, value);
+        dispatch(setIsBackdrop(false));
         toast.success(`Post skills successfully!`)
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.error(`Post skills failed!`)
       }
     }
@@ -76,14 +87,20 @@ function TagField({
   const handlePostMemberHobbies = async () => {
     try {
       const access_token = getCookie("accessToken");
-      if (access_token) {
-        const value = data;
-        const response = await postMemberHobby(access_token, value);
+
+      if (access_token && userId) {
+        const value = {
+          userId: userId,
+          hobbies: data
+        }
+        dispatch(setIsBackdrop(true));
+        await postMemberHobby(access_token, value);
+        dispatch(setIsBackdrop(false));
         toast.success(`Post hobbies successfully!`)
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
+        dispatch(setIsBackdrop(false));
         toast.error(`Post hobbies failed!`)
       }
     }
@@ -101,11 +118,11 @@ function TagField({
   return (
     <div className="flex flex-col gap-[20px]">
       <div
-        className={`form-group border-[1px] border-gray-300  rounded-[6px] p-[6px] 
+        className={`form-group border-[1px] border-gray-300 dark:border-darkHover  rounded-[6px] p-[6px] 
         ${useTagFor === "skills" ? "isSkills" : "isHobbies"}
       ${isEdit ? "" : "pointer-events-none"}`}
       >
-        <Tags value={state} settings={settings} readOnly={false} />
+        <Tags value={state} settings={settings} readOnly={false} className="dark:text-white"/>
       </div>
       {isEdit ? (
         <div>
@@ -117,7 +134,7 @@ function TagField({
             method={() => {
               handleSubmitTags();
             }}
-            tailwind={"text-white"}
+            tailwind={"text-white dark:shadow-darkPrimaryBlue"}
           ></UnlinkButton>
         </div>
       ) : null}

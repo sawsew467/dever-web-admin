@@ -62,7 +62,7 @@ function BlogTag() {
   return (
     <div className="flex flex-col gap-[8px]">
         <div>
-            <h3 className="font-[500]">Add tag</h3>
+            <h3 className="font-[500] dark:text-white ">Add tag</h3>
         </div>
         <div>
         <BlogTagField

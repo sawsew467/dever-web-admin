@@ -22,11 +22,19 @@ module.exports = {
         primaryYellowBland: "#FDF6B2",
         primaryBrown: "#723B13",
         primaryRed: "#9B1C1C",
-        primaryRedBland: "#FDE8E8"
+        primaryRedBland: "#FDE8E8",
+        dark: "#282828",
+        darkHover: "#3f3f3f",
+        darkSemi: "#575757"
       },
       boxShadow: {
         primary: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-        secondary: "4px 4px 8px 0px rgba(0, 0, 0, 0.10)"
+        darkPrimary: "rgba(234, 237, 237, 0.35) 0px 0px 10px",
+        darkPrimaryGreen: "#046c4e 0px 0px 10px",
+        darkPrimaryBlue: "#1a56db 0px 0px 10px",
+        darkPrimaryRed: "#c81e1e 0px 0px 10px",
+        secondary: "4px 4px 8px 0px rgba(0, 0, 0, 0.10)",
+        darkSecondary: "4px 4px 8px 0px rgba(234, 237, 237, 0.35)"
       },
       transitionProperty: {
         'height': 'height'
@@ -36,6 +44,7 @@ module.exports = {
     }
     },
   },
+  darkMode: 'class',
   plugins: [
     require("flowbite/plugin"),
     require('tailwindcss-animated'),
