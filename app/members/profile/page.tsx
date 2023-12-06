@@ -1,12 +1,10 @@
 "use client";
-import React, { ReactNode, useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+
 import Button from "@/components/Button";
 
 import avatar from "@image/page/member/list/Fu-dever.png";
-import briefcaseIcon from "@icon/page/member/profile/briefcase.svg";
-import calendarIcon from "@icon/page/member/profile/calendar-month.svg";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -70,7 +68,7 @@ function Profile() {
     }
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
   };
-  const [userData, setUserData] = useState<userInfo>();
+  const [userData, setUserData] = useState<userInfo | null>( );
 
   const handleGetUserProfile = async () => {
     try {

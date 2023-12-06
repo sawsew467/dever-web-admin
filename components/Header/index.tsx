@@ -42,7 +42,6 @@ function Header(): JSX.Element {
   const router = useRouter();
   const dispatch = useDispatch();
   const userInfo  = useSelector((state: RootState) => state.userInfor.currentUser);
-  console.log(userInfo);
 
   const handleOpenMenu = () => {
     dispatch(toggleIsOpenSlidebar());
