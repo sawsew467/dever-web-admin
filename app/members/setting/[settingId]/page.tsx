@@ -55,8 +55,7 @@ function SettingUser({ params }: pageProps) {
   const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
   const [userProjects, setUserProjects] = useState<TAppUserProject[]>([]);
 
-  const [userData, setUserData] = useState<userInfo>();
-  console.log(userData)
+  const [userData, setUserData] = useState<userInfo | null>(null);
 
   const handleGetUserProfile = async () => {
     try {
@@ -155,9 +154,10 @@ function SettingUser({ params }: pageProps) {
               <AboutUser about={userData?.aboutMe!} 
               userId={userData?.id!}/>
               <GeneralInformation
-                userData={userData!}
-                refreshApi={handleGetUserProfile}
-                userId={userData?.id!}
+                  userData={userData!}
+                  refreshApi={handleGetUserProfile}
+                  userId={userData?.id!} 
+                  setUserData={setUserData}                
               />
               <Projects
                 userId={userData?.id!}

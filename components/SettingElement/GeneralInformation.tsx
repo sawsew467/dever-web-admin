@@ -1,5 +1,5 @@
 "use-client"
-import React, { useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
 import { generalInformationSchema } from "@component/SettingElement/Validation/validation";
@@ -24,6 +24,7 @@ import { patchGeneralInfo } from "@/apis/setting";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import { setIsBackdrop } from "@/redux/slices/app";
+import { setUserName } from "@/redux/slices/userInfor";
 
 type TGeneralFieldValues = {
   firstName: string;
@@ -48,9 +49,10 @@ type TProps = {
   userData: userInfo;
   refreshApi: () => void;
   userId: string
+  setUserData: React.Dispatch<SetStateAction<userInfo | null>>
 };
 
-function GeneralInformation({ userData, refreshApi, userId }: TProps): JSX.Element {
+function GeneralInformation({ userData, refreshApi, userId, setUserData }: TProps): JSX.Element {
   const [postionOptions, setPositionOptions] = useState<TOptionsList[]>([]);
   const [majorOptions, setMajorOptions] = useState<TOptionsList[]>([]);
   const [departmentOptions, setDeparmentOptions] = useState<TOptionsList[]>([]);
@@ -58,7 +60,7 @@ function GeneralInformation({ userData, refreshApi, userId }: TProps): JSX.Eleme
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TGeneralFieldValues> | null>(null);
   const dispatch = useDispatch()
-
+  
   const onSubmit = async (
     values: TGeneralFieldValues,
     actions: FormikHelpers<TGeneralFieldValues>
@@ -81,12 +83,18 @@ function GeneralInformation({ userData, refreshApi, userId }: TProps): JSX.Eleme
           departmentID: values.departmentID,
           joinDate: values.joinDate,
         };
+        const userName = values.lastName.concat(' ', values.firstName);
+        setUserData({
+          ...userData,
+          ...generalData
+        })
         dispatch(setIsBackdrop(true));
         await patchGeneralInfo(access_token, generalData);
+        dispatch(setUserName(userName));
         dispatch(setIsBackdrop(false));
+        refreshApi();
         toast.success(`Update general information successfully!`);
         actions.resetForm();
-        refreshApi();
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -218,6 +226,7 @@ function GeneralInformation({ userData, refreshApi, userId }: TProps): JSX.Eleme
           }}
           validationSchema={generalInformationSchema}
           onSubmit={onSubmit}
+          enableReinitialize = {true}
         >
           {(formikProps) => {
             formikRef.current = formikProps;

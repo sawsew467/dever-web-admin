@@ -66,6 +66,13 @@ function Profile({ params }: pageProps) {
   const [userData, setUserData] = useState<userInfo>();
 
   const renderHtmlString = (htmlString: string) => {
+    if(htmlString.length == 0 || htmlString == "<p class=\"EditorTheme__paragraph\"><br></p>" ) {
+      return <p
+      className="italic select-none cursor-pointer dark:text-white"
+    >
+      Not set yet
+    </p>
+    }
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
   };
 
@@ -424,6 +431,7 @@ function Profile({ params }: pageProps) {
                       (item: TAppUserProject, index: number) => {
                         return (
                           <ProjectCard
+                            data={item}
                             key={index}
                             img={item.thumbnailUrl}
                             title={item.title}

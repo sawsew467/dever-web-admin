@@ -37,7 +37,7 @@ export const contactInformationSchema = yup.object().shape({
 });
 
 export const generalInformationSchema =yup.object().shape({
-  firstName: yup.string().required("Fist name is required"),
+  firstName: yup.string().required("Fisrt name is required"),
   lastName: yup.string().required("Last name is required"),
   birthday: yup.string().required("Birthday is required"),
   homeAddress: yup.string().required("Home address is required"),

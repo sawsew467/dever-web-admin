@@ -21,10 +21,11 @@ import {
 import { Button as MUIButton } from "@mui/material/";
 import UnlinkButton from "../UnlinkButton";
 import { getCookie } from "cookies-next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { PiWarningFill } from "react-icons/pi";
 import { useRouter } from "next/navigation";
+import { setIsBackdrop } from "@/redux/slices/app";
 
 interface memberPros {
   id: string;
@@ -58,6 +59,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const isDarkMode = useSelector((state: RootState) => state.app.isDarkMode);
   const route = useRouter();
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpenDialog(true);
@@ -71,8 +73,9 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await approveUser(value.id, access_token);
-        // console.log(response);
+        dispatch(setIsBackdrop(true));
+        await approveUser(value.id, access_token);
+        dispatch(setIsBackdrop(false));
         toast.success(`Approved user ${value.email} successfully!`);
         refreshApi();
       }
@@ -88,8 +91,9 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await rejectUser(value.id, access_token);
-        // console.log(response);
+        dispatch(setIsBackdrop(true));
+        await rejectUser(value.id, access_token);
+        dispatch(setIsBackdrop(false));
         toast.success(`Rejected user with email: ${value.email}`);
         refreshApi();
       }
@@ -105,7 +109,7 @@ function MemberItem({ value, selecteFunct, refreshApi, getAllRemovedMember }: IP
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
-        const response = await deleteMemberInfo(value.id, access_token);
+        await deleteMemberInfo(value.id, access_token);
         // console.log(response);
         toast.success(`Removed user ${value.email} successfully!`);
         refreshApi();

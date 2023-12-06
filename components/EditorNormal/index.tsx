@@ -86,7 +86,8 @@ function EditorNormal({ htmlString, setHtmlString, isNeedSave, useEditorFor, use
               }
               ErrorBoundary={LexicalErrorBoundary}
             />
-            {isNeedSave ? <DomToLexicalPlugin html={htmlString} /> : null}
+            {/* {isNeedSave ? <DomToLexicalPlugin html={htmlString} /> : null} */}
+            <DomToLexicalPlugin html={htmlString}></DomToLexicalPlugin>
             {/* {isDarkMode ?  <TreeViewPlugin/> : null} */}
             {floatingAnchorElem && (
               <FloatingTextFormatToolbarPlugin

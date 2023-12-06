@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import Image from "next/image";
-import { registerSchema } from "@/app/validation";
+import { registerSchema } from "@/ultils/validation";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import SignupImage from "@image/page/authentication/signup/signupImage.jpg";
 import InputForm from "@/components/InputForm";

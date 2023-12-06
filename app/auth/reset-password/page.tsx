@@ -7,7 +7,7 @@ import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import ResetImg from "@image/page/authentication/reset/resetImage.jpg";
 import { registerAccount } from "@/apis/auth";
-import { registerSchema } from "@/app/validation";
+import { registerSchema } from "@/ultils/validation";
 
 type UserRegister = {
   email : string,

@@ -90,7 +90,6 @@ function RefreshToken() {
           expired: decode!.exp,
         };      
         if (shouldRefreshAccessToken(verifyToken)) {
-          console.log("refreshing ...");
           const refreshed = refreshAccessToken();
           if (!refreshed) {
             router.push("/auth/sign-in");

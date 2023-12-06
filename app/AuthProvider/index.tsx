@@ -21,6 +21,7 @@ function AppProvider({children}:{children:React.ReactNode}) {
             const decoded:EncodeType = jwtDecode(access_token);
             const currentUser = {
                 id: decoded!.sub,
+                name: '',
                 email: '',
                 avatarUrl: '',
                 role: decoded!.role,

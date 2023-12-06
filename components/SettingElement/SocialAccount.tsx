@@ -234,10 +234,11 @@ function SocialAccount({
           userId: userId,
           platformId: platformId,
         };
+        dispatch(setIsBackdrop(true));
         await deleteSocialAccount(access_token, req);
-        
-        toast.success(`Deleting successfully!`);
         refreshApi();
+        dispatch(setIsBackdrop(false));
+        toast.success(`Deleting successfully!`);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -305,12 +306,12 @@ function SocialAccount({
                       textContent={"Delete"}
                       icon={""}
                       iconPosition={"left"}
-                      backgroundColor={"dark:bg-dark dark:hover:bg-blue-500 hover:bg-blue-700"}
+                      backgroundColor={"dark:bg-dark dark:hover:bg-red-500 hover:bg-red-700"}
                       method={() => {
                         handleDeleteAccount(item.id);
                       }}
                       tailwind={
-                        "text-blue-700 dark:text-blue-500 dark:font-bold border-[1px] font-[500] dark:hover:text-white border-blue-500 hover:text-white transition dark:shadow-darkPrimaryBlue"
+                        "text-red-700 dark:text-red-500 dark:font-bold border-[1px] font-[500] dark:hover:text-white border-red-500 hover:text-white transition dark:shadow-darkPrimaryRed"
                       }
                     ></UnlinkButton>
                   </div>

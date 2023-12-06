@@ -42,6 +42,7 @@ function ContactInfomation({ phone, email, userId }: TProps): JSX.Element {
         console.log(contactInfo);
         dispatch(setIsBackdrop(true));
         await updateContactInfo(access_token, contactInfo);
+        setIsEdit(false);
         dispatch(setIsBackdrop(false));
         toast.success("Update contact information successfully!");
       }

@@ -18,7 +18,6 @@ function AboutUser({ about, userId }: TPros): JSX.Element {
         About you
       </h3>
       {
-        // htmlString.length == 0 ? <p className="italic">Haven&apos;t set bio yet!</p> :
         htmlString.length == 0 || htmlString == "<p class=\"EditorTheme__paragraph\"><br></p>" ? (
           <p
             className="italic select-none cursor-pointer dark:text-white"

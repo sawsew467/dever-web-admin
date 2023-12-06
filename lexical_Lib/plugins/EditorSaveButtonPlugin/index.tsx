@@ -26,12 +26,11 @@ function EditorSaveButtonPlugin({ setHtmlString, useFor, userId }: TPros) {
         userId: userId!,
         aboutMe: bio
       }
-      console.log(aboutMe);
       if (access_token) {
         dispatch(setIsBackdrop(true));
         await updateAbout(access_token, aboutMe);
-        toast.success("Change bio successfully!");
         dispatch(setIsBackdrop(false));
+        toast.success("Change bio successfully!");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

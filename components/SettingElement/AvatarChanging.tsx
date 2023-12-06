@@ -10,6 +10,7 @@ import { updateAvatar } from "@/apis/setting";
 import { Skeleton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setIsBackdrop } from "@/redux/slices/app";
+import { setUserAvatar } from "@/redux/slices/userInfor";
 
 type TProps = {
   avatarUrl:string;
@@ -59,12 +60,13 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
     }
     try {
       const access_token = getCookie('accessToken');
-      dispatch(setIsBackdrop(true));
       if(access_token) {
+        dispatch(setIsBackdrop(true));
         await updateAvatar(access_token, avatar);
+        refreshApi();
+        dispatch(setUserAvatar(avatarUrl));
         dispatch(setIsBackdrop(false));
         toast.success("Update profile image successfully!");
-        refreshApi();
       }
     } catch (error) {
       if(axios.isAxiosError(error)) {
