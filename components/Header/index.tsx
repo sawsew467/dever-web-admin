@@ -14,7 +14,7 @@ import {
   toggleIsDarkMode,
   toggleIsOpenSlidebar,
 } from "@/redux/slices/app";
-import { logout } from "@/redux/slices/userInfor";
+import { logout, setUserAvatar, setUserName } from "@/redux/slices/userInfor";
 import { userInfo } from "@/ultils/types";
 import { getCookie } from "cookies-next";
 import { getMemberInfo } from "@/apis/profile";
@@ -37,9 +37,12 @@ function Header(): JSX.Element {
   );
   const [userData, setUserData] = useState<userInfo>();
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
-
+  const userAvatarUrl = useSelector((state: RootState) => state.userInfor.currentUser.avatarUrl);
+  const userName = useSelector((state: RootState) => state.userInfor.currentUser.name);
   const router = useRouter();
   const dispatch = useDispatch();
+  const userInfo  = useSelector((state: RootState) => state.userInfor.currentUser);
+  console.log(userInfo);
 
   const handleOpenMenu = () => {
     dispatch(toggleIsOpenSlidebar());
@@ -62,6 +65,8 @@ function Header(): JSX.Element {
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
           const data = response.data.body;
+          dispatch(setUserAvatar(data.avatarUrl));
+          dispatch(setUserName(data.lastName.concat(' ', data.firstName).trim()));
           setUserData(data);
           setIsFetchData(false);
         }
@@ -124,7 +129,7 @@ function Header(): JSX.Element {
         </div>
         <div className="flex items-center gap-[10px] font-bold select-none dark:text-white">
           <div>
-            <h3>{userData?.lastName.concat(" ", userData.firstName)}</h3>
+            <h3>{userName}</h3>
           </div>
           <div
             className="flex items-center justify-center transition duration-300 cursor-pointer w-[60px] h-[60px] rounded-[50%] hover:bg-slate-100 dark:hover:bg-darkHover object-fill relative"
@@ -134,7 +139,7 @@ function Header(): JSX.Element {
               <Skeleton variant="circular" width={40} height={40} />
             ) : (
               <Image
-                src={userData?.avatarUrl == "" ? avatar : userData?.avatarUrl}
+                src={userData?.avatarUrl == "" ? avatar : userAvatarUrl}
                 alt="Picture of the author"
                 className="object-cover rounded-[50%] w-[48px] h-[48px]"
                 width={1200}
@@ -154,14 +159,14 @@ function Header(): JSX.Element {
                 >
                   <div>
                     <h2 className="font-bold">
-                      {userData?.lastName.concat(" ", userData.firstName)}
+                      {userName}
                     </h2>
                     <h3 className="font-[400]">{userData?.email}</h3>
                   </div>
                   <div className="w-[48px]">
                     <Image
                       src={
-                        userData?.avatarUrl == "" ? avatar : userData?.avatarUrl
+                        userData?.avatarUrl == "" ? avatar : userAvatarUrl
                       }
                       alt="Picture of the author"
                       className="object-cover rounded-[50%] w-[48px] h-[48px]"

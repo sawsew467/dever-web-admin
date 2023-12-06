@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import Image from "next/image";
 import Logo from "@image/page/authentication/signin/logo.svg";
 import InputForm from "@/components/InputForm";
-import { resetSchema } from "@/app/validation";
+import { resetSchema } from "@/ultils/validation";
 import {toast} from "react-toastify";
 
 function ForgotPassword() {

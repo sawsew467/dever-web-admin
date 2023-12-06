@@ -81,7 +81,7 @@ function MemberRecycleBinDialog({
           <CloseIcon />
         </IconButton>
         <DialogContent
-          dividers
+          dividers  
           className="dark:border-darkHover dark:border-y-2 flex flex-col gap-[10px] scrollbar-hide"
         >
           {removedUsers.map((item, index) => {

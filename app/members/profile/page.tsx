@@ -61,6 +61,13 @@ function Profile() {
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
 
   const renderHtmlString = (htmlString: string) => {
+    if(htmlString.length == 0 || htmlString == "<p class=\"EditorTheme__paragraph\"><br></p>" ) {
+      return <p
+      className="italic select-none cursor-pointer dark:text-white"
+    >
+      Not set yet
+    </p>
+    }
     return <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>;
   };
   const [userData, setUserData] = useState<userInfo>();
@@ -432,6 +439,7 @@ function Profile() {
                       (item: TAppUserProject, index: number) => {
                         return (
                           <ProjectCard
+                            data={item}
                             key={index}
                             img={item.thumbnailUrl}
                             title={item.title}

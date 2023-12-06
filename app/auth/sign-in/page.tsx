@@ -6,7 +6,7 @@ import { login } from "../../../redux/slices/userInfor";
 import { loginAccount } from "../../../apis/auth";
 import Image from "next/image";
 import { Form, Formik } from "formik";
-import { loginSchema } from "@/app/validation";
+import { loginSchema } from "@/ultils/validation";
 import InputForm from "@/components/InputForm";
 import Link from "next/link";
 import Logo from "@image/page/authentication/signin/logo.svg";
@@ -55,6 +55,7 @@ function SignIn() {
 
       const userInfo = {
         id: decoded!.sub,
+        name: '',
         email: data.body.userCredentials.email,
         avatarUrl: data.body.userCredentials.avatarUrl,
         role: decoded!.role,
