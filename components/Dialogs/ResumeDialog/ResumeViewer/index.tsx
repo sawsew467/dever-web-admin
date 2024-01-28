@@ -28,7 +28,7 @@ import "@react-pdf-viewer/zoom/lib/styles/index.css";
 import SearchSidebar from "@/components/ReactPdfViewer/plugins/SearchSidebarPlugin/SearchSidebar";
 import { SpecialZoomLevel } from "@react-pdf-viewer/core";
 import { SelectionMode } from '@react-pdf-viewer/selection-mode';
-import { PiDownloadSimpleBold } from "react-icons/pi";
+import { PiDownloadSimpleLight } from "react-icons/pi";
 
 
 type TProps = {
@@ -213,10 +213,27 @@ function ResumeViewer({
                   <div className="px-[2px]">
                     <EnterFullScreen />
                   </div>
-                  <div className="px-[2px]">
+                  <div className="px-[6px] hover:bg-[#d6d6d6] p-[6px] rounded hover:dark:bg-[#191919] relative"
+                    onMouseEnter={() => {
+                      const downloadTitle = document.getElementById('download-title');
+                      const downlaodTitleSquare = document.getElementById('download-title-square');
+                      if(downloadTitle) downloadTitle.style.display = 'block'
+                      if(downlaodTitleSquare) downlaodTitleSquare.style.display = 'block'
+                    }}
+                    onMouseLeave={() => {
+                      const downloadTitle = document.getElementById('download-title');
+                      const downlaodTitleSquare = document.getElementById('download-title-square');
+                      if(downloadTitle) downloadTitle.style.display = 'none'
+                      if(downlaodTitleSquare) downlaodTitleSquare.style.display = 'none'
+                    }}
+                  >
                     <a key={value?.id} href={value?.data!} download={`${value?.fullName} ${value?.studentId}-${new Date().toDateString()}.pdf`}>
-                      <PiDownloadSimpleBold className='text-[#9f9f9f] text-[20px]'/>
+                      <PiDownloadSimpleLight className='text-[dark] dark:text-[white] text-[20px]'/>
                     </a>
+                    <div id="download-title-square" className="w-[15px] h-[15px] bg-black dark:bg-darkHover absolute rotate-45 top-[36px]" style={{display: 'none'}}></div>
+                    <div id="download-title" className="absolute w-fit p-[8px] bg-[#000] dark:bg-darkHover text-white top-[40px] left-[-30px] rounded" style={{display:'none'}}>
+                      <p>Download</p>
+                    </div>
                   </div>
                   <div className="px-[2px]">
                     <Print />
@@ -297,7 +314,7 @@ function ResumeViewer({
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent className=" p-[16px] py-0 scrollbar-hide sm:w-[calc(100vw-80px)] h-[calc(100vh-100px)] select-text">
+        <DialogContent className="px-[16px] py-0 scrollbar-hide sm:w-[calc(100vw-80px)] h-[calc(100vh-100px)] select-text">
           {value?.data && (
             <div className="sm:w-[100%] h-[calc(100%-16px)] mb-4">
               <Viewer

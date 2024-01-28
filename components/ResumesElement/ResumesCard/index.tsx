@@ -112,7 +112,7 @@ function ResumesCard({
   }, [value.selected]);
 
   return (
-    <div className=" w-full lg:w-fit h-fit dark:bg-dark dark:shadow-darkPrimary dark:text-white shadow-primary rounded-[16px] p-[12px] cursor-pointer hover:scale-[1.02] transition relative">
+    <div className=" w-full lg:w-fit h-fit dark:bg-dark dark:shadow-darkPrimary dark:text-white shadow-primary rounded-[10px] p-[12px] cursor-pointer hover:scale-[1.02] transition relative">
       {isOnSelect && (
         <div>
           <input
