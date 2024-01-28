@@ -27,7 +27,6 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   // console.log(imageSource);
-
   const handleBrowseImage = () => {
     document.getElementById("imageImporter")?.click();
   };
@@ -60,11 +59,14 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
     }
     try {
       const access_token = getCookie('accessToken');
-      if(access_token) {
+      const appUserId = getCookie('userId');
+      if(access_token && appUserId) {
         dispatch(setIsBackdrop(true));
         await updateAvatar(access_token, avatar);
         refreshApi();
-        dispatch(setUserAvatar(avatarUrl));
+        if(appUserId === userId) {
+          dispatch(setUserAvatar(avatarUrl));
+        }
         dispatch(setIsBackdrop(false));
         toast.success("Update profile image successfully!");
       }

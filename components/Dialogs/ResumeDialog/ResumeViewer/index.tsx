@@ -7,7 +7,7 @@ import {
   DialogTitle,
   IconButton,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import React, { SetStateAction, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -18,18 +18,14 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { SearchIcon } from "@react-pdf-viewer/search";
-import type {
-  ToolbarProps,
-  ToolbarSlot
-} from "@react-pdf-viewer/toolbar";
+import type { ToolbarProps, ToolbarSlot } from "@react-pdf-viewer/toolbar";
 import { RenderZoomProps, zoomPlugin } from "@react-pdf-viewer/zoom";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 
 import SearchSidebar from "@/components/ReactPdfViewer/plugins/SearchSidebarPlugin/SearchSidebar";
 import { SpecialZoomLevel } from "@react-pdf-viewer/core";
-import { SelectionMode } from '@react-pdf-viewer/selection-mode';
+import { SelectionMode } from "@react-pdf-viewer/selection-mode";
 import { PiDownloadSimpleLight } from "react-icons/pi";
-
 
 type TProps = {
   setOpenResumeViewer: React.Dispatch<SetStateAction<boolean>>;
@@ -78,7 +74,7 @@ function ResumeViewer({
               Zoom,
               EnterFullScreen,
               Print,
-              SwitchSelectionMode
+              SwitchSelectionMode,
             } = slots;
             return (
               <div className="w-full flex items-center justify-between">
@@ -213,25 +209,46 @@ function ResumeViewer({
                   <div className="px-[2px]">
                     <EnterFullScreen />
                   </div>
-                  <div className="px-[6px] hover:bg-[#d6d6d6] p-[6px] rounded hover:dark:bg-[#191919] relative"
+                  <div
+                    className="px-[6px] hover:bg-[#d6d6d6] p-[6px] rounded hover:dark:bg-[#191919] relative"
                     onMouseEnter={() => {
-                      const downloadTitle = document.getElementById('download-title');
-                      const downlaodTitleSquare = document.getElementById('download-title-square');
-                      if(downloadTitle) downloadTitle.style.display = 'block'
-                      if(downlaodTitleSquare) downlaodTitleSquare.style.display = 'block'
+                      const downloadTitle =
+                        document.getElementById("download-title");
+                      const downlaodTitleSquare = document.getElementById(
+                        "download-title-square"
+                      );
+                      if (downloadTitle) downloadTitle.style.display = "block";
+                      if (downlaodTitleSquare)
+                        downlaodTitleSquare.style.display = "block";
                     }}
                     onMouseLeave={() => {
-                      const downloadTitle = document.getElementById('download-title');
-                      const downlaodTitleSquare = document.getElementById('download-title-square');
-                      if(downloadTitle) downloadTitle.style.display = 'none'
-                      if(downlaodTitleSquare) downlaodTitleSquare.style.display = 'none'
+                      const downloadTitle =
+                        document.getElementById("download-title");
+                      const downlaodTitleSquare = document.getElementById(
+                        "download-title-square"
+                      );
+                      if (downloadTitle) downloadTitle.style.display = "none";
+                      if (downlaodTitleSquare)
+                        downlaodTitleSquare.style.display = "none";
                     }}
                   >
-                    <a key={value?.id} href={value?.data!} download={`${value?.fullName} ${value?.studentId}-${new Date().toDateString()}.pdf`}>
-                      <PiDownloadSimpleLight className='text-[dark] dark:text-[white] text-[20px]'/>
+                    <a
+                      key={value?.id}
+                      href={value?.data!}
+                      download={`${value?.fullName} ${value?.studentId}-${new Date().toDateString()}.pdf`}
+                    >
+                      <PiDownloadSimpleLight className="text-[dark] dark:text-[white] text-[20px]" />
                     </a>
-                    <div id="download-title-square" className="w-[15px] h-[15px] bg-black dark:bg-darkHover absolute rotate-45 top-[36px]" style={{display: 'none'}}></div>
-                    <div id="download-title" className="absolute w-fit p-[8px] bg-[#000] dark:bg-darkHover text-white top-[40px] left-[-30px] rounded" style={{display:'none'}}>
+                    <div
+                      id="download-title-square"
+                      className="w-[15px] h-[15px] bg-black dark:bg-darkHover absolute rotate-45 top-[36px]"
+                      style={{ display: "none" }}
+                    ></div>
+                    <div
+                      id="download-title"
+                      className="absolute w-fit p-[8px] bg-[#000] dark:bg-darkHover text-white top-[40px] left-[-30px] rounded"
+                      style={{ display: "none" }}
+                    >
                       <p>Download</p>
                     </div>
                   </div>
@@ -324,7 +341,6 @@ function ResumeViewer({
                   defaultLayoutPluginInstance,
                   readingIndicatorPluginInstance,
                   zoomIndicatorPluginInstance,
-                  
                 ]}
                 theme={`${isDarkMode ? "dark" : "light"}`}
                 // defaultScale={1.5}
