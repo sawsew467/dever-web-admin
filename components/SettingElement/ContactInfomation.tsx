@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, SetStateAction } from "react";
 
 import { Form, Formik, FormikHelpers } from "formik";
 import { toast } from "react-toastify";
@@ -10,6 +10,8 @@ import { isAxiosError } from "axios";
 import { PiPencilSimpleFill, PiPencilSimpleLineFill } from "react-icons/pi";
 import { setIsBackdrop } from "@/redux/slices/app";
 import { useDispatch } from "react-redux";
+import { setUserEmail } from "@/redux/slices/userInfor";
+import { userInfo } from "@/ultils/types";
 
 type TContactFieldValue = {
   phone: string;
@@ -17,12 +19,12 @@ type TContactFieldValue = {
 };
 
 type TProps = {
-  phone: string;
-  email: string;
-  userId: string;
+  userData: userInfo;
+  setUserData: React.Dispatch<SetStateAction<userInfo | null>>
+  refreshApi: () => void;
 }
 
-function ContactInfomation({ phone, email, userId }: TProps): JSX.Element {
+function ContactInfomation({ userData, refreshApi, setUserData }: TProps): JSX.Element {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const formikRef = useRef<FormikHelpers<TContactFieldValue> | null>(null);
   const dispatch = useDispatch();
@@ -33,17 +35,26 @@ function ContactInfomation({ phone, email, userId }: TProps): JSX.Element {
   ) => {
     try {
       const access_token = getCookie("accessToken");
-      if (access_token && userId) {
+      if (access_token && userData.id) {
         const contactInfo = {
-          userId: userId,
+          userId: userData.id,
           phoneNumber: values.phone,
           email: values.email,
         };
-        console.log(contactInfo);
+        const updateUserData = {
+          phoneNumber: values.phone,
+          email: values.email,
+        }
         dispatch(setIsBackdrop(true));
         await updateContactInfo(access_token, contactInfo);
-        setIsEdit(false);
+        setUserData({
+          ...userData,
+          ...updateUserData,
+        })
+        dispatch(setUserEmail(contactInfo.email));
         dispatch(setIsBackdrop(false));
+        refreshApi();
+        setIsEdit(false);
         toast.success("Update contact information successfully!");
       }
     } catch (error) {
@@ -78,11 +89,12 @@ function ContactInfomation({ phone, email, userId }: TProps): JSX.Element {
       <div>
         <Formik
           initialValues={{
-            phone: phone,
-            email: email,
+            phone: userData.phoneNumber,
+            email: userData.email,
           }}
           validationSchema={contactInformationSchema}
           onSubmit={onSubmit}
+          enableReinitialize={true}
         >
           {(formikProps) => {
             formikRef.current = formikProps;

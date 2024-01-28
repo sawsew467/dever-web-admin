@@ -72,12 +72,13 @@ export const counterSlice = createSlice({
     },
     setUserName: (state, action) => {
       state.currentUser.name = action.payload;
-    } 
+    } ,
+    setUserEmail: (state, action) => {
+      state.currentUser.email = action.payload;
+    }
   },
 });
 
-// Action creators được tạo ra cho mỗi hàm reducer
-export const { login, logout, refreshUserInfoFromStorage, setUserAvatar, setUserName } =
-  counterSlice.actions;
+export const { login, logout, refreshUserInfoFromStorage, setUserAvatar, setUserName, setUserEmail } = counterSlice.actions;
 
 export default counterSlice.reducer;

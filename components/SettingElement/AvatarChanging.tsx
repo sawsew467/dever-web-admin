@@ -84,7 +84,6 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", UPLOAD_PRESET);
-
       const responseData = await axios.post(
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         formData
@@ -93,7 +92,6 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
       setImageSource(imageURL);
       setIsUploading(false);
     } catch (error) {
-      console.error("Error uploading image: ", error);
       return null;
     }
   };    
@@ -149,7 +147,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
               method={() => handleBrowseImage()}
               tailwind={"text-white dark:shadow-darkPrimaryBlue"}
             ></UnlinkButton>
-            {imageState ? (
+            {!isUploading && imageState ? (
               <UnlinkButton
                 textContent={"Save"}
                 icon={""}

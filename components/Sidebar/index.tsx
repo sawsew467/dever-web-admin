@@ -1,5 +1,5 @@
 "use client";
-import { changeIsMouseVisit } from "@/redux/slices/app";
+import { changeIsMouseVisit, closeSidebar } from "@/redux/slices/app";
 import {
   openBlogList,
   openBlogPending,
@@ -8,11 +8,13 @@ import {
   openMemberList,
   openMemberProfile,
   openMemberSetting,
+  openViewAllResumes,
   openViewNotification,
   openYourBlog,
   toggleDropdownBlogs,
   toggleDropdownMembers,
   toggleDropdownNotifications,
+  toggleDropdownResumes,
 } from "@/redux/slices/sideBarControl";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
@@ -22,9 +24,15 @@ import { BiChevronUp } from "react-icons/bi";
 import { HiViewGridAdd } from "react-icons/hi";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { IoNotifications } from "react-icons/io5";
+import { FaBookOpenReader } from "react-icons/fa6";
 
 function Slidebar() {
   const dispatch = useDispatch();
+
+  const userRole = useSelector(
+    (state:RootState) => state.userInfor.currentUser.role
+  )
+
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
@@ -70,6 +78,13 @@ function Slidebar() {
   const isCreateBlog = useSelector(
     (state: RootState) => state.sidebarControl.sidebarNavigation.isCreateBlog
   );
+
+  const isDropdownResumes = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarDropDown.isDropdownResumes
+  );
+  const isViewAllResumes = useSelector(
+    (state: RootState) => state.sidebarControl.sidebarNavigation.isViewAllResumes
+  )
   return (
     <>
       <aside
@@ -216,6 +231,7 @@ function Slidebar() {
                 </li>
               </ul>
             </li>
+
             <li className="pt-[16px]">
               <button
                 type="button"
@@ -374,6 +390,7 @@ function Slidebar() {
                 </li>
               </ul>
             </li>
+
             <li className="pt-[16px]">
               <button
                 type="button"
@@ -571,6 +588,98 @@ function Slidebar() {
                 </li>
               </ul>
             </li>
+
+            {
+              userRole.toLowerCase() === 'admin' ? 
+              <li className="pt-[16px]">
+              <button
+                type="button"
+                onClick={() => dispatch(toggleDropdownResumes())}
+                //  className='flex pt-[16px] px-[8px] w-[255px] text-gray-900 items-center justify-between'
+                className={`flex px-[8px] py-[6px] w-[100%] text-gray-900  dark:text-slate-100 items-center justify-between hover:bg-gray-100 dark:hover:bg-darkHover rounded-[8px] transition`}
+              >
+                <div className="flex items-center">
+                  <FaBookOpenReader
+                    className={
+                      "text-[26px] text-slate-500 p-[2px] dark:text-slate-300"
+                    }
+                  />
+                  <span
+                    className="pl-[12px] text-[16px] "
+                    style={{
+                      display: isOpenSlidebar
+                        ? isMouseVisit
+                          ? ""
+                          : "none"
+                        : "",
+                    }}
+                  >
+                    Résumés
+                  </span>
+                </div>
+                <div className={isDropdownResumes ? "rotate-180" : ""}>
+                  <BiChevronUp
+                    className={
+                      "text-[24px] text-slate-500 dark:text-slate-300 rotate-180"
+                    }
+                    style={{
+                      display: isOpenSlidebar
+                        ? isMouseVisit
+                          ? ""
+                          : "none"
+                        : "",
+                    }}
+                  />
+                </div>
+              </button>
+              <ul
+                id="dropdown-Notifications"
+                className={isDropdownResumes ? "pt-[6px]" : "hidden"}
+              >
+                <li
+                  className={` mt-[6px] hover:bg-gray-100 dark:hover:bg-darkHover rounded-md ${
+                    isViewAllResumes ? "bg-gray-100 dark:bg-darkHover" : ""
+                  }`}
+                  onClick={() => {dispatch(openViewAllResumes(true))
+                    dispatch(closeSidebar())
+                  }}
+                >
+                  <Link
+                    href="/resumes/all"
+                    className={`py-[6px] flex items-center w-full text-gray-900  dark:text-slate-100 transition duration-75 rounded-lg ${
+                      isOpenSlidebar ? (isMouseVisit ? "pl-11" : "") : "pl-11"
+                    } group`}
+                  >
+                    <span
+                      style={{
+                        display: isOpenSlidebar
+                          ? isMouseVisit
+                            ? ""
+                            : "none"
+                          : "",
+                      }}
+                      className="whitespace-nowrap"
+                    >
+                      All Résumés
+                    </span>
+                    <span
+                      className="px-[14px]"
+                      style={{
+                        display: isOpenSlidebar
+                          ? isMouseVisit
+                            ? "none"
+                            : ""
+                          : "none",
+                      }}
+                    >
+                      A
+                    </span>
+                  </Link>
+                </li>
+              </ul>
+            </li> : null
+            }
+
           </ul>
         </div>
       </aside>

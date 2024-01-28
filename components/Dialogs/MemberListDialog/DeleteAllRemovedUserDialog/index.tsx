@@ -48,7 +48,6 @@ function DeleteAllRemovedUserDialog({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle
-          id="alert-dialog-title"
           className="dark:text-red-600 text-red-500 font-bold flex items-center gap-[8px]"
         >
           <PiWarningFill />
@@ -110,7 +109,6 @@ function DeleteAllRemovedUserDialog({
                 handleDeleteAllRemovedUser()
                 setOpenDialogToDeleteAllRemovedUser(false);
             }}
-            autoFocus
             className="hover:text-red-500"
           >
             {`${removedUsers.length <= 1 ? "Delete" : "Delete all"}`}

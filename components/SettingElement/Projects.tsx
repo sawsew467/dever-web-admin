@@ -45,9 +45,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
       projectUrl: sourceCode,
       demoUrl: production,
       thumbnailUrl: imageURL,
-    };
-    console.log(newProjectData);
-    
+    };    
     try {
       const access_token = getCookie('accessToken');
       if(access_token) {

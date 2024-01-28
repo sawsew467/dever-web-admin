@@ -13,6 +13,8 @@ import { store } from "../redux/store";
 import AuthProvider from "@/app/AuthProvider";
 import RefreshToken from "./RefreshToken";
 import BackDrop from "@/components/Backdrop";
+import { Worker } from '@react-pdf-viewer/core';
+
 const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
@@ -43,6 +45,9 @@ export default function RootLayout({
             <BackDrop/>
             <ToastNotificationComp />
             <RefreshToken />
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+              </Worker>
+
           </AuthProvider>
         </Provider>
       </body>

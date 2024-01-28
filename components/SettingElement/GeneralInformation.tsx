@@ -83,13 +83,14 @@ function GeneralInformation({ userData, refreshApi, userId, setUserData }: TProp
           departmentID: values.departmentID,
           joinDate: values.joinDate,
         };
-        const userName = values.lastName.concat(' ', values.firstName);
+
+        dispatch(setIsBackdrop(true));
+        await patchGeneralInfo(access_token, generalData);
+        const userName = values.lastName.concat(' ', values.firstName).trim();
         setUserData({
           ...userData,
           ...generalData
         })
-        dispatch(setIsBackdrop(true));
-        await patchGeneralInfo(access_token, generalData);
         dispatch(setUserName(userName));
         dispatch(setIsBackdrop(false));
         refreshApi();

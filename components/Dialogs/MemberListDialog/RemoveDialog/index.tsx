@@ -44,7 +44,7 @@ function RemoveDialog({
             userSelect: "none"
           },
         }}
-        fullScreen={fullScreen}
+        // fullScreen={fullScreen}
         open={openDialogToDelete}
         onClose={() => setOpenDialogToDelete(false)}
         aria-labelledby="responsive-dialog-title"

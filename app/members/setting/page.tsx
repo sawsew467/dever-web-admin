@@ -101,9 +101,9 @@ function SettingList() {
                 refreshApi={handleGetUserProfile}
               />
               <ContactInfomation
-                phone={userData?.phoneNumber!}
-                email={userData?.email!}
-                userId={userData?.id!}
+                userData={userData!}
+                refreshApi={handleGetUserProfile}
+                setUserData={setUserData}
               />
               <SocialAccount
                 socialMediaState={socialMediaState}

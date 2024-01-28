@@ -14,7 +14,7 @@ import {
   toggleIsDarkMode,
   toggleIsOpenSlidebar,
 } from "@/redux/slices/app";
-import { logout, setUserAvatar, setUserName } from "@/redux/slices/userInfor";
+import { logout, setUserAvatar, setUserEmail, setUserName } from "@/redux/slices/userInfor";
 import { userInfo } from "@/ultils/types";
 import { getCookie } from "cookies-next";
 import { getMemberInfo } from "@/apis/profile";
@@ -39,6 +39,7 @@ function Header(): JSX.Element {
   const [isFetchData, setIsFetchData] = useState<boolean>(true);
   const userAvatarUrl = useSelector((state: RootState) => state.userInfor.currentUser.avatarUrl);
   const userName = useSelector((state: RootState) => state.userInfor.currentUser.name);
+  const userEmail = useSelector((state: RootState) => state.userInfor.currentUser.email);
   const router = useRouter();
   const dispatch = useDispatch();
   const userInfo  = useSelector((state: RootState) => state.userInfor.currentUser);
@@ -66,6 +67,7 @@ function Header(): JSX.Element {
           const data = response.data.body;
           dispatch(setUserAvatar(data.avatarUrl));
           dispatch(setUserName(data.lastName.concat(' ', data.firstName).trim()));
+          dispatch(setUserEmail(data.email));
           setUserData(data);
           setIsFetchData(false);
         }
@@ -160,7 +162,7 @@ function Header(): JSX.Element {
                     <h2 className="font-bold">
                       {userName}
                     </h2>
-                    <h3 className="font-[400]">{userData?.email}</h3>
+                    <h3 className="font-[400]">{userEmail}</h3>
                   </div>
                   <div className="w-[48px]">
                     <Image

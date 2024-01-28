@@ -64,3 +64,12 @@ export type TAppUserProject = {
   title: string;
   updatedAt: string;
 };
+
+export type TResume = {
+  id: string;
+  fullName: string;
+  email: string;
+  studentId: string;
+  data: any;
+  selected: boolean;
+};
