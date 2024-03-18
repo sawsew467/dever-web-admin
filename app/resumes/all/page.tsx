@@ -1,5 +1,5 @@
 "use client";
-import { deleteCVByID, getAllCv } from "@/apis/resumes";
+import { deleteCVByID, getAllCv, getCvById } from "@/apis/resumes";
 import ResumesCard from "@/components/ResumesElement/ResumesCard";
 import searchIcon from "@icon/page/notification/list/search-outline.svg";
 import {
@@ -35,6 +35,11 @@ function Resumes() {
   }, [dispatch]);
 
   const [resumesList, setResumesList] = useState<TResume[]>([]);
+  // console.log(resumesList);
+  const [resumeListSearchedList, setResumeListSearchList] = useState<TResume[]>(
+    []
+  );
+  console.log(resumeListSearchedList);
   const [isListLoading, setIsListLoading] = useState<boolean>(true);
   const [isOnSelect, setIsOnSelect] = useState<boolean>(false);
   const [numberItemSelected, setNumberItemSelected] = useState<number>(0);
@@ -42,7 +47,7 @@ function Resumes() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
   const [resumeView, setResumeView] = useState<TResume | null>(null);
   const [openResumeViewer, setOpenResumeViewer] = useState<boolean>(false);
-
+  const [searchingValue, setSearchingValue] = useState<string | null>(null);
   const handleGetAllResumes = async () => {
     try {
       const access_token = getCookie("accessToken");
@@ -58,6 +63,61 @@ function Resumes() {
       }
     }
   };
+  const handleGetPdfResume = async (resumeId: string): Promise<string | undefined> => {
+    try {
+      const access_token = getCookie('accessToken');
+      if(access_token) {
+        const pdfRes = await getCvById(access_token, resumeId)
+        const data = pdfRes.request.response;
+        const blob = new Blob([data],  {
+          type: "application/pdf"
+        });
+        const url = URL.createObjectURL(blob);
+        return url;
+      }
+    } catch (error) {
+      if(axios.isAxiosError(error)) {
+        return;
+      }
+    }
+  }
+  const handleGetSearchedResumes = async () => {
+    try {
+      const access_token = getCookie("accessToken");
+      if (access_token && searchingValue && searchingValue.trim().length > 0) {
+        // const resumesValue: TResume[] = (await getAllCv(access_token)).data
+        //   .body;
+        if (searchingValue) {
+          let filtedList: TResume[] = [];
+          for (let item of resumesList) {
+            if (
+              item.fullName.toLowerCase().includes(searchingValue.toLowerCase())
+            ) {
+              // item.data = await handleGetPdfResume(item.id);
+              filtedList.push(item);
+            }
+            if (
+              item.studentId
+                .toLowerCase()
+                .includes(searchingValue.toLowerCase())
+            ) {
+              // item.data = await handleGetPdfResume(item.id);
+              filtedList.push(item);
+            }
+          }
+          setResumeListSearchList(filtedList);
+        }
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchingValue?.length == 0) {
+      setResumeListSearchList([]);
+    }
+  }, [searchingValue]);
 
   useEffect(() => {
     dispatch(closeSidebar());
@@ -106,6 +166,38 @@ function Resumes() {
     dispatch(setIsBackdrop(false));
   };
 
+  const handleRenderResumeItem = () => {
+    if (resumeListSearchedList.length > 0) {
+      return resumeListSearchedList.map((value: TResume, index: number) => (
+        <ResumesCard
+          key={value.id}
+          value={value}
+          resumesList={resumesList}
+          setResumesList={setResumesList}
+          isOnSelect={isOnSelect}
+          setNumberItemSelected={setNumberItemSelected}
+          numberItemSelected={numberItemSelected}
+          addToSelectList={handleFilterAllSelectedResumes}
+          setResumeView={setResumeView}
+          setOpenResumeViewer={setOpenResumeViewer}
+        ></ResumesCard>
+      ));
+    }
+    return resumesList.map((value: TResume, index: number) => (
+      <ResumesCard
+        key={index}
+        value={value}
+        resumesList={resumesList}
+        setResumesList={setResumesList}
+        isOnSelect={isOnSelect}
+        setNumberItemSelected={setNumberItemSelected}
+        numberItemSelected={numberItemSelected}
+        addToSelectList={handleFilterAllSelectedResumes}
+        setResumeView={setResumeView}
+        setOpenResumeViewer={setOpenResumeViewer}
+      ></ResumesCard>
+    ));
+  };
   return (
     <div
       className={`w-[100%] ${
@@ -130,8 +222,18 @@ function Resumes() {
                 type="search"
                 className="w-full lg:w-[392px] border-y-2 border-r border-l-none border-slate-200 dark:border-darkHover dark:bg-dark dark:text-white select-none outline-none border-l-2 rounded-l-[10px]"
                 placeholder="Enter name or student ID..."
+                onChange={(e) => setSearchingValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if(e.key = 'Enter') {
+                    handleGetSearchedResumes();
+                  }
+                }}
               />
-              <div className="w-[42px] h-[38px] bg-primaryBlue flex items-cent    justify-center cursor-pointer">
+              <div
+                className="w-[42px] h-[38px] bg-primaryBlue flex items-cent    justify-center cursor-pointer"
+                onClick={() => handleGetSearchedResumes()}
+              
+              >
                 <Image
                   src={searchIcon}
                   alt="searchIcon"
@@ -174,7 +276,11 @@ function Resumes() {
         </div>
         <div className="flex flex-row justify-between items-center">
           <p className="font-bold dark:text-white">
-            Total: {resumesList.length}
+            {/* Total: {resumesList.length} */}
+            Total:{" "}
+            {resumeListSearchedList.length == 0
+              ? resumesList.length
+              : resumeListSearchedList.length}
           </p>
           {isOnSelect && numberItemSelected > 0 ? (
             <>
@@ -193,20 +299,23 @@ function Resumes() {
               </h3>
             </div>
           ) : (
-            resumesList.map((value: TResume, index: number) => (
-              <ResumesCard
-                key={index}
-                value={value}
-                resumesList={resumesList}
-                setResumesList={setResumesList}
-                isOnSelect={isOnSelect}
-                setNumberItemSelected={setNumberItemSelected}
-                numberItemSelected={numberItemSelected}
-                addToSelectList={handleFilterAllSelectedResumes}
-                setResumeView={setResumeView}
-                setOpenResumeViewer={setOpenResumeViewer}
-              ></ResumesCard>
-            ))
+            // (
+            //   resumesList.map((value: TResume, index: number) => (
+            //     <ResumesCard
+            //       key={index}
+            //       value={value}
+            //       resumesList={resumesList}
+            //       setResumesList={setResumesList}
+            //       isOnSelect={isOnSelect}
+            //       setNumberItemSelected={setNumberItemSelected}
+            //       numberItemSelected={numberItemSelected}
+            //       addToSelectList={handleFilterAllSelectedResumes}
+            //       setResumeView={setResumeView}
+            //       setOpenResumeViewer={setOpenResumeViewer}
+            //     ></ResumesCard>
+            //   ))
+            // )
+            handleRenderResumeItem()
           )}
         </div>
       </div>

@@ -58,13 +58,13 @@ function ResumeViewer({
   const readingIndicatorPluginInstance = readingIndicatorPlugin();
   const { ReadingIndicator } = readingIndicatorPluginInstance;
   const zoomIndicatorPluginInstance = zoomPlugin();
+
   const renderToolbar = React.useCallback(
     (Toolbar: (props: ToolbarProps) => React.ReactElement) => (
       <>
         <Toolbar>
           {(slots: ToolbarSlot) => {
             const {
-              Download,
               GoToNextPage,
               GoToPreviousPage,
               NumberOfPages,
