@@ -51,7 +51,7 @@ function MemberRecycleBinDialog({
         onClose={() => setOpenDialogToRecycle(false)}
         aria-labelledby="customized-dialog-title"
         open={openDialogToRecycle}
-        fullScreen={fullScreen}
+        // fullScreen={fullScreen}
         PaperProps={{
           style: {
             backgroundColor: isDarkMode ? "#282828" : "",
@@ -81,7 +81,7 @@ function MemberRecycleBinDialog({
           <CloseIcon />
         </IconButton>
         <DialogContent
-          dividers
+          dividers  
           className="dark:border-darkHover dark:border-y-2 flex flex-col gap-[10px] scrollbar-hide"
         >
           {removedUsers.map((item, index) => {

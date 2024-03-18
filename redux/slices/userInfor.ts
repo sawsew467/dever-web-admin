@@ -4,6 +4,7 @@ import { setCookie } from "cookies-next";
 
 type User = {
   id: string;
+  name:string;
   email: string;
   avatarUrl: string;
   role: string;
@@ -16,6 +17,7 @@ type AppState = {
 const initialState: AppState = {
   currentUser: {
     id: "",
+    name: "",
     email: "",
     avatarUrl: "",
     role: "",
@@ -65,11 +67,18 @@ export const counterSlice = createSlice({
     refreshUserInfoFromStorage: (state, action: PayloadAction<User>) => {
       state.currentUser = action.payload;
     },
+    setUserAvatar: (state, action) => {
+      state.currentUser.avatarUrl = action.payload;
+    },
+    setUserName: (state, action) => {
+      state.currentUser.name = action.payload;
+    } ,
+    setUserEmail: (state, action) => {
+      state.currentUser.email = action.payload;
+    }
   },
 });
 
-// Action creators được tạo ra cho mỗi hàm reducer
-export const { login, logout, refreshUserInfoFromStorage } =
-  counterSlice.actions;
+export const { login, logout, refreshUserInfoFromStorage, setUserAvatar, setUserName, setUserEmail } = counterSlice.actions;
 
 export default counterSlice.reducer;

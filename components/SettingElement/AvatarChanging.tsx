@@ -10,6 +10,7 @@ import { updateAvatar } from "@/apis/setting";
 import { Skeleton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setIsBackdrop } from "@/redux/slices/app";
+import { setUserAvatar } from "@/redux/slices/userInfor";
 
 type TProps = {
   avatarUrl:string;
@@ -26,7 +27,6 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
   const [imageSource, setImageSource] = useState<string | undefined | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   // console.log(imageSource);
-
   const handleBrowseImage = () => {
     document.getElementById("imageImporter")?.click();
   };
@@ -59,12 +59,16 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
     }
     try {
       const access_token = getCookie('accessToken');
-      dispatch(setIsBackdrop(true));
-      if(access_token) {
+      const appUserId = getCookie('userId');
+      if(access_token && appUserId) {
+        dispatch(setIsBackdrop(true));
         await updateAvatar(access_token, avatar);
+        refreshApi();
+        if(appUserId === userId) {
+          dispatch(setUserAvatar(avatarUrl));
+        }
         dispatch(setIsBackdrop(false));
         toast.success("Update profile image successfully!");
-        refreshApi();
       }
     } catch (error) {
       if(axios.isAxiosError(error)) {
@@ -82,7 +86,6 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", UPLOAD_PRESET);
-
       const responseData = await axios.post(
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         formData
@@ -91,7 +94,6 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
       setImageSource(imageURL);
       setIsUploading(false);
     } catch (error) {
-      console.error("Error uploading image: ", error);
       return null;
     }
   };    
@@ -147,7 +149,7 @@ function AvatarChanging({avatarUrl, fullName, career, refreshApi, userId}:TProps
               method={() => handleBrowseImage()}
               tailwind={"text-white dark:shadow-darkPrimaryBlue"}
             ></UnlinkButton>
-            {imageState ? (
+            {!isUploading && imageState ? (
               <UnlinkButton
                 textContent={"Save"}
                 icon={""}

@@ -78,7 +78,6 @@ function TagField({
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         dispatch(setIsBackdrop(false));
         toast.error(`Post skills failed!`)
       }

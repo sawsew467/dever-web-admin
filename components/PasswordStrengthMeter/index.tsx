@@ -47,7 +47,7 @@ function PasswordStrengthMeter({password}: TProps) {
     return (
         <div className='w-full flex flex-row items-center justify-center gap-2 relative'>
             <div className='w-full bg-slate-200 rounded-md h-2 overflow-hidden '>
-                <div className='h-2 transition-all' style={changePasswordColor()}></div>
+                <div className='h-2 transition-all duration-500' style={changePasswordColor()}></div>
                 
             </div>
             <div className='absolute top-[38px] right-[20px]'>

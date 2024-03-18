@@ -44,7 +44,7 @@ type TAppUserProject = {
 };
 
 function SettingUser({ params }: pageProps) {
-    const route = useRouter();
+  const route = useRouter();
   const isOpenSlidebar = useSelector(
     (state: RootState) => state.app.isOpenSlidebar
   );
@@ -55,8 +55,7 @@ function SettingUser({ params }: pageProps) {
   const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
   const [userProjects, setUserProjects] = useState<TAppUserProject[]>([]);
 
-  const [userData, setUserData] = useState<userInfo>();
-  console.log(userData)
+  const [userData, setUserData] = useState<userInfo | null>(null);
 
   const handleGetUserProfile = async () => {
     try {
@@ -102,62 +101,68 @@ function SettingUser({ params }: pageProps) {
       } absolute right-0 top-[72px] bottom-0 h-fit duration-[0.3s]`}
     >
       <div className="py-[20px] px-[16px] flex flex-col gap-[20px]">
-        {
-            !isFetchData &&  <div className="flex flex-row justify-between">
+        {!isFetchData && (
+          <div className="flex flex-row justify-between">
             <h3 className="font-[700] text-[24px] select-none dark:text-white ">
-              <span className="text-blue-500">{
-                  userData?.firstName.length == 0 || userData?.lastName.length == 0 ?
-                  userData.email : userData?.lastName.concat(' ',userData.firstName)
-              }&apos;s</span> profile setting
+              <span className="text-blue-500">
+                {userData?.firstName.length == 0 ||
+                userData?.lastName.length == 0
+                  ? userData.email
+                  : userData?.lastName.concat(" ", userData.firstName)}
+                &apos;s
+              </span>{" "}
+              profile setting
             </h3>
             <UnlinkButton
-                method={() => {
-                  route.back()
-                }}
-                icon="arrowLeft"
-                backgroundColor="bg-blue-700"
-                iconPosition="left"
-                textContent="Back"
-                tailwind="text-white dark:shadow-darkPrimaryBlue"
-              ></UnlinkButton>
-          </div> 
-        }
+              method={() => {
+                route.back();
+              }}
+              icon="arrowLeft"
+              backgroundColor="bg-blue-700"
+              iconPosition="left"
+              textContent="Back"
+              tailwind="text-white dark:shadow-darkPrimaryBlue"
+            ></UnlinkButton>
+          </div>
+        )}
         {isFetchData ? (
           <LinearProgress />
         ) : (
           <div className="flex flex-col lg:flex-row gap-[16px]">
             <div className="flex flex-col gap-[16px] w-full lg:w-[40%] h-fit select-none">
               <AvatarChanging
-                                  avatarUrl={userData?.avatarUrl!}
-                                  fullName={userData?.lastName.concat(" ", userData?.firstName!)}
-                                  career={userData?.career!}
-                                  refreshApi={handleGetUserProfile} userId={userData?.id!}           />
-              <ContactInfomation
-                phone={userData?.phoneNumber!}
-                email={userData?.email!}
+                avatarUrl={userData?.avatarUrl!}
+                fullName={userData?.lastName.concat(" ", userData?.firstName!)}
+                career={userData?.career!}
+                refreshApi={handleGetUserProfile}
                 userId={userData?.id!}
+              />
+              <ContactInfomation
+                userData={userData!}
+                refreshApi={handleGetUserProfile}
+                setUserData={setUserData}
               />
               <SocialAccount
                 socialMediaState={socialMediaState}
                 refreshApi={handleGetUserProfile}
                 userId={userData?.id!}
               />
-              <Skills 
+              <Skills
                 userSkills={userData?.userSkills!}
                 userId={userData?.id!}
-                />
-              <Hobbies 
-                userHobbies={userData?.userHobbies!} 
+              />
+              <Hobbies
+                userHobbies={userData?.userHobbies!}
                 userId={userData?.id!}
-                />
+              />
             </div>
             <div className="flex flex-col gap-[16px] w-full lg:w-[60%] h-fit">
-              <AboutUser about={userData?.aboutMe!} 
-              userId={userData?.id!}/>
+              <AboutUser about={userData?.aboutMe!} userId={userData?.id!} />
               <GeneralInformation
                 userData={userData!}
                 refreshApi={handleGetUserProfile}
                 userId={userData?.id!}
+                setUserData={setUserData}
               />
               <Projects
                 userId={userData?.id!}

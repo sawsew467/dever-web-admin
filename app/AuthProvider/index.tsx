@@ -16,17 +16,16 @@ function AppProvider({children}:{children:React.ReactNode}) {
         const access_token = getCookie("accessToken");
         const refresh_token = getCookie("refreshToken")
 
-
         if(access_token && refresh_token) {
             const decoded:EncodeType = jwtDecode(access_token);
             const currentUser = {
                 id: decoded!.sub,
+                name: '',
                 email: '',
                 avatarUrl: '',
                 role: decoded!.role,
                 remember: null,
             }
-
             return currentUser;
         }
         return null;

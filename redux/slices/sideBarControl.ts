@@ -5,6 +5,7 @@ type sidebarDropdown = {
   isDropdownNotifications: boolean;
   isDropdownMembers: boolean;
   isDropdownBlogs: boolean;
+  isDropdownResumes: boolean;
 };
 type sidebarNavigation = {
   isViewNotification: boolean;
@@ -16,6 +17,7 @@ type sidebarNavigation = {
   isYourBlog: boolean;
   isBlogPending: boolean;
   isCreateBlog: boolean;
+  isViewAllResumes: boolean;
 };
 type SidebarState = {
   sidebarDropDown: sidebarDropdown;
@@ -26,6 +28,7 @@ const initialState: SidebarState = {
     isDropdownNotifications: false,
     isDropdownMembers: false,
     isDropdownBlogs: false,
+    isDropdownResumes: false,
   },
   sidebarNavigation: {
     isViewNotification: false,
@@ -37,6 +40,7 @@ const initialState: SidebarState = {
     isYourBlog: false,
     isBlogPending: false,
     isCreateBlog: false,
+    isViewAllResumes: false
   },
 };
 
@@ -56,6 +60,10 @@ export const sidebarSlice = createSlice({
       state.sidebarDropDown.isDropdownBlogs =
         !state.sidebarDropDown.isDropdownBlogs;
     },
+    toggleDropdownResumes: (state) => {
+      state.sidebarDropDown.isDropdownResumes =
+        !state.sidebarDropDown.isDropdownResumes;
+    },
     dropdownNotifications: (state, action) => {
         state.sidebarDropDown.isDropdownNotifications = action.payload;
     },
@@ -65,6 +73,9 @@ export const sidebarSlice = createSlice({
     dropdownBlogs: (state, action) => {
         state.sidebarDropDown.isDropdownBlogs = action.payload;
     },
+    dropdownResumes: (state, action) => {
+      state.sidebarDropDown.isDropdownResumes = action.payload;
+  },
     openViewNotification: (state, action) => {
       state.sidebarNavigation.isViewNotification = action.payload;
       state.sidebarNavigation.isCreateNotification = false;
@@ -75,6 +86,7 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
     },
     openCreateNotification: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -86,6 +98,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+
     },
     openMemberList: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -97,6 +111,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+
     },
     openMemberProfile: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -108,6 +124,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+
     },
     openMemberSetting: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -119,6 +137,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+      
     },
     openBlogList: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -130,6 +150,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+
     },
     openYourBlog: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -141,6 +163,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = action.payload;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+
     },
     openBlogPending: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -152,6 +176,8 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = action.payload;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
+
     },
     openCreateBlog: (state, action) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -163,6 +189,19 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = action.payload;
+      state.sidebarNavigation.isViewAllResumes = false;
+    },
+    openViewAllResumes: (state, action) => {
+      state.sidebarNavigation.isViewNotification = false;
+      state.sidebarNavigation.isCreateNotification = false;
+      state.sidebarNavigation.isMemberList = false;
+      state.sidebarNavigation.isMemberProfile = false;
+      state.sidebarNavigation.isMemberSetting = false;
+      state.sidebarNavigation.isBlogList = false;
+      state.sidebarNavigation.isYourBlog = false;
+      state.sidebarNavigation.isBlogPending = false;
+      state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = action.payload;
     },
     closeAllRoute: (state) => {
       state.sidebarNavigation.isViewNotification = false;
@@ -174,9 +213,11 @@ export const sidebarSlice = createSlice({
       state.sidebarNavigation.isYourBlog = false;
       state.sidebarNavigation.isBlogPending = false;
       state.sidebarNavigation.isCreateBlog = false;
+      state.sidebarNavigation.isViewAllResumes = false;
       state.sidebarDropDown.isDropdownBlogs = false;
       state.sidebarDropDown.isDropdownMembers = false;
       state.sidebarDropDown.isDropdownNotifications = false;
+      state.sidebarDropDown.isDropdownResumes = false;
     },
   },
 });
@@ -197,6 +238,9 @@ export const {
   openMemberSetting,
   openViewNotification,
   openYourBlog,
-  closeAllRoute
+  closeAllRoute,
+  dropdownResumes,
+  toggleDropdownResumes,
+  openViewAllResumes
 } = sidebarSlice.actions;
 export default sidebarSlice.reducer;

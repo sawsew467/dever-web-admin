@@ -34,6 +34,6 @@
       "@lexicalLib/*" : ["./lexical_Lib/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/plugins/AutoLinkPlugin.js", "components/plugins/ListMaxIndentLevelPlugin.js", "components/plugins/ToolbarPlugin.js", "components/plugins/CodeHighlightPlugin.js", "components/EditorLarge/index.tsx", "components/plugins/TreeViewPlugin.js", "components/SettingElement/Skills.tsx", "components/SettingElement/TagField/index.tsx", "lexical_Lib/plugins/DomToLexicalPlugin"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/plugins/AutoLinkPlugin.js", "components/plugins/ListMaxIndentLevelPlugin.js", "components/plugins/ToolbarPlugin.js", "components/plugins/CodeHighlightPlugin.js", "components/EditorLarge/index.tsx", "components/plugins/TreeViewPlugin.js", "components/SettingElement/Skills.tsx", "components/SettingElement/TagField/index.tsx", "lexical_Lib/plugins/DomToLexicalPlugin", "pdf-worker.js"],
   "exclude": ["node_modules"]
 }

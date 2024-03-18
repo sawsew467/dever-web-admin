@@ -46,3 +46,30 @@ export type userInfo = {
   userHobbies: string[];
   userProjects: any;
 };
+
+
+export type TProjectCreateFieldsValue = {
+  title: string;
+  sourceCode: string;
+  production: string;
+};
+
+export type TAppUserProject = {
+  createdAt: string;
+  demoUrl: string;
+  description: string;
+  projectId: string;
+  projectUrl: string;
+  thumbnailUrl: string;
+  title: string;
+  updatedAt: string;
+};
+
+export type TResume = {
+  id: string;
+  fullName: string;
+  email: string;
+  studentId: string;
+  data: any;
+  selected: boolean;
+};

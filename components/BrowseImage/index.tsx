@@ -106,8 +106,6 @@ function BrowseImage({
     };
 
     if (fileStorage) {
-      console.log("Oke");
-
       handleGetImageURL(fileStorage);
     }
   }, [fileStorage, page, setFileURL]);
@@ -140,7 +138,8 @@ function BrowseImage({
                       <p className="absolute top-[50%] left-[50%] translate-x-[-50%]
                       translate-y-[-50%] font-[700]"> Uploading image...</p>
                     </div>
-                  </> :     <Image
+                  </> :     
+                  <Image
                   src={URL.createObjectURL(fileStorage)}
                   alt="imageFromFile"
                   width={6000}

@@ -11,12 +11,12 @@ import ChangePassword from "@/components/SettingElement/ChangePassword";
 import Projects from "@/components/SettingElement/Projects";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { userInfo } from "@/ultils/types";
+import { TAppUserProject, userInfo } from "@/ultils/types";
 import { getCookie } from "cookies-next";
 import { getMemberInfo } from "@/apis/profile";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
-import { getAllAccountsByUserId } from "@/apis/setting";
+
 import {
   dropdownMembers,
   openMemberSetting,
@@ -26,17 +26,6 @@ type TSocialData = {
   id: string;
   name: string;
   url: string;
-};
-
-type TAppUserProject = {
-  createdAt: string;
-  demoUrl: string;
-  description: string;
-  projectId: string;
-  projectUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  updatedAt: string;
 };
 
 function SettingList() {
@@ -50,14 +39,13 @@ function SettingList() {
   const [socialMediaState, setSocialMediaState] = useState<TSocialData[]>([]);
   const [userProjects, setUserProjects] = useState<TAppUserProject[]>([]);
 
-  const [userData, setUserData] = useState<userInfo>();
+  const [userData, setUserData] = useState<userInfo | null>(null);
 
   const handleGetUserProfile = async () => {
     try {
       const access_token = getCookie("accessToken");
       if (access_token) {
         const userId = getCookie("userId");
-
         if (userId) {
           const response = await getMemberInfo(userId, access_token);
           const data = response.data.body;
@@ -76,7 +64,6 @@ function SettingList() {
 
   useEffect(() => {
     handleGetUserProfile();
-    // handleGetAllSocialAccounts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const dispatch = useDispatch();
@@ -114,9 +101,9 @@ function SettingList() {
                 refreshApi={handleGetUserProfile}
               />
               <ContactInfomation
-                phone={userData?.phoneNumber!}
-                email={userData?.email!}
-                userId={userData?.id!}
+                userData={userData!}
+                refreshApi={handleGetUserProfile}
+                setUserData={setUserData}
               />
               <SocialAccount
                 socialMediaState={socialMediaState}
@@ -137,10 +124,11 @@ function SettingList() {
               <AboutUser about={userData?.aboutMe!} 
               userId={userData?.id!}/>
               <GeneralInformation
-                userData={userData!}
-                refreshApi={handleGetUserProfile}
-                userId={userData?.id!}
-              />
+                  userData={userData!}
+                  refreshApi={handleGetUserProfile}
+                  userId={userData?.id!} 
+                  setUserData={setUserData}
+                  />
               <Projects
                 userId={userData?.id!}
                 refreshApi={handleGetUserProfile}

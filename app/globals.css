@@ -19,7 +19,6 @@
   }
 }
 
-
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -762,7 +761,7 @@ i.page-break,
 }
 
 .dropdown {
-  z-index: 10;
+  z-index: 1400;
   display: block;
   position: fixed;
   box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1),

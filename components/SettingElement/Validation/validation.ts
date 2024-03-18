@@ -3,15 +3,10 @@ import * as yup from "yup";
 const passwordRule = /^(?=.*[a-z])(?=.*[!@#?])[A-Za-z!@#?.0-9]{8,100}$/;
 const phoneRule = /^(?:\+84|0)(?:3[2-9]|5[689]|7[06-9]|8[1-9]|9[0-9])\s?\d{2,3}\s?\d{2,3}\s?\d{3}$/;
 
-//API return account's password
-const accountCurrentPassword = "FudeverAdmins123@";
 
 export const changePasswordSchema = yup.object().shape({
   currentPassword: yup
     .string()
-    .test("password-match", "Current password is incorrect", function (value) {
-      return accountCurrentPassword === value;
-    })
     .required("Current password is required"),
 
   newPassword: yup
@@ -37,7 +32,7 @@ export const contactInformationSchema = yup.object().shape({
 });
 
 export const generalInformationSchema =yup.object().shape({
-  firstName: yup.string().required("Fist name is required"),
+  firstName: yup.string().required("Fisrt name is required"),
   lastName: yup.string().required("Last name is required"),
   birthday: yup.string().required("Birthday is required"),
   homeAddress: yup.string().required("Home address is required"),

@@ -8,7 +8,7 @@ function BackDrop(): JSX.Element {
   return (
     <div>
       <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1500 }}
         open={isBackdrop}
       >
         <CircularProgress color="inherit" />

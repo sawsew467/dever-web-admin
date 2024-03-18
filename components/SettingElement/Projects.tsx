@@ -3,11 +3,8 @@ import AddButton from "./AddButton";
 import ProjectCard from "../ProjectCard";
 import { FormikHelpers, Form, Formik } from "formik";
 import { toast } from "react-toastify";
-import Image from "next/image";
 import * as yup from "yup";
 
-import EditIconAnimate from "@icon/components/Button/edit.gif";
-import EditIconPause from "@icon/components/Button/edit_pause.png";
 import FormikInput from "./FormikInput";
 import EditorNormal from "../EditorNormal";
 import BrowseImage from "./BrowseImage";
@@ -17,23 +14,7 @@ import { postProject } from "@/apis/setting";
 import { getCookie } from "cookies-next";
 import { useDispatch } from "react-redux";
 import { setIsBackdrop } from "@/redux/slices/app";
-
-type TProjectCreateFieldsValue = {
-  title: string;
-  sourceCode: string;
-  production: string;
-};
-
-type TAppUserProject = {
-  createdAt: string;
-  demoUrl: string;
-  description: string;
-  projectId: string;
-  projectUrl: string;
-  thumbnailUrl: string;
-  title: string;
-  updatedAt: string;
-};
+import { TAppUserProject, TProjectCreateFieldsValue } from "@/ultils/types";
 
 type TProps = {
   userId: string;
@@ -51,7 +32,6 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
     null
   );
   const dispatch = useDispatch();
-
   const onSubmit = async (
     values: TProjectCreateFieldsValue,
     actions: FormikHelpers<TProjectCreateFieldsValue>
@@ -65,17 +45,18 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
       projectUrl: sourceCode,
       demoUrl: production,
       thumbnailUrl: imageURL,
-    };
-    console.log(newProjectData);
-    
+    };    
     try {
       const access_token = getCookie('accessToken');
       if(access_token) {
         dispatch(setIsBackdrop(true));
         await postProject(access_token, newProjectData);
-        dispatch(setIsBackdrop(false));
         refreshApi();
+        dispatch(setIsBackdrop(false));
         toast.success("Create new project successfully!")
+        
+        actions.resetForm();
+        setIsEdit(false);
       }
     } catch (error) {
       if(isAxiosError(error)) {
@@ -84,8 +65,6 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
       }
     }
 
-    actions.resetForm();
-    setIsEdit(false);
   };
 
   const handleEditClick = () => {
@@ -127,6 +106,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
             {userProjectList.map((item, index) => {
               return (
                 <ProjectCard
+                  data={item}
                   key={index}
                   img={item.thumbnailUrl}
                   title={item.title}
@@ -170,7 +150,6 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
                 production: yup
                 .string()
                 .url("Invalid URL format")
-                .required("Product URL is required"),
             })}
             onSubmit={onSubmit}
           >
@@ -203,7 +182,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
                       />
                     </div>
                     <BrowseImage
-                      formTitle={"Project thumbnail"}
+                      formTitle={"Project thumbnail (required)"}
                       fileStorage={importedImage}
                       setFileStorage={setImportedImage}
                       setFileURL={setImageURL}
@@ -215,7 +194,7 @@ function  Projects({userId, refreshApi, userProjectList}: TProps): JSX.Element {
                       placeholder={"Enter project's source code..."}
                       type={"text"}
                       isEdit={isEdit}
-                      title={"Source code URL"}
+                      title={"Source code (Github)"}
                     />
                     <FormikInput
                       label={"production"}

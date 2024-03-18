@@ -48,7 +48,7 @@ function ApproveDialog({
             userSelect: "none",
           },
         }}
-        fullScreen={fullScreen}
+        // fullScreen={fullScreen}
         open={openDialogToApprove}
         onClose={() => setOpenDialogToApprove(false)}
         aria-labelledby="responsive-dialog-title"
